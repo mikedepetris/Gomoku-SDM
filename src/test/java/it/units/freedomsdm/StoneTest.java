@@ -16,4 +16,11 @@ public class StoneTest {
         Assertions.assertEquals(Colour.BLACK, stone.getStoneColour());
     }
 
+    @Test
+    void setStoneColour(){
+        Stone stone = new Stone(Colour.BLACK);
+        Assertions.assertEquals(Colour.BLACK, stone.getStoneColour());
+        stone.setStoneColour(Colour.WHITE);
+        Assertions.assertSame(Colour.WHITE, stone.getStoneColour());
+    }
 }
