@@ -3,30 +3,30 @@ package it.units.freedomsdm;
 public class Coordinates {
     @Override
     public String toString() {
-        return "(" + this.getRowIdx() + ", " + this.getColIdx();
+        return "(" + this.getRowIndex() + ", " + this.getColIndex();
     }
 
-    private int rowIdx;
-    private int colIdx;
+    private int rowIndex;
+    private int colIndex;
 
-    public Coordinates(int rowIdx, int colIdx) {
-        this.rowIdx = rowIdx;
-        this.colIdx = colIdx;
+    public Coordinates(int rowIndex, int colIndex) {
+        this.rowIndex = rowIndex;
+        this.colIndex = colIndex;
     }
 
-    public int getRowIdx() {
-        return rowIdx;
+    public int getRowIndex() {
+        return rowIndex;
     }
 
-    public void setRowIdx(int rowIdx) {
-        this.rowIdx = rowIdx;
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
     }
 
-    public int getColIdx() {
-        return colIdx;
+    public int getColIndex() {
+        return colIndex;
     }
 
-    public void setColIdx(int colIdx) {
-        this.colIdx = colIdx;
+    public void setColIndex(int colIndex) {
+        this.colIndex = colIndex;
     }
 }
