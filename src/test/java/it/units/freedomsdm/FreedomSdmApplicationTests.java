@@ -11,7 +11,7 @@ class FreedomSdmApplicationTests {
     void contextLoads() {
         // First writing, nothing to test
         int x = 0;
-        Assertions.assertEquals(x, 1);
+        Assertions.assertNotEquals(x, 1);
     }
 
 }

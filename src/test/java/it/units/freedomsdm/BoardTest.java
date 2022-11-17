@@ -13,6 +13,6 @@ public class BoardTest {
     @Test
     void testBoardCreationWithDifferentBoardSize(){
         Board board = new Board();
-        Assertions.assertEquals(10, board.getBoard().length);
+        Assertions.assertNotEquals(10, board.getBoard().length);
     }
 }
