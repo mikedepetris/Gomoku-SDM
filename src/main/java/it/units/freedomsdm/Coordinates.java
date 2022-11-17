@@ -1,17 +1,16 @@
 package it.units.freedomsdm;
 
 public class Coordinates {
-    @Override
-    public String toString() {
-        return "(" + this.getRowIndex() + ", " + this.getColIndex();
-    }
-
     private int rowIndex;
     private int colIndex;
-
     public Coordinates(int rowIndex, int colIndex) {
         this.rowIndex = rowIndex;
         this.colIndex = colIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + this.getRowIndex() + "," + this.getColIndex() + ")";
     }
 
     public int getRowIndex() {
