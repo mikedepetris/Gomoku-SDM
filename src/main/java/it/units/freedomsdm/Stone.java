@@ -1,17 +1,24 @@
 package it.units.freedomsdm;
 
 public class Stone {
-    private Colour stoneColour;
+    private final Colour stoneColour;
+    private Coordinates coordinates;
 
-    public Stone(Colour stoneColour) {
+    public Stone(Coordinates coordinates, Colour stoneColour) {
+        this.coordinates = coordinates;
         this.stoneColour = stoneColour;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public Colour getStoneColour() {
         return stoneColour;
     }
 
-    public void setStoneColour(Colour stoneColour) {
-        this.stoneColour = stoneColour;
-    }
 }
