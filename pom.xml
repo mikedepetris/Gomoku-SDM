@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>it.units</groupId>
-    <artifactId>Freedom-SDM</artifactId>
+    <artifactId>Gomoku-SDM</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Freedom-SDM</name>
-    <description>Freedom-SDM</description>
+    <name>Gomoku-SDM</name>
+    <description>Gomoku-SDM</description>
     <properties>
         <java.version>17</java.version>
     </properties>

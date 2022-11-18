@@ -1,4 +1,4 @@
-package it.units.freedomsdm;
+package it.units.gomokusdm;
 
 import java.util.ArrayList;
 import java.util.List;

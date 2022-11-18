@@ -1,4 +1,4 @@
-package it.units.freedomsdm;
+package it.units.gomokusdm;
 
 public class Board {
     private static final int BOARD_DIMENSION = 19;

@@ -1,4 +1,4 @@
-package it.units.freedomsdm;
+package it.units.gomokusdm;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

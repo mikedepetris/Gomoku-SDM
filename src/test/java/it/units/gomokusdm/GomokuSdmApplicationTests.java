@@ -1,11 +1,11 @@
-package it.units.freedomsdm;
+package it.units.gomokusdm;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FreedomSdmApplicationTests {
+class GomokuSdmApplicationTests {
 
     @Test
     void contextLoads() {

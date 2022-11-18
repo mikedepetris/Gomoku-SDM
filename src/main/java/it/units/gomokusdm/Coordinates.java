@@ -1,4 +1,4 @@
-package it.units.freedomsdm;
+package it.units.gomokusdm;
 
 public class Coordinates {
     private int rowIndex;
