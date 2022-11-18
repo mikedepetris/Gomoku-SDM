@@ -36,4 +36,22 @@ public class PlayerTest {
         player.addMove(new Coordinates(0,0));
         Assertions.assertEquals(1, player.getMovesList().size());
     }
+
+    @Test
+    public void testDefaultUserBlack(){
+        // - vogliamo che il test fallisca se non inserisco il nome?
+        // - oppure non fallisce, ma viene mantenuto di default lo user Player 1/2 (numero scelto in base al colore)
+        Player player = new Player("", Colour.BLACK);
+        Assertions.assertEquals("Player 1", player.getUsername());
+    }
+
+    @Test
+    public void testDefaultUserWhite(){
+        // - vogliamo che il test fallisca se non inserisco il nome?
+        // - oppure non fallisce, ma viene mantenuto di default lo user Player 1/2 (numero scelto in base al colore)
+        Player player = new Player("", Colour.WHITE);
+        Assertions.assertEquals("Player 2", player.getUsername());
+    }
+
+
 }
