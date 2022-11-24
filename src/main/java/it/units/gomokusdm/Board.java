@@ -1,6 +1,7 @@
 package it.units.gomokusdm;
 
 public class Board {
+    // commento test
     private static final int BOARD_DIMENSION = 19;
     private final int[][] board;
 
