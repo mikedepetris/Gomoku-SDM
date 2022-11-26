@@ -16,16 +16,21 @@ public class Board {
         return board;
     }
 
-    public void printBoard() {
+    public String toString() {
+        StringBuilder temp = new StringBuilder();
         for (int i = 0; i<BOARD_DIMENSION; i++) {
             for (int j = 0; j<BOARD_DIMENSION; j++) {
                 switch (board[i][j]) {
-                    case EMPTY -> System.out.print("|0");
-                    case BLACK_STONE -> System.out.print("|B");
-                    case WHITE_STONE -> System.out.print("|W");
+                    case EMPTY -> temp.append("|0");
+                    case BLACK_STONE -> temp.append("|B");
+                    case WHITE_STONE -> temp.append("|W");
                 }
             }
+            temp.append("\n");
+            // (System.getProperty("line.separator"))
+
         }
+        return temp.toString();
 
     }
 
