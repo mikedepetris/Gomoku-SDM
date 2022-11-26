@@ -15,3 +15,5 @@ copy commands to checkout in your local repository
     git checkout <17-test-pr>
 do changes
 commit push
+
+qui nuovo issue 19
