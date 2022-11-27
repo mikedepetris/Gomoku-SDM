@@ -35,4 +35,11 @@ public class Board {
     }
 
 
+    public void setCell(Colour colour, Coordinates coordinates) {
+
+    }
+
+    public boolean isEmptyCell(Coordinates coordinates) {
+        return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
+    }
 }
