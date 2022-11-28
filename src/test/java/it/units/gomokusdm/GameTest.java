@@ -16,7 +16,7 @@ public class GameTest {
         Assertions.assertEquals(game.getPlayer2(), secondPlayer);
     }
 
-    // Va prima implementato setCell in Board
+    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
     @Test
     public void testMakeFirstMove() {
         Player firstPlayer = new Player("First", Colour.BLACK);
@@ -32,14 +32,15 @@ public class GameTest {
         Assertions.assertEquals(stoneColor, firstPlayer.getColour());
     }
 
-    // Va prima implementato setCell in Board
+    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
+    // Mi aspetto che fallisca perchè, il player ha fatto delle mosse in coordinate non adiacenti a quella centrale
     @Test
     public void testMakeConsecutiveMoves() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.makeMove(firstPlayer, new Coordinates(1, 1));
+        //game.makeMove(firstPlayer, new Coordinates(1, 1));
         game.makeMove(secondPlayer, new Coordinates(1, 2));
         game.makeMove(firstPlayer, new Coordinates(1, 3));
         int[][] expectedBoard =
@@ -53,7 +54,7 @@ public class GameTest {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
