@@ -52,4 +52,12 @@ public class Board {
     public boolean isEmptyCell(Coordinates coordinates) {
         return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
     }
+
+    public int getStoneAt(Coordinates coordinates){
+        return board[coordinates.getRowIndex()][coordinates.getRowIndex()];
+    }
+
+    public int getBoardDimension(){
+        return BOARD_DIMENSION;
+    }
 }
