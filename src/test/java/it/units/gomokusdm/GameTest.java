@@ -16,14 +16,20 @@ public class GameTest {
         Assertions.assertEquals(game.getPlayer2(), secondPlayer);
     }
 
+    // Va prima implementato setCell in Board
+    // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
+    // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
+    // Le successive mosse invece sono casuali
+
     // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
+
     @Test
     public void testMakeFirstMove() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.makeMove(firstPlayer, new Coordinates(1, 1));
+        game.makeMove(firstPlayer, new Coordinates(1, 1)); // deve essere 10,10
         Colour stoneColor = switch (board.getBoard()[1][1]) {
             case 1 -> Colour.BLACK;
             case 2 -> Colour.WHITE;
@@ -31,6 +37,11 @@ public class GameTest {
         };
         Assertions.assertEquals(stoneColor, firstPlayer.getColour());
     }
+
+    // Va prima implementato setCell in Board
+    // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
+    // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
+    // Le successive mosse invece sono casuali
 
     // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
     // Mi aspetto che fallisca perchè, il player ha fatto delle mosse in coordinate non adiacenti a quella centrale
@@ -40,7 +51,10 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
+
+        game.makeMove(firstPlayer, new Coordinates(1, 1)); // deve essere 10,10
         //game.makeMove(firstPlayer, new Coordinates(1, 1));
+
         game.makeMove(secondPlayer, new Coordinates(1, 2));
         game.makeMove(firstPlayer, new Coordinates(1, 3));
         int[][] expectedBoard =
