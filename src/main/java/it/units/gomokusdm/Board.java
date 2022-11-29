@@ -1,5 +1,7 @@
 package it.units.gomokusdm;
 
+import java.util.Objects;
+
 public class Board {
     private static final int BOARD_DIMENSION = 19;
     private final int[][] board;
@@ -10,6 +12,7 @@ public class Board {
 
     public Board() {
         this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
+        this.board[9][9] = BLACK_STONE;
     }
 
     public int[][] getBoard() {
@@ -26,6 +29,7 @@ public class Board {
                     case WHITE_STONE -> temp.append("|W");
                 }
             }
+            temp.append("|");
             temp.append("\n");
             // (System.getProperty("line.separator"))
 
@@ -36,7 +40,13 @@ public class Board {
 
 
     public void setCell(Colour colour, Coordinates coordinates) {
-
+        int row = coordinates.getRowIndex();
+        int col = coordinates.getColIndex();
+        if (Objects.equals(colour, "BLACK")) {
+            board[row][col] = BLACK_STONE;
+        } else {
+            board[row][col] = WHITE_STONE;
+        }
     }
 
     public boolean isEmptyCell(Coordinates coordinates) {
