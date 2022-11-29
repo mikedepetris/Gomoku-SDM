@@ -20,6 +20,9 @@ public class GameTest {
     // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
     // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
     // Le successive mosse invece sono casuali
+
+    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
+
     @Test
     public void testMakeFirstMove() {
         Player firstPlayer = new Player("First", Colour.BLACK);
@@ -39,13 +42,19 @@ public class GameTest {
     // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
     // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
     // Le successive mosse invece sono casuali
+
+    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
+    // Mi aspetto che fallisca perchè, il player ha fatto delle mosse in coordinate non adiacenti a quella centrale
     @Test
     public void testMakeConsecutiveMoves() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
+
         game.makeMove(firstPlayer, new Coordinates(1, 1)); // deve essere 10,10
+        //game.makeMove(firstPlayer, new Coordinates(1, 1));
+
         game.makeMove(secondPlayer, new Coordinates(1, 2));
         game.makeMove(firstPlayer, new Coordinates(1, 3));
         int[][] expectedBoard =
@@ -59,7 +68,7 @@ public class GameTest {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
