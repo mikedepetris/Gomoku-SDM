@@ -76,6 +76,20 @@ public class BoardTest {
 
     }
 
+    @Test
+    public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame(){
+        Board board = new Board();
+        Coordinates coordinates = new Coordinates(0,0);
+        Assertions.assertEquals(0, board.getStoneAt(coordinates));
+    }
+
+    @Test
+    public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer(){
+        Board board = new Board();
+        Coordinates coordinates = new Coordinates(board.getBoardDimension()/2, board.getBoardDimension()/2 );
+        Assertions.assertEquals(1, board.getStoneAt(coordinates));
+    }
+
 
 
 
