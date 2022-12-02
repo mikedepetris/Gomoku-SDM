@@ -1,19 +1,26 @@
 package it.units.gomokusdm;
 
 import java.io.*;
-import java.util.Scanner;
 
 public class CLIController {
 
     private static CLIController cli = null;
 
-    private PrintStream outputStream;
-    private InputStream inputStream;
-    private BufferedReader reader;
+    private final PrintStream outputStream;
+    private final InputStream inputStream;
+    private final BufferedReader reader;
     private Board board;
     private Game game;
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
+
+    private CLIController(PrintStream outputStream, InputStream inputStream) {
+        this.outputStream = outputStream;
+        this.inputStream = inputStream;
+        this.reader = new BufferedReader(new InputStreamReader(inputStream));
+        this.player1 = new Player("", Colour.BLACK);
+        this.player2 = new Player("", Colour.WHITE);
+    }
 
     public static CLIController createInstance(PrintStream outputStream, InputStream inputStream) {
         if (cli == null) cli = new CLIController(outputStream, inputStream);
@@ -26,14 +33,6 @@ public class CLIController {
 
     public static void closeInstance() {
         cli = null;
-    }
-
-    private CLIController(PrintStream outputStream, InputStream inputStream) {
-        this.outputStream = outputStream;
-        this.inputStream = inputStream;
-        this.reader = new BufferedReader(new InputStreamReader(inputStream));
-        this.player1 = new Player("", Colour.BLACK);
-        this.player2 = new Player("", Colour.WHITE);
     }
 
     public Player getPlayer1() {
@@ -53,7 +52,25 @@ public class CLIController {
     private void setPlayerNames(Player player) throws IOException {
         outputStream.printf("Player %d name:   ", player.equals(player1) ? 1 : 2);
         String playerName = reader.readLine();
-        player.setUsername(playerName);
+        if (!playerName.isBlank()) {
+            player.setUsername(playerName);
+        } else {
+            String defaultUsername = player.equals(player1) ? "Player_1" : "Player_2";
+            player.setUsername(defaultUsername);
+        }
+    }
+
+    public int getSingleCoordinateByPlayer() throws IOException {
+        return Integer.parseInt(reader.readLine());
+    }
+
+    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException {
+        outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
+        int rowCoordinate = getSingleCoordinateByPlayer();
+        outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
+        int columnCoordinate = getSingleCoordinateByPlayer();
+        return new Coordinates(rowCoordinate, columnCoordinate);
+
     }
 
 
