@@ -37,7 +37,7 @@ public class Game {
     }
 
     private boolean checkIfThereAreFiveConsecutiveStones() {
-        return true;
+        return false;
     }
 
 
