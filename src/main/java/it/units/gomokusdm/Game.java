@@ -41,6 +41,8 @@ public class Game {
         lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
     }
 
+    // 33-checkiftherearefiveconsecutivestones-implemented
+    
     // Implemento metodo super basico che verifica se ci sono 5 stones dello stesso colore,
     // basandosi su i,j per le direzioni
     public boolean countFiveStones (int i, int j, int colIndex, int rowIndex, int winning_colour) {
@@ -80,7 +82,6 @@ public class Game {
                 (countFiveStones(0, -4, colIndex, rowIndex, winning_colour)) ||
                 (countFiveStones(-4, -4, colIndex, rowIndex, winning_colour)) ||
                 (countFiveStones(4, -4, colIndex, rowIndex, winning_colour));
-
     }
 
 
