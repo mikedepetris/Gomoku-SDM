@@ -121,4 +121,26 @@ public class GameTest {
         }
     }
 
+    /* Costruisco una situazione in cui nella board ci sono 5 bianchi consecutivi richiamando 5 volte make move
+       con il player bianco (senza alternare con il player nero, è solo un test per vedere se rileva la vittoria)
+       ho fatto una diagonale di bianchi da destra
+     */
+    @Test
+    public void isPlayerWinningGame() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+
+        game.makeMove(secondPlayer, new Coordinates(8, 10));
+        game.makeMove(secondPlayer, new Coordinates(7, 11));
+        game.makeMove(secondPlayer, new Coordinates(6, 12));
+        game.makeMove(secondPlayer, new Coordinates(5, 13));
+        game.makeMove(secondPlayer, new Coordinates(4, 14));
+
+        boolean result = game.checkIfThereAreFiveConsecutiveStones(game.getLastMoveCoordinates(), Colour.WHITE);
+        Assertions.assertEquals(result, true);
+
+    }
+
 }

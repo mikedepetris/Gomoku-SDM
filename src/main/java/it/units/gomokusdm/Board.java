@@ -54,7 +54,7 @@ public class Board {
     }
 
     public int getStoneAt(Coordinates coordinates){
-        return board[coordinates.getRowIndex()][coordinates.getRowIndex()];
+        return board[coordinates.getRowIndex()][coordinates.getColIndex()];
     }
 
     public int getBoardDimension(){

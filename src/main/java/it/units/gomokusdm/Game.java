@@ -3,14 +3,14 @@ package it.units.gomokusdm;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class Game {
 
     private Board board;
     private Player player1;
     private Player player2;
-
-    //private Coordinates lastMoveCoordinates;
+    private Coordinates lastMoveCoordinates;
 
     public Game(Board board, Player player1, Player player2) {
         this.board = board;
@@ -30,14 +30,58 @@ public class Game {
         return player2;
     }
 
+    public Coordinates getLastMoveCoordinates() {
+        return lastMoveCoordinates;
+    }
+
     public void makeMove(Player player, Coordinates coordinates) {
         if (isFeasibleMove(coordinates)) {
             board.setCell(player.getColour(), coordinates);
         }
+        lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
     }
 
-    private boolean checkIfThereAreFiveConsecutiveStones() {
-        return false;
+    // 33-checkiftherearefiveconsecutivestones-implemented
+    
+    // Implemento metodo super basico che verifica se ci sono 5 stones dello stesso colore,
+    // basandosi su i,j per le direzioni
+    public boolean countFiveStones (int i, int j, int colIndex, int rowIndex, int winning_colour) {
+        int i_increment = i/4 * (-1);
+        int j_increment = j/4 * (-1);
+        int counterStones = 0;
+        while (i <= 4 && j <= 4) {
+            if ( (rowIndex + j >= 0 && rowIndex + j < 19 ) && (colIndex + i >= 0 && colIndex + i < 19 ) ) {
+                int stoneColourNumber = board.getStoneAt(new Coordinates(rowIndex+j, colIndex+i));
+                if (stoneColourNumber == winning_colour) {
+                    counterStones++;
+                } else {
+                    if (counterStones != 5) {
+                        counterStones = 0;
+                    } else {
+                        i = 4; j = 4; // stop while, there are already five consecutive stones
+                    }
+                }
+            }
+            i=i+i_increment;
+            j=j+j_increment;
+        }
+        return (counterStones == 5) ;
+    }
+
+    public boolean checkIfThereAreFiveConsecutiveStones(Coordinates coordinates, Colour colour) {
+        boolean winning = false;
+        int rowIndex = coordinates.getRowIndex();
+        int colIndex = coordinates.getColIndex();
+        int winning_colour = 1;
+        if (colour == Colour.WHITE) {
+            winning_colour = 2;
+        }
+        // controlla 4 direzioni
+        // N.B sto richiamando 4 while
+        return (countFiveStones(-4, 0, colIndex, rowIndex, winning_colour)) ||
+                (countFiveStones(0, -4, colIndex, rowIndex, winning_colour)) ||
+                (countFiveStones(-4, -4, colIndex, rowIndex, winning_colour)) ||
+                (countFiveStones(4, -4, colIndex, rowIndex, winning_colour));
     }
 
 
