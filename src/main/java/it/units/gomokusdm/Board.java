@@ -1,9 +1,7 @@
 package it.units.gomokusdm;
 
-import java.util.Objects;
-
 public class Board {
-    private static final int BOARD_DIMENSION = 19;
+    private int BOARD_DIMENSION;
     private final int[][] board;
 
     private static final int EMPTY = 0;
@@ -11,12 +9,33 @@ public class Board {
     private static final int WHITE_STONE = 2;
 
     public Board() {
+        BOARD_DIMENSION = 19;
         this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
-        this.board[9][9] = BLACK_STONE;
+        this.board[BOARD_DIMENSION/2][BOARD_DIMENSION/2] = BLACK_STONE;
+    }
+
+    public int getBoardDimension(){
+        return BOARD_DIMENSION;
     }
 
     public int[][] getBoard() {
         return board;
+    }
+
+    public int getStoneAt(Coordinates coordinates){
+        return board[coordinates.getRowIndex()][coordinates.getColIndex()];
+    }
+
+    public void setCell(Colour colour, Coordinates coordinates) {
+        if (colour == Colour.BLACK) {
+            board[coordinates.getRowIndex()][coordinates.getColIndex()] = BLACK_STONE;
+        } else {
+            board[coordinates.getRowIndex()][coordinates.getColIndex()] = WHITE_STONE;
+        }
+    }
+
+    public boolean isEmptyCell(Coordinates coordinates) {
+        return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
     }
 
     public String toString() {
@@ -31,33 +50,10 @@ public class Board {
             }
             temp.append("|");
             temp.append("\n");
-            // (System.getProperty("line.separator"))
-
         }
         return temp.toString();
 
     }
 
 
-    public void setCell(Colour colour, Coordinates coordinates) {
-        int row = coordinates.getRowIndex();
-        int col = coordinates.getColIndex();
-        if (Objects.equals(colour, "BLACK")) {
-            board[row][col] = BLACK_STONE;
-        } else {
-            board[row][col] = WHITE_STONE;
-        }
-    }
-
-    public boolean isEmptyCell(Coordinates coordinates) {
-        return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
-    }
-
-    public int getStoneAt(Coordinates coordinates){
-        return board[coordinates.getRowIndex()][coordinates.getColIndex()];
-    }
-
-    public int getBoardDimension(){
-        return BOARD_DIMENSION;
-    }
 }
