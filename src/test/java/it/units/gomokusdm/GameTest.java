@@ -138,7 +138,7 @@ public class GameTest {
         game.makeMove(secondPlayer, new Coordinates(5, 13));
         game.makeMove(secondPlayer, new Coordinates(4, 14));
 
-        boolean result = game.checkIfThereAreFiveConsecutiveStones(game.getLastMoveCoordinates(), Colour.WHITE);
+        boolean result = game.checkIfThereAreFiveConsecutiveStones(Colour.WHITE);
         Assertions.assertEquals(result, true);
 
     }
