@@ -39,8 +39,7 @@ public class Coordinates {
             for (int col = -1; col <= 1; col++) {
                 int rowCoordinate = rowIndex + row;
                 int columnCoordinate = colIndex + col;
-                if ((rowCoordinate >= 0 && rowCoordinate < 19) && (columnCoordinate >= 0 && columnCoordinate < 19))
-                    adjacentCoordinates.add(new Coordinates(rowCoordinate, columnCoordinate));
+                adjacentCoordinates.add(new Coordinates(rowCoordinate, columnCoordinate));
             }
         }
         return adjacentCoordinates;

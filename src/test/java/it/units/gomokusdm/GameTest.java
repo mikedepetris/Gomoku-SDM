@@ -16,58 +16,95 @@ public class GameTest {
         Assertions.assertEquals(game.getPlayer2(), secondPlayer);
     }
 
-    // Va prima implementato setCell in Board
-    // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
-    // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
-    // Le successive mosse invece sono casuali
-
-    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
-
     @Test
-    public void testMakeFirstMove() {
+    public void testIsFeasibleMove() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.makeMove(firstPlayer, new Coordinates(1, 1)); // deve essere 10,10
+        // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
+        boolean result = game.isFeasibleMove(new Coordinates(8,9));
+        Assertions.assertEquals(true, result);
+
+    }
+
+    @Test
+    public void testIsNotFeasibleMove() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
+        boolean result = game.isFeasibleMove(new Coordinates(1,1));
+        Assertions.assertEquals(false, result);
+
+    }
+
+
+    // The game has begun.
+    // The board is in the initial state, with the black stone in the center (9,9)
+    // The second player (white) tries to make the move, in adjacent coordinates (8,9)
+
+    @Test
+    public void testMakeFirstMoveAdjacent() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        //
+        game.makeMove(secondPlayer, new Coordinates(8, 9));
+        Colour stoneColor = switch (board.getBoard()[8][9]) {
+            case 1 -> Colour.BLACK;
+            case 2 -> Colour.WHITE;
+            default -> null;
+        };
+        Assertions.assertEquals(stoneColor, secondPlayer.getColour());
+    }
+
+    // The game has begun.
+    // The board is in the initial state, with the black stone in the center (9,9)
+    // The second player (white) tries to make the move, but in not adjacent coordinates (1,1)
+    // the cell is empty
+    @Test
+    public void testMakeFirstMoveNotAdjacent() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        //
+        game.makeMove(secondPlayer, new Coordinates(1, 1));
         Colour stoneColor = switch (board.getBoard()[1][1]) {
             case 1 -> Colour.BLACK;
             case 2 -> Colour.WHITE;
             default -> null;
         };
-        Assertions.assertEquals(stoneColor, firstPlayer.getColour());
+        Assertions.assertEquals(stoneColor, null);
     }
 
-    // Va prima implementato setCell in Board
-    // Il test è invalido perchè il giocatore che inizia ("First"), è obbligato a inserire la pedina nera al centro.
-    // Non può inserire nelle coordinate (1,1), ma mi aspetto in questo caso le coordinate (10,10) come prima mossa
-    // Le successive mosse invece sono casuali
 
-    // Fallisce perchè: NullPointerException:this.lastMoveCoordinates is null
-    // Mi aspetto che fallisca perchè, il player ha fatto delle mosse in coordinate non adiacenti a quella centrale
     @Test
     public void testMakeConsecutiveMoves() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
-
-        game.makeMove(firstPlayer, new Coordinates(1, 1)); // deve essere 10,10
-        //game.makeMove(firstPlayer, new Coordinates(1, 1));
-
+        // pedina non adiacente, mi aspetto che non faccia nulla
         game.makeMove(secondPlayer, new Coordinates(1, 2));
-        game.makeMove(firstPlayer, new Coordinates(1, 3));
+        // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
+        game.makeMove(secondPlayer, new Coordinates(8, 9));
+        game.makeMove(firstPlayer, new Coordinates(7, 9));
+        game.makeMove(secondPlayer, new Coordinates(7, 8));
         int[][] expectedBoard =
                 {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -83,6 +120,39 @@ public class GameTest {
             for (int j = 0; j < board.getBoard()[0].length; j++) {
                 Assertions.assertEquals(board.getBoard()[i][j], expectedBoard[i][j]);
             }
+        }
+    }
+
+
+    @Test
+    public void testIsPlayerWinningGame() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+
+        boolean[] result = new boolean[8];
+        int i = 0;
+        game.makeMove(secondPlayer, new Coordinates(9, 10));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(8, 8));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 11));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(7, 7));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 12));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(6, 6));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 13));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(5, 5));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+
+        boolean[] expected_result = {false, false, false, false, false, false, false, true};
+        for (int j = 0; j<result.length; j++) {
+            Assertions.assertEquals(result[j], expected_result[j]);
         }
     }
 
