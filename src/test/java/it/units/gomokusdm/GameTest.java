@@ -92,6 +92,8 @@ public class GameTest {
         game.makeMove(secondPlayer, new Coordinates(1, 2));
         // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
         game.makeMove(secondPlayer, new Coordinates(8, 9));
+        game.makeMove(firstPlayer, new Coordinates(7, 9));
+        game.makeMove(secondPlayer, new Coordinates(7, 8));
         int[][] expectedBoard =
                 {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -101,7 +103,7 @@ public class GameTest {
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                        {0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -121,26 +123,37 @@ public class GameTest {
         }
     }
 
-    /* Costruisco una situazione in cui nella board ci sono 5 bianchi consecutivi richiamando 5 volte make move
-       con il player bianco (senza alternare con il player nero, è solo un test per vedere se rileva la vittoria)
-       ho fatto una diagonale di bianchi da destra
-     */
+
     @Test
-    public void isPlayerWinningGame() {
+    public void testIsPlayerWinningGame() {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
 
-        game.makeMove(secondPlayer, new Coordinates(8, 10));
-        game.makeMove(secondPlayer, new Coordinates(7, 11));
-        game.makeMove(secondPlayer, new Coordinates(6, 12));
-        game.makeMove(secondPlayer, new Coordinates(5, 13));
-        game.makeMove(secondPlayer, new Coordinates(4, 14));
+        boolean[] result = new boolean[8];
+        int i = 0;
+        game.makeMove(secondPlayer, new Coordinates(9, 10));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(8, 8));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 11));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(7, 7));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 12));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(6, 6));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        game.makeMove(secondPlayer, new Coordinates(9, 13));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        game.makeMove(firstPlayer, new Coordinates(5, 5));
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
 
-        boolean result = game.checkIfThereAreFiveConsecutiveStones(Colour.WHITE);
-        Assertions.assertEquals(result, true);
-
+        boolean[] expected_result = {false, false, false, false, false, false, false, true};
+        for (int j = 0; j<result.length; j++) {
+            Assertions.assertEquals(result[j], expected_result[j]);
+        }
     }
 
 }
