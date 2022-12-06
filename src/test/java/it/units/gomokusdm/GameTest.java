@@ -3,6 +3,9 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameTest {
 
     @Test
@@ -154,6 +157,35 @@ public class GameTest {
         for (int j = 0; j<result.length; j++) {
             Assertions.assertEquals(result[j], expected_result[j]);
         }
+    }
+
+    @Test
+    public void testIsPlayerWinningGameWith5ConsecutiveStones() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+
+        List<Boolean> result = new ArrayList<>();
+        game.makeMove(secondPlayer, new Coordinates(9, 10));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(firstPlayer, new Coordinates(8, 8));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(secondPlayer, new Coordinates(9, 11));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(firstPlayer, new Coordinates(7, 7));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(secondPlayer, new Coordinates(9, 12));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(firstPlayer, new Coordinates(6, 6));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(secondPlayer, new Coordinates(9, 13));
+        result.add(game.checkIfPlayerWins());
+        game.makeMove(firstPlayer, new Coordinates(5, 5));
+        result.add(game.checkIfPlayerWins());
+
+        List<Boolean> expected_result = List.of(false, false, false, false, false, false, false, true);
+        Assertions.assertEquals(expected_result, result);
     }
 
 }

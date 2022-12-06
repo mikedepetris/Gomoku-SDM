@@ -3,6 +3,7 @@ package it.units.gomokusdm;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Game {
 
@@ -68,6 +69,40 @@ public class Game {
             }
         }
         return (counterStones == nStones) ;
+    }
+
+    public boolean checkIfPlayerWins() {
+        return getAllDirectionsResultOfConsecutiveNStones(5).contains(Boolean.TRUE);
+    }
+
+    private List<Boolean> getAllDirectionsResultOfConsecutiveNStones(int N) {
+        List<Boolean> valuesOfAdjStonesInAllDirection = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            valuesOfAdjStonesInAllDirection.add(checkIfThereAreNConsecutiveStonesInDirection(direction, N));
+        }
+        return valuesOfAdjStonesInAllDirection;
+    }
+
+    private boolean checkIfThereAreNConsecutiveStonesInDirection(Direction direction, int N) {
+        List<Boolean> valueOfAdjacentStones = new ArrayList<>();
+        Coordinates currentCoordinate = lastMoveCoordinates;
+        valueOfAdjacentStones.add(Boolean.TRUE);
+        int valueToControl = N - 1;
+        while (valueToControl > 0) {
+            Coordinates coordinatesInDirection = currentCoordinate.getCoordinateMovedInDirectionWithStep(direction, 1);
+            if (!checkIfStonesAreEqual(currentCoordinate, coordinatesInDirection)) {
+                valueOfAdjacentStones.add(Boolean.FALSE);
+                break;
+            }
+            valueOfAdjacentStones.add(Boolean.TRUE);
+            currentCoordinate = coordinatesInDirection;
+            valueToControl--;
+        }
+        return valueOfAdjacentStones.size() == N && !valueOfAdjacentStones.contains(Boolean.FALSE);
+    }
+
+    private boolean checkIfStonesAreEqual(Coordinates firstCoordinate, Coordinates secondCoordinate) {
+        return board.areStonesOfSameColourAt(firstCoordinate, secondCoordinate);
     }
 
     public boolean checkIfThereAreFiveConsecutiveStones(Colour colour) {
