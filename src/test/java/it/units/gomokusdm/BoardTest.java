@@ -30,7 +30,7 @@ public class BoardTest {
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|B|0|0|0|0|0|0|0|0|0|\n" +
+                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
@@ -82,21 +82,5 @@ public class BoardTest {
         Coordinates coordinates = new Coordinates(0,0);
         Assertions.assertEquals(0, board.getStoneAt(coordinates));
     }
-
-    @Test
-    public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer(){
-        Board board = new Board();
-        Coordinates coordinates = new Coordinates(board.getBoardDimension()/2, board.getBoardDimension()/2 );
-        Assertions.assertEquals(1, board.getStoneAt(coordinates));
-    }
-
-
-
-
-
-
-
-
-
 
 }

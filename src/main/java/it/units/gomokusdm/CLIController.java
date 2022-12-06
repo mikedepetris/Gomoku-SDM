@@ -70,7 +70,6 @@ public class CLIController {
         outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
         int columnCoordinate = getSingleCoordinateByPlayer();
         return new Coordinates(rowCoordinate, columnCoordinate);
-
     }
 
 
