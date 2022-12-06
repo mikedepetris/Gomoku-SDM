@@ -11,7 +11,6 @@ public class Board {
     public Board() {
         BOARD_DIMENSION = 19;
         this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
-        this.board[BOARD_DIMENSION/2][BOARD_DIMENSION/2] = BLACK_STONE;
     }
 
     public int getBoardDimension(){
@@ -36,6 +35,11 @@ public class Board {
 
     public boolean isEmptyCell(Coordinates coordinates) {
         return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
+    }
+
+    public boolean areValidCoordinates(Coordinates coordinates) {
+        return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
+                (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
     }
 
     public String toString() {
