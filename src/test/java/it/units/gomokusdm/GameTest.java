@@ -97,6 +97,17 @@ public class GameTest {
         }
     }
 
+    @Test
+    public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() throws Exception {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
+                board.getBoardDimension() / 2 );
+        Assertions.assertEquals(1, board.getStoneAt(coordinates));
+    }
+
 
     @Test
     public void testMakeConsecutiveMoves() throws Exception {
