@@ -93,19 +93,13 @@ public class Game {
     // controlla se esiste una stone adiacente intorno a quella che sto inserendo. se ne esiste almeno una,
     // posso inserire la stone
     public boolean isThereAnAdjacentStone(Coordinates coordinates) {
-        boolean adjacentStone = false;
         ArrayList<Coordinates> adjacent_coordinates = coordinates.getAdjacentCoordinates();
-        Iterator<Coordinates> iter = adjacent_coordinates.iterator();
-        while (iter.hasNext()) {
-            Coordinates el = iter.next();
-            if (el.getRowIndex() >= 0 && el.getRowIndex() < board.getBoardDimension() &&
-                    el.getColIndex() >= 0 && el.getColIndex() < board.getBoardDimension()) {
-                if (!board.isEmptyCell(el)) {
-                    adjacentStone = true;
-                }
+        for (Coordinates el : adjacent_coordinates) {
+            if (board.areValidCoordinates(coordinates) && !board.isEmptyCell(el)) {
+                return true;
             }
         }
-        return adjacentStone;
+        return false;
     }
 
     // la cella dev'essere vuota, e intorno ce ne deve essere almeno una adiacente

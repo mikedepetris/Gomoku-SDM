@@ -38,6 +38,11 @@ public class Board {
         return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
     }
 
+    public boolean areValidCoordinates(Coordinates coordinates) {
+        return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
+                (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
+    }
+
     public String toString() {
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i<BOARD_DIMENSION; i++) {
