@@ -2,7 +2,6 @@ package it.units.gomokusdm;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Game {
 
@@ -10,11 +9,21 @@ public class Game {
     private Player player1;
     private Player player2;
     private Coordinates lastMoveCoordinates;
+    private Player lastMovingPlayer;
 
-    public Game(Board board, Player player1, Player player2) {
+    public Game(Board board, Player player1, Player player2) throws Exception {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
+        if (checkPlayerColours(player1, player2)) {
+            makeMandatoryFirstMove(player1.getColour() == Colour.BLACK ? player1 : player2);
+        } else {
+            throw new Exception("invalid player colors");
+        }
+    }
+
+    private static boolean checkPlayerColours(Player player1, Player player2) {
+        return player1.getColour() != player2.getColour();
     }
 
     public Board getBoard() {
@@ -33,41 +42,53 @@ public class Game {
         return lastMoveCoordinates;
     }
 
-    public void makeMove(Player player, Coordinates coordinates) {
-        if (isFeasibleMove(coordinates)) {
-            board.setCell(player.getColour(), coordinates);
-        }
-        lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
+    private void makeMandatoryFirstMove(Player player) {
+        board.setCell(player.getColour(),
+                new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2));
     }
-    
-    // Implemento metodo super basico che verifica se ci sono nStones dello stesso colore,
+
+    public void makeMove(Player player, Coordinates coordinates) throws Exception {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
+            board.setCell(player.getColour(), coordinates);
+            lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
+            lastMovingPlayer = player;
+        } else {
+            throw new Exception("Invalid arguments.");
+        }
+    }
+
+    private boolean isTurnOfPlayer(Player player) {
+        return player != lastMovingPlayer;
+    }
+
+    // Implemento metodo super basico che verifica se ci sono nstones dello stesso colore,
     // basandosi su i,j per le direzioni
     // metodo poco leggibile anche se funziona, aperto al refactoring
-    public boolean countStones (int colDirection, int rowDirection, int winningColour, int nStones) {
+    public boolean countStones(int colDirection, int rowDirection, int winningColour, int n) {
         int rowIndex = lastMoveCoordinates.getRowIndex(); int colIndex = lastMoveCoordinates.getColIndex();
-        int i = colDirection*(nStones-1); int j = rowDirection*(nStones-1);
-        int i_increment = i/(nStones-1); int j_increment = j/(nStones-1);
+        int i = colDirection * (n - 1);
+        int j = rowDirection * (n - 1);
+        int i_increment = i / (n - 1);
+        int j_increment = j / (n - 1);
         int counterStones = 0;
-        if (nStones <= board.getBoardDimension() && nStones > 0) {
-            while (i <= (nStones - 1) && i >= -(nStones - 1) && j <= (nStones - 1) && j >= -(nStones - 1)) {
-                if ((rowIndex + j >= 0 && rowIndex + j < board.getBoardDimension()) &&
-                        (colIndex + i >= 0 && colIndex + i < board.getBoardDimension())) {
+        if (n <= board.getBoardDimension() && n > 0) {
+            while (i <= (n - 1) && i >= -(n - 1) && j <= (n - 1) && j >= -(n - 1)) {
+                if (board.areValidCoordinates(new Coordinates(rowIndex + j, colIndex + i))) {
                     int stoneColourNumber = board.getStoneAt(new Coordinates(rowIndex + j, colIndex + i));
                     if (stoneColourNumber == winningColour) {
                         counterStones++;
                     } else {
-                        if (counterStones != nStones) {
+                        if (counterStones != n) {
                             counterStones = 0;
                         } else {
-                            i = (nStones - 1); j = (nStones - 1); // stop while, there are already five consecutive stones
-                        }
-                    }
+                            i = (n - 1); j = (n - 1); // stop while, there are already five consecutive stones
+                        }                    }
                 }
                 i = i - i_increment;
                 j = j - j_increment;
             }
         }
-        return (counterStones == nStones) ;
+        return (counterStones == n) ;
     }
 
     public boolean checkIfThereAreFiveConsecutiveStones(Colour colour) {

@@ -3,10 +3,12 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Executable;
+
 public class GameTest {
 
     @Test
-    public void testGameInstantiation() {
+    public void testGameInstantiation() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
@@ -17,26 +19,36 @@ public class GameTest {
     }
 
     @Test
-    public void testIsFeasibleMove() {
+    public void testInvalidGameInstantiation() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.BLACK);
+        Board board = new Board();
+        Assertions.assertThrows(Exception.class, () -> {
+            Game game = new Game(board, firstPlayer, secondPlayer);
+        });
+    }
+
+    @Test
+    public void testIsFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         boolean result = game.isFeasibleMove(new Coordinates(8,9));
-        Assertions.assertEquals(true, result);
+        Assertions.assertTrue(result);
 
     }
 
     @Test
-    public void testIsNotFeasibleMove() {
+    public void testIsNotFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         boolean result = game.isFeasibleMove(new Coordinates(1,1));
-        Assertions.assertEquals(false, result);
+        Assertions.assertFalse(result);
 
     }
 
@@ -46,7 +58,7 @@ public class GameTest {
     // The second player (white) tries to make the move, in adjacent coordinates (8,9)
 
     @Test
-    public void testMakeFirstMoveAdjacent() {
+    public void testMakeFirstMoveAdjacent() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
@@ -66,66 +78,76 @@ public class GameTest {
     // The second player (white) tries to make the move, but in not adjacent coordinates (1,1)
     // the cell is empty
     @Test
-    public void testMakeFirstMoveNotAdjacent() {
+    public void testMakeFirstMoveNotAdjacent() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
-        //
-        game.makeMove(secondPlayer, new Coordinates(1, 1));
-        Colour stoneColor = switch (board.getBoard()[1][1]) {
-            case 1 -> Colour.BLACK;
-            case 2 -> Colour.WHITE;
-            default -> null;
-        };
-        Assertions.assertEquals(stoneColor, null);
-    }
-
-
-    @Test
-    public void testMakeConsecutiveMoves() {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
-        Board board = new Board();
-        Game game = new Game(board, firstPlayer, secondPlayer);
-        // pedina non adiacente, mi aspetto che non faccia nulla
-        game.makeMove(secondPlayer, new Coordinates(1, 2));
-        // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
-        game.makeMove(secondPlayer, new Coordinates(8, 9));
-        game.makeMove(firstPlayer, new Coordinates(7, 9));
-        game.makeMove(secondPlayer, new Coordinates(7, 8));
-        int[][] expectedBoard =
-                {
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-                };
-        for (int i = 0; i < board.getBoard().length; i++) {
-            for (int j = 0; j < board.getBoard()[0].length; j++) {
-                Assertions.assertEquals(board.getBoard()[i][j], expectedBoard[i][j]);
-            }
+        try {
+            game.makeMove(secondPlayer, new Coordinates(1, 1));
+        } catch (Exception e) {
+            System.err.println("Handled makeMove Exception");
+        } finally {
+            Colour stoneColor = switch (board.getBoard()[1][1]) {
+                case 1 -> Colour.BLACK;
+                case 2 -> Colour.WHITE;
+                default -> null;
+            };
+            Assertions.assertEquals(stoneColor, null);
         }
     }
 
 
     @Test
-    public void testIsPlayerWinningGame() {
+    public void testMakeConsecutiveMoves() throws Exception {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        // pedina non adiacente, mi aspetto che non faccia nulla
+        try {
+            game.makeMove(secondPlayer, new Coordinates(1, 2));
+        } catch (Exception e) {
+            System.err.println("Handled makeMove Exception");
+        } finally {
+            // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
+            game.makeMove(secondPlayer, new Coordinates(8, 9));
+            game.makeMove(firstPlayer, new Coordinates(7, 9));
+            game.makeMove(secondPlayer, new Coordinates(7, 8));
+            int[][] expectedBoard =
+                    {
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+                    };
+            for (int i = 0; i < board.getBoard().length; i++) {
+                for (int j = 0; j < board.getBoard()[0].length; j++) {
+                    Assertions.assertEquals(board.getBoard()[i][j], expectedBoard[i][j]);
+                }
+            }
+        }
+
+    }
+
+
+    @Test
+    public void testIsPlayerWinningGame() throws Exception {
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();

@@ -11,7 +11,6 @@ public class Board {
     public Board() {
         BOARD_DIMENSION = 19;
         this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
-        this.board[BOARD_DIMENSION/2][BOARD_DIMENSION/2] = BLACK_STONE;
     }
 
     public int getBoardDimension(){
