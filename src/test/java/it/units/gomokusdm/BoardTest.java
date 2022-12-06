@@ -1,17 +1,18 @@
 package it.units.gomokusdm;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class BoardTest {
 
     @Test
-    void testBoardCreation(){
+    void testBoardCreation() {
         Board board = new Board();
         Assertions.assertEquals(19, board.getBoard().length);
     }
 
     @Test
-    void testBoardCreationWithDifferentBoardSize(){
+    void testBoardCreationWithDifferentBoardSize() {
         Board board = new Board();
         Assertions.assertNotEquals(10, board.getBoard().length);
     }
@@ -21,7 +22,7 @@ public class BoardTest {
         Board board = new Board();
         String result = board.toString();
         //System.out.print(result);
-        String expected_result ="|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+        String expected_result = "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
@@ -49,11 +50,11 @@ public class BoardTest {
     void testSetCell() {
         Board board = new Board();
         Colour c = Colour.WHITE;
-        Coordinates coordinates = new Coordinates(9,8);
+        Coordinates coordinates = new Coordinates(9, 8);
 
         board.setCell(c, coordinates);
         String result = board.toString();
-        String expected_result ="|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+        String expected_result = "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
                 "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
@@ -77,9 +78,9 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame(){
+    public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
         Board board = new Board();
-        Coordinates coordinates = new Coordinates(0,0);
+        Coordinates coordinates = new Coordinates(0, 0);
         Assertions.assertEquals(0, board.getStoneAt(coordinates));
     }
 

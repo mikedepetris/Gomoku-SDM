@@ -3,10 +3,8 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-// <<<<<<< 42-refactoring-verifica-della-vittoria
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Executable;
 
 public class GameTest {
 
@@ -38,7 +36,7 @@ public class GameTest {
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
-        boolean result = game.isFeasibleMove(new Coordinates(8,9));
+        boolean result = game.isFeasibleMove(new Coordinates(8, 9));
         Assertions.assertTrue(result);
 
     }
@@ -50,7 +48,7 @@ public class GameTest {
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
-        boolean result = game.isFeasibleMove(new Coordinates(1,1));
+        boolean result = game.isFeasibleMove(new Coordinates(1, 1));
         Assertions.assertFalse(result);
 
     }
@@ -107,7 +105,7 @@ public class GameTest {
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
-                board.getBoardDimension() / 2 );
+                board.getBoardDimension() / 2);
         Assertions.assertEquals(1, board.getStoneAt(coordinates));
     }
 
@@ -170,24 +168,31 @@ public class GameTest {
         boolean[] result = new boolean[8];
         int i = 0;
         game.makeMove(secondPlayer, new Coordinates(9, 10));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        i++;
         game.makeMove(firstPlayer, new Coordinates(8, 8));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        i++;
         game.makeMove(secondPlayer, new Coordinates(9, 11));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        i++;
         game.makeMove(firstPlayer, new Coordinates(7, 7));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        i++;
         game.makeMove(secondPlayer, new Coordinates(9, 12));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        i++;
         game.makeMove(firstPlayer, new Coordinates(6, 6));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        i++;
         game.makeMove(secondPlayer, new Coordinates(9, 13));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()); i++;
+        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        i++;
         game.makeMove(firstPlayer, new Coordinates(5, 5));
         result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
 
         boolean[] expected_result = {false, false, false, false, false, false, false, true};
-        for (int j = 0; j<result.length; j++) {
+        for (int j = 0; j < result.length; j++) {
             Assertions.assertEquals(result[j], expected_result[j]);
         }
     }

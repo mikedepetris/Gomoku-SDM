@@ -13,7 +13,7 @@ public class Board {
         this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
     }
 
-    public int getBoardDimension(){
+    public int getBoardDimension() {
         return BOARD_DIMENSION;
     }
 
@@ -21,7 +21,7 @@ public class Board {
         return board;
     }
 
-    public int getStoneAt(Coordinates coordinates){
+    public int getStoneAt(Coordinates coordinates) {
         return board[coordinates.getRowIndex()][coordinates.getColIndex()];
     }
 
@@ -44,8 +44,8 @@ public class Board {
 
     public String toString() {
         StringBuilder temp = new StringBuilder();
-        for (int i = 0; i<BOARD_DIMENSION; i++) {
-            for (int j = 0; j<BOARD_DIMENSION; j++) {
+        for (int i = 0; i < BOARD_DIMENSION; i++) {
+            for (int j = 0; j < BOARD_DIMENSION; j++) {
                 switch (board[i][j]) {
                     case EMPTY -> temp.append("|0");
                     case BLACK_STONE -> temp.append("|B");

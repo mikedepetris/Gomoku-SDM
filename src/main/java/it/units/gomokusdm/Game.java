@@ -2,8 +2,6 @@ package it.units.gomokusdm;
 
 
 import java.util.ArrayList;
-//<<<<<<< 42-refactoring-verifica-della-vittoria
-import java.util.Iterator;
 import java.util.List;
 
 public class Game {
@@ -68,7 +66,8 @@ public class Game {
     // basandosi su i,j per le direzioni
     // metodo poco leggibile anche se funziona, aperto al refactoring
     public boolean countStones(int colDirection, int rowDirection, int winningColour, int n) {
-        int rowIndex = lastMoveCoordinates.getRowIndex(); int colIndex = lastMoveCoordinates.getColIndex();
+        int rowIndex = lastMoveCoordinates.getRowIndex();
+        int colIndex = lastMoveCoordinates.getColIndex();
         int i = colDirection * (n - 1);
         int j = rowDirection * (n - 1);
         int i_increment = i / (n - 1);
@@ -84,14 +83,16 @@ public class Game {
                         if (counterStones != n) {
                             counterStones = 0;
                         } else {
-                            i = (n - 1); j = (n - 1); // stop while, there are already five consecutive stones
-                        }                    }
+                            i = (n - 1);
+                            j = (n - 1); // stop while, there are already five consecutive stones
+                        }
+                    }
                 }
                 i = i - i_increment;
                 j = j - j_increment;
             }
         }
-        return (counterStones == n) ;
+        return (counterStones == n);
     }
 
     public boolean checkIfPlayerWins() {
@@ -134,14 +135,14 @@ public class Game {
         if (colour == Colour.WHITE) {
             winningColour = 2;
         }
-        int[] directions = {-1,0,0,-1,-1,-1,1,-1}; // -1 -> sx - +1 -> dx
+        int[] directions = {-1, 0, 0, -1, -1, -1, 1, -1}; // -1 -> sx - +1 -> dx
         int len = 0;
         while (len < directions.length) {
-            areThereFiveStones = countStones(directions[len], directions[len+1], winningColour,5);
+            areThereFiveStones = countStones(directions[len], directions[len + 1], winningColour, 5);
             if (areThereFiveStones) {
                 len = directions.length; // stop while if I've already found 5 stones in a direction
             }
-            len=len+2;
+            len = len + 2;
         }
         return (areThereFiveStones);
 
