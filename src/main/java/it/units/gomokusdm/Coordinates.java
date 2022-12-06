@@ -53,4 +53,10 @@ public class Coordinates {
         return false;
     }
 
+    public Coordinates getCoordinateMovedInDirectionWithStep(Direction direction, int step) {
+        return new Coordinates(this.rowIndex + step * direction.getRowIdx(),
+                this.colIndex + step * direction.getColIdx());
+
+    }
+
 }
