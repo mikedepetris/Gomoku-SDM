@@ -199,28 +199,34 @@ public class GameTest {
 
     @Test
     public void testIsPlayerWinningGameWith5ConsecutiveStones() {
+        List<Boolean> result = new ArrayList<>();
+
         Player firstPlayer = new Player("First", Colour.BLACK);
         Player secondPlayer = new Player("Second", Colour.WHITE);
         Board board = new Board();
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        Game game = null;
+        try {
+            game = new Game(board, firstPlayer, secondPlayer);
 
-        List<Boolean> result = new ArrayList<>();
-        game.makeMove(secondPlayer, new Coordinates(9, 10));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(firstPlayer, new Coordinates(8, 8));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(secondPlayer, new Coordinates(9, 11));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(firstPlayer, new Coordinates(7, 7));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(secondPlayer, new Coordinates(9, 12));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(firstPlayer, new Coordinates(6, 6));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(secondPlayer, new Coordinates(9, 13));
-        result.add(game.checkIfPlayerWins());
-        game.makeMove(firstPlayer, new Coordinates(5, 5));
-        result.add(game.checkIfPlayerWins());
+            game.makeMove(secondPlayer, new Coordinates(9, 10));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(firstPlayer, new Coordinates(8, 8));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(secondPlayer, new Coordinates(9, 11));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(firstPlayer, new Coordinates(7, 7));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(secondPlayer, new Coordinates(9, 12));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(firstPlayer, new Coordinates(6, 6));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(secondPlayer, new Coordinates(9, 13));
+            result.add(game.checkIfPlayerWins());
+            game.makeMove(firstPlayer, new Coordinates(5, 5));
+            result.add(game.checkIfPlayerWins());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         List<Boolean> expected_result = List.of(false, false, false, false, false, false, false, true);
         Assertions.assertEquals(expected_result, result);
