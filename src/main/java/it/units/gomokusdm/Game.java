@@ -163,8 +163,8 @@ public class Game {
     // controlla se esiste una stone adiacente intorno a quella che sto inserendo. se ne esiste almeno una,
     // posso inserire la stone
     public boolean isThereAnAdjacentStone(Coordinates coordinates) {
-        ArrayList<Coordinates> adjacent_coordinates = coordinates.getAdjacentCoordinates();
-        for (Coordinates el : adjacent_coordinates) {
+        ArrayList<Coordinates> adjacentCoordinates = coordinates.getAdjacentCoordinates();
+        for (Coordinates el : adjacentCoordinates) {
             if (board.areValidCoordinates(coordinates) && !board.isEmptyCell(el)) {
                 return true;
             }
@@ -172,8 +172,8 @@ public class Game {
         return false;
     }
 
-    // la cella dev'essere vuota, e intorno ce ne deve essere almeno una adiacente
     public boolean isFeasibleMove(Coordinates coordinates) {
-        return board.isEmptyCell(coordinates) && isThereAnAdjacentStone(coordinates);
+        return board.areValidCoordinates(coordinates) && board.isEmptyCell(coordinates)
+                && isThereAnAdjacentStone(coordinates);
     }
 }
