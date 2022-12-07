@@ -28,7 +28,7 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        cli.startGameCLI();
+        cli.initializeGameCLI();
         Assertions.assertEquals("Player One", cli.getPlayer1().getUsername());
         Assertions.assertEquals("Player Two", cli.getPlayer2().getUsername());
     }
@@ -39,7 +39,7 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        cli.startGameCLI();
+        cli.initializeGameCLI();
         Assertions.assertEquals("Player_1", cli.getPlayer1().getUsername());
         Assertions.assertEquals("Player_2", cli.getPlayer2().getUsername());
     }
@@ -54,4 +54,5 @@ public class CLIControllerTest {
         Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
         Assertions.assertEquals(new Coordinates(1,1), coordinates);
     }
+
 }

@@ -43,9 +43,20 @@ public class Game {
         return lastMoveCoordinates;
     }
 
+    public Player getLastMovingPlayer() {
+        return lastMovingPlayer;
+    }
+
+    public Player getNextMovingPlayer() {
+        return player1 == lastMovingPlayer ? player2 : player1;
+    }
+
     private void makeMandatoryFirstMove(Player player) {
-        board.setCell(player.getColour(),
-                new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2));
+        Coordinates boardCenter =
+                new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2);
+        board.setCell(player.getColour(), boardCenter);
+        this.lastMovingPlayer = player;
+        this.lastMoveCoordinates = boardCenter;
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws Exception {
