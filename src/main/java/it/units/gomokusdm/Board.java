@@ -63,14 +63,10 @@ public class Board {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);
     }
 
-    /**
-     * (0,0) (0,1) (0,2)
-     * (1,0) (1,1) (1,2)
-     * (2,0) (2,1) (2,2)
-     *
-     *
-     *
-     */
+    public boolean isCoordinateInsideTheBoard(Coordinates coordinates){
+        return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < BOARD_DIMENSION)
+                && (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < BOARD_DIMENSION);
+    }
 
 
 }

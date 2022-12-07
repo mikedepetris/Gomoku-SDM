@@ -114,7 +114,7 @@ public class Game {
         int valueToControl = N - 1;
         while (valueToControl > 0) {
             Coordinates coordinatesInDirection = currentCoordinate.getCoordinateMovedInDirectionWithStep(direction, 1);
-            if (!checkIfStonesAreEqual(currentCoordinate, coordinatesInDirection)) {
+            if (!board.isCoordinateInsideTheBoard(coordinatesInDirection) || !checkIfStonesAreEqual(currentCoordinate, coordinatesInDirection)) {
                 valueOfAdjacentStones.add(Boolean.FALSE);
                 break;
             }
