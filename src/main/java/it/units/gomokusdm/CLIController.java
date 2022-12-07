@@ -20,6 +20,12 @@ public class CLIController {
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
         this.player1 = new Player("", Colour.BLACK);
         this.player2 = new Player("", Colour.WHITE);
+        this.board = new Board();
+        try {
+            this.game = new Game(board, player1, player2);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static CLIController createInstance(PrintStream outputStream, InputStream inputStream) {
@@ -43,10 +49,29 @@ public class CLIController {
         return player2;
     }
 
-    public void startGameCLI() throws IOException {
+    public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
         setPlayerNames(player1);
         setPlayerNames(player2);
+    }
+
+    public void startGameClI() throws IOException {
+        outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
+                player1.getColour() == Colour.BLACK ? player1.getUsername() : player2.getUsername());
+
+        while (!game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
+            Player nextMovingPlayer = game.getNextMovingPlayer();
+            outputStream.println(board);
+            outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
+            Coordinates coordinates = getCoordinatesByPlayerInput(nextMovingPlayer);
+            try {
+                game.makeMove(nextMovingPlayer, coordinates);
+            } catch (Exception e) {
+                outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
+            }
+        }
+
+        outputStream.printf("\n%s won the game!", game.getLastMovingPlayer().getUsername());
     }
 
     private void setPlayerNames(Player player) throws IOException {
