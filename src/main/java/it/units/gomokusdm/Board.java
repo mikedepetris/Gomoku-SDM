@@ -34,7 +34,10 @@ public class Board {
     }
 
     public boolean isEmptyCell(Coordinates coordinates) {
-        return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
+        if (areValidCoordinates(coordinates))
+            return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
+        else
+            return true;
     }
 
     public boolean areValidCoordinates(Coordinates coordinates) {
