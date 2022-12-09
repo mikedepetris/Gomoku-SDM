@@ -13,6 +13,7 @@ public class CLIController {
     private Game game;
     private final Player player1;
     private final Player player2;
+    private Player winner;
 
     private CLIController(PrintStream outputStream, InputStream inputStream) {
         this.outputStream = outputStream;
@@ -49,6 +50,10 @@ public class CLIController {
         return player2;
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
         setPlayerNames(player1);
@@ -70,8 +75,8 @@ public class CLIController {
                 outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
-
-        outputStream.printf("\n%s won the game!", game.getLastMovingPlayer().getUsername());
+        winner = game.getLastMovingPlayer();
+        outputStream.printf("\n%s won the game!", winner.getUsername());
     }
 
     private void setPlayerNames(Player player) throws IOException {
@@ -90,11 +95,15 @@ public class CLIController {
     }
 
     public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException {
-        outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
-        int rowCoordinate = getSingleCoordinateByPlayer();
-        outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
-        int columnCoordinate = getSingleCoordinateByPlayer();
-        return new Coordinates(rowCoordinate, columnCoordinate);
+        try {
+            outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
+            int rowCoordinate = getSingleCoordinateByPlayer();
+            outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
+            int columnCoordinate = getSingleCoordinateByPlayer();
+            return new Coordinates(rowCoordinate, columnCoordinate);
+        } catch (NumberFormatException numberFormatException) {
+            return null;
+        }
     }
 
 
