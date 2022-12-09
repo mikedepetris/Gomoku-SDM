@@ -55,4 +55,62 @@ public class CLIControllerTest {
         Assertions.assertEquals(new Coordinates(1,1), coordinates);
     }
 
+    @Test
+    void testNonNumericPlayersCoordinatesInput() throws IOException {
+        String inputString = "a\na\n";
+        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        CLIController.closeInstance();
+        CLIController cli = CLIController.createInstance(System.out, inputStream);
+        Player player= new Player("A", Colour.WHITE);
+        Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
+        Assertions.assertNull(coordinates);
+    }
+
+    @Test
+    void testCompleteGameSimulation() throws IOException {
+        String inputString =
+                "player one\n" +
+                "player two\n" +
+                "9\n10\n" +
+                "9\n8\n" +
+                "9\n11\n" +
+                "9\n7\n" +
+                "9\n12\n" +
+                "9\n6\n" +
+                "9\n13\n" +
+                "9\n5\n";
+        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        CLIController.closeInstance();
+        CLIController cli = CLIController.createInstance(System.out, inputStream);
+        Player player1 = cli.getPlayer1();
+        Player player2 = cli.getPlayer2();
+        cli.initializeGameCLI();
+        cli.startGameClI();
+        Assertions.assertEquals(cli.getWinner(), player1);
+    }
+
+    @Test
+    void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException {
+        String inputString =
+                "player one\n" +
+                "player two\n" +
+                "9\n10\n" +
+                "9\n8\n" +
+                "9\n11\n" +
+                "9\n7\n" +
+                "9\n12\n" +
+                "9\n6\n" +
+                "9\n13\n" +
+                "9\n*!&%x\n" +
+                "9\n5\n";
+        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        CLIController.closeInstance();
+        CLIController cli = CLIController.createInstance(System.out, inputStream);
+        Player player1 = cli.getPlayer1();
+        Player player2 = cli.getPlayer2();
+        cli.initializeGameCLI();
+        cli.startGameClI();
+        Assertions.assertEquals(cli.getWinner(), player1);
+    }
+
 }
