@@ -57,15 +57,17 @@ public class Game {
         board.setCell(player.getColour(), boardCenter);
         this.lastMovingPlayer = player;
         this.lastMoveCoordinates = boardCenter;
+        lastMovingPlayer.addMove(lastMoveCoordinates);
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws Exception {
-        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && lastMovingPlayer.getMovesList().size() <= 60) {
             board.setCell(player.getColour(), coordinates);
             lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
             lastMovingPlayer = player;
+            lastMovingPlayer.addMove(lastMoveCoordinates);
         } else {
-            throw new Exception("Invalid arguments.");
+            throw new Exception("Invalid Arguments");
         }
     }
 
