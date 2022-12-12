@@ -283,4 +283,62 @@ public class GameTest {
         Assertions.assertEquals(expected_result, result);
     }
 
+    /* Genero una sequenza di makeMove validi alternando fra bianco e nero (senza controllare la vittoria), per riempire
+     tutta la board. Si dovrebbe interrompere prima di un tot limite mosse, lanciando l'eccezione.
+     */
+
+    @Test
+    public void testLimitMovesPlayer() {
+        Player firstPlayer = new Player("First", Colour.BLACK);
+        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Board board = new Board();
+        Game game = null;
+        int totalMovesCounter = 0;
+        try {
+            game = new Game(board, firstPlayer, secondPlayer);
+            int i = board.getBoardDimension()/2;
+            Player actualPlayer = firstPlayer;
+            // traccio diagonale di mosse alternate per raggiungere la cima
+            while(i > 0) {
+                actualPlayer = secondPlayer;
+                i--;
+                game.makeMove(secondPlayer, new Coordinates(i, i));
+                totalMovesCounter++;
+                if (i > 0) {
+                    i--;
+                    game.makeMove(firstPlayer, new Coordinates(i, i));
+                    totalMovesCounter++;
+                    actualPlayer = firstPlayer;
+                }
+            }
+            // ora riempo la board
+            int j = 0; i = 0;
+            while (i < board.getBoardDimension()) {
+                while (j < board.getBoardDimension()) {
+                    //System.out.print(i); System.out.print(j);
+                    //System.out.println("");
+                    if (board.isEmptyCell(new Coordinates(i,j))) {
+                        if (actualPlayer.getColour() == Colour.BLACK) {
+                            actualPlayer = secondPlayer;
+                        } else {
+                            actualPlayer = firstPlayer;
+                        }
+                        game.makeMove(actualPlayer, new Coordinates(i, j));
+                        totalMovesCounter++;
+                    }
+                    j++;
+                }
+                j = 0;
+                i++;
+            }
+        } catch (Exception e) {
+            // Mi aspetto che lanci un'eccezione quando ho raggiunto il limite di 60 per ogni giocatore
+            int movesLimit = 60*2;
+            Assertions.assertEquals(movesLimit, totalMovesCounter);
+        }
+
+    }
+
+
+
 }
