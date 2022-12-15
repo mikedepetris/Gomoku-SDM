@@ -4,11 +4,13 @@ package it.units.gomokusdm;
 import java.util.ArrayList;
 import java.util.List;
 
+// solo un test per circleci
 public class Game {
 
     private Board board;
     private Player player1;
     private Player player2;
+
     private Coordinates lastMoveCoordinates;
     private Player lastMovingPlayer;
 
