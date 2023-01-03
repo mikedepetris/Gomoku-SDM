@@ -19,7 +19,7 @@ public class Game {
         this.player1 = player1;
         this.player2 = player2;
         if (checkPlayerColours(player1, player2)) {
-            makeMandatoryFirstMove(player1.getColour() == Colour.BLACK ? player1 : player2);
+            makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
         } else {
             throw new Exception("invalid player colors");
         }
@@ -91,8 +91,8 @@ public class Game {
         if (n <= board.getBoardDimension() && n > 0) {
             while (i <= (n - 1) && i >= -(n - 1) && j <= (n - 1) && j >= -(n - 1)) {
                 if (board.areValidCoordinates(new Coordinates(rowIndex + j, colIndex + i))) {
-                    int stoneColourNumber = board.getStoneAt(new Coordinates(rowIndex + j, colIndex + i));
-                    if (stoneColourNumber == winningColour) {
+                    Stone stoneColourNumber = board.getStoneAt(new Coordinates(rowIndex + j, colIndex + i));
+                    if (stoneColourNumber == Stone.castIntToStone(winningColour)) {
                         counterStones++;
                     } else {
                         if (counterStones != n) {
@@ -144,10 +144,10 @@ public class Game {
         return board.areStonesOfSameColourAt(firstCoordinate, secondCoordinate);
     }
 
-    public boolean checkIfThereAreFiveConsecutiveStones(Colour colour) {
+    public boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
         boolean areThereFiveStones = false;
         int winningColour = 1;
-        if (colour == Colour.WHITE) {
+        if (stone == Stone.WHITE) {
             winningColour = 2;
         }
         int[] directions = {-1, 0, 0, -1, -1, -1, 1, -1}; // -1 -> sx - +1 -> dx

@@ -10,8 +10,8 @@ public class GameTest {
 
     @Test
     public void testGameInstantiation() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         Assertions.assertEquals(game.getBoard(), board);
@@ -21,8 +21,8 @@ public class GameTest {
 
     @Test
     public void testInvalidGameInstantiation() {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.BLACK);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new Board();
         Assertions.assertThrows(Exception.class, () -> {
             Game game = new Game(board, firstPlayer, secondPlayer);
@@ -31,8 +31,8 @@ public class GameTest {
 
     @Test
     public void testIsFeasibleMove() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
@@ -43,8 +43,8 @@ public class GameTest {
 
     @Test
     public void testIsNotFeasibleMove() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
@@ -59,17 +59,13 @@ public class GameTest {
 
     @Test
     public void testMakeFirstMoveAdjacent() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         //
         game.makeMove(secondPlayer, new Coordinates(8, 9));
-        Colour stoneColor = switch (board.getBoard()[8][9]) {
-            case 1 -> Colour.BLACK;
-            case 2 -> Colour.WHITE;
-            default -> null;
-        };
+        Stone stoneColor = board.getStoneAt(new Coordinates(8,9));
         Assertions.assertEquals(stoneColor, secondPlayer.getColour());
     }
 
@@ -79,8 +75,8 @@ public class GameTest {
     // the cell is empty
     @Test
     public void testMakeFirstMoveNotAdjacent() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         try {
@@ -88,31 +84,27 @@ public class GameTest {
         } catch (Exception e) {
             System.err.println("Handled makeMove Exception");
         } finally {
-            Colour stoneColor = switch (board.getBoard()[1][1]) {
-                case 1 -> Colour.BLACK;
-                case 2 -> Colour.WHITE;
-                default -> null;
-            };
-            Assertions.assertEquals(stoneColor, null);
+            Stone stoneColor = board.getStoneAt(new Coordinates(1,1));
+            Assertions.assertEquals(stoneColor, Stone.EMPTY);
         }
     }
 
     @Test
     public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
                 board.getBoardDimension() / 2);
-        Assertions.assertEquals(1, board.getStoneAt(coordinates));
+        Assertions.assertEquals(Stone.BLACK, board.getStoneAt(coordinates));
     }
 
 
     @Test
     public void testMakeConsecutiveMoves() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         // pedina non adiacente, mi aspetto che non faccia nulla
@@ -147,9 +139,9 @@ public class GameTest {
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
                     };
-            for (int i = 0; i < board.getBoard().length; i++) {
-                for (int j = 0; j < board.getBoard()[0].length; j++) {
-                    Assertions.assertEquals(board.getBoard()[i][j], expectedBoard[i][j]);
+            for (int i = 0; i < board.getBoardDimension(); i++) {
+                for (int j = 0; j < board.getBoardDimension(); j++) {
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i,j)), Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -158,8 +150,8 @@ public class GameTest {
 
     @Test
     public void testMakeConsecutiveMovesOutsideTheBoard() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
         try {
@@ -199,9 +191,9 @@ public class GameTest {
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
                     };
-            for (int i = 0; i < board.getBoard().length; i++) {
-                for (int j = 0; j < board.getBoard()[0].length; j++) {
-                    Assertions.assertEquals(board.getBoard()[i][j], expectedBoard[i][j]);
+            for (int i = 0; i < board.getBoardDimension(); i++) {
+                for (int j = 0; j < board.getBoardDimension(); j++) {
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i,j)), Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -211,8 +203,8 @@ public class GameTest {
 
     @Test
     public void testIsPlayerWinningGame() throws Exception {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = new Game(board, firstPlayer, secondPlayer);
 
@@ -252,8 +244,8 @@ public class GameTest {
     public void testIsPlayerWinningGameWith5ConsecutiveStones() {
         List<Boolean> result = new ArrayList<>();
 
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = null;
         try {
@@ -289,8 +281,8 @@ public class GameTest {
 
     @Test
     public void testLimitMovesPlayer() {
-        Player firstPlayer = new Player("First", Colour.BLACK);
-        Player secondPlayer = new Player("Second", Colour.WHITE);
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = null;
         int totalMovesCounter = 0;
@@ -318,7 +310,7 @@ public class GameTest {
                     //System.out.print(i); System.out.print(j);
                     //System.out.println("");
                     if (board.isEmptyCell(new Coordinates(i,j))) {
-                        if (actualPlayer.getColour() == Colour.BLACK) {
+                        if (actualPlayer.getColour() == Stone.BLACK) {
                             actualPlayer = secondPlayer;
                         } else {
                             actualPlayer = firstPlayer;
