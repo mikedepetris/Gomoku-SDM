@@ -1,41 +1,43 @@
 package it.units.gomokusdm;
 
-public class Board {
-    private int BOARD_DIMENSION;
-    private final int[][] board;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
 
-    private static final int EMPTY = 0;
-    private static final int BLACK_STONE = 1;
-    private static final int WHITE_STONE = 2;
+public class Board {
+    private final int boardDimension;
+    private final Map<Coordinates, Stone> board = new LinkedHashMap<>();
+
+    public Board(int boardDimension) {
+        this.boardDimension = boardDimension;
+        IntStream.range(0, this.boardDimension)
+                .forEach(row -> IntStream.range(0, this.boardDimension)
+                        .forEach(col -> board.put(new Coordinates(row, col), Stone.EMPTY)));
+    }
 
     public Board() {
-        BOARD_DIMENSION = 19;
-        this.board = new int[BOARD_DIMENSION][BOARD_DIMENSION];
+        this(19);
     }
 
     public int getBoardDimension() {
-        return BOARD_DIMENSION;
+        return boardDimension;
     }
 
-    public int[][] getBoard() {
+    public Map<Coordinates, Stone> getBoard() {
         return board;
     }
 
-    public int getStoneAt(Coordinates coordinates) {
-        return board[coordinates.getRowIndex()][coordinates.getColIndex()];
+    public Stone getStoneAt(Coordinates coordinates) {
+        return board.get(coordinates);
     }
 
-    public void setCell(Colour colour, Coordinates coordinates) {
-        if (colour == Colour.BLACK) {
-            board[coordinates.getRowIndex()][coordinates.getColIndex()] = BLACK_STONE;
-        } else {
-            board[coordinates.getRowIndex()][coordinates.getColIndex()] = WHITE_STONE;
-        }
+    public void setCell(Stone stone, Coordinates coordinates) {
+        board.put(coordinates, stone);
     }
 
     public boolean isEmptyCell(Coordinates coordinates) {
         if (areValidCoordinates(coordinates))
-            return board[coordinates.getRowIndex()][coordinates.getColIndex()] == EMPTY;
+            return board.get(coordinates).equals(Stone.EMPTY);
         else
             return true;
     }
@@ -47,12 +49,12 @@ public class Board {
 
     public String toString() {
         StringBuilder temp = new StringBuilder();
-        for (int i = 0; i < BOARD_DIMENSION; i++) {
-            for (int j = 0; j < BOARD_DIMENSION; j++) {
-                switch (board[i][j]) {
+        for (int i = 0; i < boardDimension; i++) {
+            for (int j = 0; j < boardDimension; j++) {
+                switch (board.get(new Coordinates(i, j))) {
                     case EMPTY -> temp.append("|0");
-                    case BLACK_STONE -> temp.append("|B");
-                    case WHITE_STONE -> temp.append("|W");
+                    case BLACK -> temp.append("|B");
+                    case WHITE -> temp.append("|W");
                 }
             }
             temp.append("|");
