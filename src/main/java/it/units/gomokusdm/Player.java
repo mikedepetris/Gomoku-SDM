@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Player {
     private String username;
-    private Colour colour;
-    private final List<Stone> movesList = new ArrayList<>();
+    private Stone assignedStone;
+    private final List<Coordinates> movesList = new ArrayList<>();
 
-    public Player(String username, Colour colour) {
+    public Player(String username, Stone assignedStone) {
         this.username = username;
-        this.colour = colour;
+        this.assignedStone = assignedStone;
     }
 
     public String getUsername() {
@@ -21,20 +21,20 @@ public class Player {
         this.username = username;
     }
 
-    public Colour getColour() {
-        return colour;
+    public Stone getColour() {
+        return assignedStone;
     }
 
-    public void setColour(Colour colour) {
-        this.colour = colour;
+    public void setColour(Stone stone) {
+        this.assignedStone = stone;
     }
 
-    public List<Stone> getMovesList() {
+    public List<Coordinates> getMovesList() {
         return movesList;
     }
 
     public void addMove(Coordinates coordinates){
-        this.movesList.add(new Stone(coordinates, this.colour));
+        this.movesList.add(coordinates);
     }
 
 }
