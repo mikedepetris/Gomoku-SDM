@@ -50,7 +50,7 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player= new Player("A", Colour.WHITE);
+        Player player= new Player("A", Stone.WHITE);
         Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
         Assertions.assertEquals(new Coordinates(1,1), coordinates);
     }
@@ -61,7 +61,7 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player= new Player("A", Colour.WHITE);
+        Player player= new Player("A", Stone.WHITE);
         Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
         Assertions.assertNull(coordinates);
     }

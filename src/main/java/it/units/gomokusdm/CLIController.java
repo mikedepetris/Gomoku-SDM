@@ -19,8 +19,8 @@ public class CLIController {
         this.outputStream = outputStream;
         this.inputStream = inputStream;
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
-        this.player1 = new Player("", Colour.BLACK);
-        this.player2 = new Player("", Colour.WHITE);
+        this.player1 = new Player("", Stone.BLACK);
+        this.player2 = new Player("", Stone.WHITE);
         this.board = new Board();
         try {
             this.game = new Game(board, player1, player2);
@@ -62,7 +62,7 @@ public class CLIController {
 
     public void startGameClI() throws IOException {
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
-                player1.getColour() == Colour.BLACK ? player1.getUsername() : player2.getUsername());
+                player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
 
         while (!game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
