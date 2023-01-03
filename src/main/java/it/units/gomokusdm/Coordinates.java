@@ -1,6 +1,7 @@
 package it.units.gomokusdm;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class Coordinates {
@@ -59,4 +60,8 @@ public class Coordinates {
 
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(rowIndex, colIndex);
+    }
 }
