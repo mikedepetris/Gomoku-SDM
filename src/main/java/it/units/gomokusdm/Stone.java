@@ -1,24 +1,36 @@
 package it.units.gomokusdm;
 
-public class Stone {
-    private final Colour stoneColour;
-    private Coordinates coordinates;
+import java.util.HashMap;
+import java.util.Map;
 
-    public Stone(Coordinates coordinates, Colour stoneColour) {
-        this.coordinates = coordinates;
-        this.stoneColour = stoneColour;
+// Solutions Given by https://www.baeldung.com/java-cast-int-to-enum
+public enum Stone {
+    EMPTY(0),
+    BLACK(1),
+    WHITE(2);
+
+    private static final Map<Integer, Stone> integerToStoneMapping = new HashMap<>();
+
+    static {
+        for (Stone pizzaStatus : Stone.values()) {
+            integerToStoneMapping.put(
+                    pizzaStatus.getIntegerValueOfStone(),
+                    pizzaStatus
+            );
+        }
     }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
+    private final int integerValueOfStone;
+
+    Stone(int integerValueOfStone) {
+        this.integerValueOfStone = integerValueOfStone;
     }
 
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
+    public static Stone castIntToStone(int integerValueOfStone) {
+        return integerToStoneMapping.get(integerValueOfStone);
     }
 
-    public Colour getStoneColour() {
-        return stoneColour;
+    private int getIntegerValueOfStone() {
+        return integerValueOfStone;
     }
-
 }

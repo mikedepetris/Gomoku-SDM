@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -16,16 +16,14 @@ public class BoardTest {
 
 
     @Test
-    public void testBoardCreation() {
+    public void testBoardInitWithDefaultBoardSizeOf19x19() {
         Board board = new Board();
-        //Assertions.assertEquals(19, board.getBoard().length);
-        int nonEmptyStone = IntStream.range(0,19)
-                .map(row -> IntStream.range(0, 19)
-                        .map(col -> board.getStoneAt(new Coordinates(row, col)))
-                        .sum())
-                .sum();
-
-        Assertions.assertEquals(0, nonEmptyStone);
+        int numOfNonEmptyStones = (int) board.getBoard()
+                .values()
+                .stream()
+                .filter(stone -> !stone.equals(Stone.EMPTY))
+                .count();
+        Assertions.assertEquals(0, numOfNonEmptyStones);
     }
 
     @Test
@@ -37,17 +35,9 @@ public class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints = {5,9,15})
-    //TODO refactoring board con dimensione dinamica
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new Board();
-        Assertions.assertNotEquals(boardSize, board.getBoard());
-    }
-
-    @ParameterizedTest
-    @MethodSource("generateSomeValidCoordinates")
-    public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates){
-        Board board = new Board();
-        Assertions.assertTrue(board.areValidCoordinates(coordinates));
+        Board board = new Board(boardSize);
+        Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
 
     private static Stream<Arguments> generateSomeValidCoordinates() {
@@ -61,10 +51,10 @@ public class BoardTest {
     }
 
     @ParameterizedTest
-    @MethodSource("generateSomeInvalidCoordinates")
-    public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates){
+    @MethodSource("generateSomeValidCoordinates")
+    public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates){
         Board board = new Board();
-        Assertions.assertFalse(board.areValidCoordinates(coordinates));
+        Assertions.assertTrue(board.areValidCoordinates(coordinates));
     }
 
     private static Stream<Arguments> generateSomeInvalidCoordinates() {
@@ -75,15 +65,22 @@ public class BoardTest {
                 Arguments.of(new Coordinates(20,4)));
     }
 
+    @ParameterizedTest
+    @MethodSource("generateSomeInvalidCoordinates")
+    public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates){
+        Board board = new Board();
+        Assertions.assertFalse(board.areValidCoordinates(coordinates));
+    }
+
     private static Board occupyAllTheBoard(){
         Board board = new Board();
         IntStream.range(0,19).forEach(row ->
                 IntStream.range(0, 19)
                         .forEach(col -> {
                             if (col % 2 == 0) {
-                                board.setCell(Colour.BLACK, new Coordinates(row, col));
+                                board.setCell(Stone.BLACK, new Coordinates(row, col));
                             } else {
-                                board.setCell(Colour.WHITE, new Coordinates(row, col));
+                                board.setCell(Stone.WHITE, new Coordinates(row, col));
                             }
                         }));
         return board;
@@ -92,13 +89,12 @@ public class BoardTest {
     @Test
     public void testOccupyAllBoard(){
         Board board = occupyAllTheBoard();
-        int numberOfNonEmptyCell = IntStream.range(0,19)
-                .map(row -> IntStream.range(0, 19)
-                        .map(col -> board.getStoneAt(new Coordinates(row, col)))
-                        .filter(stones -> stones == 0)
-                        .sum())
-                .sum();
-        Assertions.assertEquals(0, numberOfNonEmptyCell);
+        int numberOfEmptyCell = (int) board.getBoard()
+                .values()
+                .stream()
+                .filter(stone -> stone.equals(Stone.EMPTY))
+                .count();
+        Assertions.assertEquals(0, numberOfEmptyCell);
     }
 
     @Test
@@ -133,7 +129,7 @@ public class BoardTest {
     public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
         Board board = new Board();
         Coordinates coordinates = new Coordinates(0, 0);
-        Assertions.assertEquals(0, board.getStoneAt(coordinates));
+        Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
     }
 
 }
