@@ -47,6 +47,7 @@ public class Board {
                 (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
     }
 
+/**
     public String toString() {
         StringBuilder temp = new StringBuilder();
         for (int i = 0; i < boardDimension; i++) {
@@ -63,10 +64,16 @@ public class Board {
         return temp.toString();
 
     }
+ **/
 
     public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder tmp = new StringBuilder();
+        board.values().forEach(tmp::append);
+        return tmp.toString();
+    }
 }
