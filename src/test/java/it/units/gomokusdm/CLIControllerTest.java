@@ -6,9 +6,18 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class CLIControllerTest {
+
+    @Test
+    void test() {
+        Board board = new Board();
+        board.setCell(Stone.BLACK, new Coordinates(0,0));
+        CLIController cli = CLIController.createInstance(System.out, System.in);
+        cli.printBoard();
+    }
 
     @Test
     void testCLICreation() {
