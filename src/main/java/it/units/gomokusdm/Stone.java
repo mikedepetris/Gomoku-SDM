@@ -33,4 +33,13 @@ public enum Stone {
     private int getIntegerValueOfStone() {
         return integerValueOfStone;
     }
+
+    @Override
+    public String toString() {
+        return switch (castIntToStone(this.integerValueOfStone)){
+            case EMPTY -> "*";
+            case BLACK -> "B";
+            case WHITE -> "W";
+        };
+    }
 }

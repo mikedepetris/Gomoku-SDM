@@ -7,13 +7,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BoardTest {
-
-
 
     @Test
     public void testBoardInitWithDefaultBoardSizeOf19x19() {
@@ -97,6 +98,7 @@ public class BoardTest {
         Assertions.assertEquals(0, numberOfEmptyCell);
     }
 
+    /**
     @Test
     void testBoardPrintBegin() {
         Board board = new Board();
@@ -124,6 +126,16 @@ public class BoardTest {
         Assertions.assertEquals(expected_result, result);
 
     }
+     **/
+    @Test
+    public void testBoardToStringAtTheBeginning(){
+        Board board = new Board();
+        String result = board.toString();
+        int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
+        String expected_result = "*".repeat(numberOfStonesInAFullBoard);
+        Assertions.assertEquals(expected_result, result);
+    }
+
 
     @Test
     public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
