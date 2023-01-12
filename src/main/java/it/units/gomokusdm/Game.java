@@ -11,7 +11,7 @@ public class Game {
     private Player player1;
     private Player player2;
 
-    private Coordinates lastMoveCoordinates;
+    //private Coordinates lastMoveCoordinates;
     private Player lastMovingPlayer;
 
     public Game(Board board, Player player1, Player player2) throws Exception {
@@ -41,9 +41,12 @@ public class Game {
         return player2;
     }
 
+    /*
     public Coordinates getLastMoveCoordinates() {
         return lastMoveCoordinates;
     }
+    */
+
 
     public Player getLastMovingPlayer() {
         return lastMovingPlayer;
@@ -58,16 +61,18 @@ public class Game {
                 new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2);
         board.setCell(player.getColour(), boardCenter);
         this.lastMovingPlayer = player;
-        this.lastMoveCoordinates = boardCenter;
-        lastMovingPlayer.addMove(lastMoveCoordinates);
+        //this.lastMoveCoordinates = boardCenter;
+        //lastMovingPlayer.addMove(lastMoveCoordinates);
+        lastMovingPlayer.addMove(boardCenter);
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws Exception {
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && lastMovingPlayer.getMovesList().size() <= 60) {
             board.setCell(player.getColour(), coordinates);
-            lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
+            //lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
             lastMovingPlayer = player;
-            lastMovingPlayer.addMove(lastMoveCoordinates);
+            //lastMovingPlayer.addMove(lastMoveCoordinates);
+            lastMovingPlayer.addMove(coordinates);
         } else {
             throw new Exception("Invalid Arguments");
         }
@@ -81,6 +86,8 @@ public class Game {
     // basandosi su i,j per le direzioni
     // metodo poco leggibile anche se funziona, aperto al refactoring
     public boolean countStones(int colDirection, int rowDirection, int winningColour, int n) {
+
+        Coordinates lastMoveCoordinates = lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size()-1);
         int rowIndex = lastMoveCoordinates.getRowIndex();
         int colIndex = lastMoveCoordinates.getColIndex();
         int i = colDirection * (n - 1);
@@ -124,6 +131,7 @@ public class Game {
 
     private boolean checkIfThereAreNConsecutiveStonesInDirection(Direction direction, int N) {
         List<Boolean> valueOfAdjacentStones = new ArrayList<>();
+        Coordinates lastMoveCoordinates = lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size()-1);
         Coordinates currentCoordinate = lastMoveCoordinates;
         valueOfAdjacentStones.add(Boolean.TRUE);
         int valueToControl = N - 1;
