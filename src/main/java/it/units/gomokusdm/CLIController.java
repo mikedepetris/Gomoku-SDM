@@ -1,16 +1,12 @@
 package it.units.gomokusdm;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static java.lang.System.lineSeparator;
 
 public class CLIController {
 
