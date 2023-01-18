@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 public class CLIControllerTest {
@@ -14,7 +13,7 @@ public class CLIControllerTest {
     @Test
     void test() {
         Board board = new Board();
-        board.setCell(Stone.BLACK, new Coordinates(0,0));
+        board.setCell(Stone.BLACK, new Coordinates(0, 0));
         CLIController cli = CLIController.createInstance(System.out, System.in);
         cli.printBoard();
     }
@@ -59,9 +58,9 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player= new Player("A", Stone.WHITE);
+        Player player = new Player("A", Stone.WHITE);
         Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
-        Assertions.assertEquals(new Coordinates(1,1), coordinates);
+        Assertions.assertEquals(new Coordinates(1, 1), coordinates);
     }
 
     @Test
@@ -70,7 +69,7 @@ public class CLIControllerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player= new Player("A", Stone.WHITE);
+        Player player = new Player("A", Stone.WHITE);
         Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
         Assertions.assertNull(coordinates);
     }
@@ -79,15 +78,15 @@ public class CLIControllerTest {
     void testCompleteGameSimulation() throws IOException {
         String inputString =
                 "player one\n" +
-                "player two\n" +
-                "9\n10\n" +
-                "9\n8\n" +
-                "9\n11\n" +
-                "9\n7\n" +
-                "9\n12\n" +
-                "9\n6\n" +
-                "9\n13\n" +
-                "9\n5\n";
+                        "player two\n" +
+                        "9\n10\n" +
+                        "9\n8\n" +
+                        "9\n11\n" +
+                        "9\n7\n" +
+                        "9\n12\n" +
+                        "9\n6\n" +
+                        "9\n13\n" +
+                        "9\n5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -102,16 +101,16 @@ public class CLIControllerTest {
     void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException {
         String inputString =
                 "player one\n" +
-                "player two\n" +
-                "9\n10\n" +
-                "9\n8\n" +
-                "9\n11\n" +
-                "9\n7\n" +
-                "9\n12\n" +
-                "9\n6\n" +
-                "9\n13\n" +
-                "9\n*!&%x\n" +
-                "9\n5\n";
+                        "player two\n" +
+                        "9\n10\n" +
+                        "9\n8\n" +
+                        "9\n11\n" +
+                        "9\n7\n" +
+                        "9\n12\n" +
+                        "9\n6\n" +
+                        "9\n13\n" +
+                        "9\n*!&%x\n" +
+                        "9\n5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);

@@ -65,7 +65,7 @@ public class GameTest {
         Game game = new Game(board, firstPlayer, secondPlayer);
         //
         game.makeMove(secondPlayer, new Coordinates(8, 9));
-        Stone stoneColor = board.getStoneAt(new Coordinates(8,9));
+        Stone stoneColor = board.getStoneAt(new Coordinates(8, 9));
         Assertions.assertEquals(stoneColor, secondPlayer.getColour());
     }
 
@@ -84,7 +84,7 @@ public class GameTest {
         } catch (Exception e) {
             System.err.println("Handled makeMove Exception");
         } finally {
-            Stone stoneColor = board.getStoneAt(new Coordinates(1,1));
+            Stone stoneColor = board.getStoneAt(new Coordinates(1, 1));
             Assertions.assertEquals(stoneColor, Stone.EMPTY);
         }
     }
@@ -141,7 +141,7 @@ public class GameTest {
                     };
             for (int i = 0; i < board.getBoardDimension(); i++) {
                 for (int j = 0; j < board.getBoardDimension(); j++) {
-                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i,j)), Stone.castIntToStone(expectedBoard[i][j]));
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)), Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -193,7 +193,7 @@ public class GameTest {
                     };
             for (int i = 0; i < board.getBoardDimension(); i++) {
                 for (int j = 0; j < board.getBoardDimension(); j++) {
-                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i,j)), Stone.castIntToStone(expectedBoard[i][j]));
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)), Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -288,10 +288,10 @@ public class GameTest {
         int totalMovesCounter = 0;
         try {
             game = new Game(board, firstPlayer, secondPlayer);
-            int i = board.getBoardDimension()/2;
+            int i = board.getBoardDimension() / 2;
             Player actualPlayer = firstPlayer;
             // traccio diagonale di mosse alternate per raggiungere la cima
-            while(i > 0) {
+            while (i > 0) {
                 actualPlayer = secondPlayer;
                 i--;
                 game.makeMove(secondPlayer, new Coordinates(i, i));
@@ -304,12 +304,13 @@ public class GameTest {
                 }
             }
             // ora riempo la board
-            int j = 0; i = 0;
+            int j = 0;
+            i = 0;
             while (i < board.getBoardDimension()) {
                 while (j < board.getBoardDimension()) {
                     //System.out.print(i); System.out.print(j);
                     //System.out.println("");
-                    if (board.isEmptyCell(new Coordinates(i,j))) {
+                    if (board.isEmptyCell(new Coordinates(i, j))) {
                         if (actualPlayer.getColour() == Stone.BLACK) {
                             actualPlayer = secondPlayer;
                         } else {
@@ -325,12 +326,11 @@ public class GameTest {
             }
         } catch (Exception e) {
             // Mi aspetto che lanci un'eccezione quando ho raggiunto il limite di 60 per ogni giocatore
-            int movesLimit = 60*2;
+            int movesLimit = 60 * 2;
             Assertions.assertEquals(movesLimit, totalMovesCounter);
         }
 
     }
-
 
 
 }

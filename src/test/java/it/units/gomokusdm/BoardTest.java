@@ -7,10 +7,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -28,14 +24,14 @@ public class BoardTest {
     }
 
     @Test
-     public void testDefaultBoardSize() {
+    public void testDefaultBoardSize() {
         Board board = new Board();
         int defaultGomokuBoardSize = 19;
         Assertions.assertEquals(defaultGomokuBoardSize, board.getBoardDimension());
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {5,9,15})
+    @ValueSource(ints = {5, 9, 15})
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
         Board board = new Board(boardSize);
         Assertions.assertEquals(boardSize, board.getBoardDimension());
@@ -43,39 +39,39 @@ public class BoardTest {
 
     private static Stream<Arguments> generateSomeValidCoordinates() {
         return Stream.of(
-                Arguments.of(new Coordinates(10,10)),
-                Arguments.of(new Coordinates(0,0)),
-                Arguments.of(new Coordinates(0,0)),
-                Arguments.of(new Coordinates(8,1)),
-                Arguments.of(new Coordinates(0,15)),
-                Arguments.of(new Coordinates(18,17)));
+                Arguments.of(new Coordinates(10, 10)),
+                Arguments.of(new Coordinates(0, 0)),
+                Arguments.of(new Coordinates(0, 0)),
+                Arguments.of(new Coordinates(8, 1)),
+                Arguments.of(new Coordinates(0, 15)),
+                Arguments.of(new Coordinates(18, 17)));
     }
 
     @ParameterizedTest
     @MethodSource("generateSomeValidCoordinates")
-    public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates){
+    public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
         Board board = new Board();
         Assertions.assertTrue(board.areValidCoordinates(coordinates));
     }
 
     private static Stream<Arguments> generateSomeInvalidCoordinates() {
         return Stream.of(
-                Arguments.of(new Coordinates(-2,3)),
-                Arguments.of(new Coordinates(28,21)),
-                Arguments.of(new Coordinates(41,0)),
-                Arguments.of(new Coordinates(20,4)));
+                Arguments.of(new Coordinates(-2, 3)),
+                Arguments.of(new Coordinates(28, 21)),
+                Arguments.of(new Coordinates(41, 0)),
+                Arguments.of(new Coordinates(20, 4)));
     }
 
     @ParameterizedTest
     @MethodSource("generateSomeInvalidCoordinates")
-    public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates){
+    public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates) {
         Board board = new Board();
         Assertions.assertFalse(board.areValidCoordinates(coordinates));
     }
 
-    private static Board occupyAllTheBoard(){
+    private static Board occupyAllTheBoard() {
         Board board = new Board();
-        IntStream.range(0,19).forEach(row ->
+        IntStream.range(0, 19).forEach(row ->
                 IntStream.range(0, 19)
                         .forEach(col -> {
                             if (col % 2 == 0) {
@@ -88,7 +84,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testOccupyAllBoard(){
+    public void testOccupyAllBoard() {
         Board board = occupyAllTheBoard();
         int numberOfEmptyCell = (int) board.getBoard()
                 .values()
@@ -99,36 +95,35 @@ public class BoardTest {
     }
 
     /**
-    @Test
-    void testBoardPrintBegin() {
-        Board board = new Board();
-        String result = board.toString();
-        String expected_result = "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
-                "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n";
-
-        Assertions.assertEquals(expected_result, result);
-
-    }
+     * @Test void testBoardPrintBegin() {
+     * Board board = new Board();
+     * String result = board.toString();
+     * String expected_result = "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n" +
+     * "|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|\n";
+     * <p>
+     * Assertions.assertEquals(expected_result, result);
+     * <p>
+     * }
      **/
     @Test
-    public void testBoardToStringAtTheBeginning(){
+    public void testBoardToStringAtTheBeginning() {
         Board board = new Board();
         String result = board.toString();
         int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
