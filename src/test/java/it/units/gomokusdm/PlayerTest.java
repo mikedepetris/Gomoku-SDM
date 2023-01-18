@@ -43,7 +43,7 @@ public class PlayerTest {
         // - vogliamo che il test fallisca se non inserisco il nome?
         // - oppure non fallisce, ma viene mantenuto di default lo user Player 1/2 (numero scelto in base al colore)
         Player player = new Player("", Stone.BLACK);
-        Assertions.assertEquals("Player_1", player.getUsername());
+        Assertions.assertEquals("B", player.getUsername());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class PlayerTest {
         // - vogliamo che il test fallisca se non inserisco il nome?
         // - oppure non fallisce, ma viene mantenuto di default lo user Player 1/2 (numero scelto in base al colore)
         Player player = new Player("", Stone.WHITE);
-        Assertions.assertEquals("Player_2", player.getUsername());
+        Assertions.assertEquals("W", player.getUsername());
     }
 
 
