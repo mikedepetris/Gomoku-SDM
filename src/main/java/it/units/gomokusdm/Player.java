@@ -9,7 +9,7 @@ public class Player {
     private final List<Coordinates> movesList = new ArrayList<>();
 
     public Player(String username, Stone assignedStone) {
-        this.username = username;
+        this.username = username.equals("") ? assignedStone.toString() : username;
         this.assignedStone = assignedStone;
     }
 

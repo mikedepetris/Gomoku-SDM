@@ -42,7 +42,7 @@ public class CLIControllerTest {
     }
 
     @Test
-    void testPlayersInitializationWithoutUsername() throws IOException {
+    void testDefaultPlayersInitializationWithoutUsername() throws IOException {
         String inputString = "\n\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
