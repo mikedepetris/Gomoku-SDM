@@ -23,8 +23,16 @@ public class Board {
         return boardDimension;
     }
 
-    public Map<Coordinates, Stone> getBoard() {
-        return board;
+    public int getNumberOfEmptyPositionInBoard(){
+        return (int) this.board
+                .values()
+                .stream()
+                .filter(stone -> stone.equals(Stone.EMPTY))
+                .count();
+    }
+
+    public int getNumberOfOccupiedPositionInBoard(){
+        return (int) Math.pow(this.boardDimension, 2) - getNumberOfEmptyPositionInBoard();
     }
 
     public Stone getStoneAt(Coordinates coordinates) {

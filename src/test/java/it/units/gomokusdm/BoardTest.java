@@ -15,11 +15,7 @@ public class BoardTest {
     @Test
     public void testBoardInitWithDefaultBoardSizeOf19x19() {
         Board board = new Board();
-        int numOfNonEmptyStones = (int) board.getBoard()
-                .values()
-                .stream()
-                .filter(stone -> !stone.equals(Stone.EMPTY))
-                .count();
+        int numOfNonEmptyStones = board.getNumberOfOccupiedPositionInBoard();
         Assertions.assertEquals(0, numOfNonEmptyStones);
     }
 
@@ -86,11 +82,7 @@ public class BoardTest {
     @Test
     public void testOccupyAllBoard() {
         Board board = occupyAllTheBoard();
-        int numberOfEmptyCell = (int) board.getBoard()
-                .values()
-                .stream()
-                .filter(stone -> stone.equals(Stone.EMPTY))
-                .count();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
         Assertions.assertEquals(0, numberOfEmptyCell);
     }
 
