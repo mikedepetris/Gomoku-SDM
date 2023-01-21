@@ -30,6 +30,18 @@ public class GameTest {
     }
 
     @Test
+    public void testInvalidGameInstantiationWithPlayerNamesEqual() {
+        Player firstPlayer = new Player("SameName", Stone.BLACK);
+        Player secondPlayer = new Player("SameName", Stone.WHITE);
+        Board board = new Board();
+        Assertions.assertThrows(Exception.class, () -> {
+            Game game = new Game(board, firstPlayer, secondPlayer);
+        });
+        //Assertions.assertNotEquals(player1.getUsername(), player2.getUsername());
+    }
+
+
+    @Test
     public void testIsFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
