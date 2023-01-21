@@ -122,7 +122,8 @@ public class CLIController {
                     tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
                             .append(System.lineSeparator());
                 } else {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)).replace(" ", "-"));
+                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
+                            .replace(" ", "-"));
                 }
             }
             if (!(row == boardPartitionString.size() - 1)) {
@@ -133,9 +134,9 @@ public class CLIController {
         }
         tmp.append("\t");
         IntStream.range(0, board.getBoardDimension())
-                .forEach(pos -> tmp.append(String.format("%1s", pos)).append("\t"));
+                .forEach(value ->
+                        tmp.append(String.format("%1s", value)).append("\t"));
         tmp.append(System.lineSeparator());
-
         outputStream.print(tmp);
     }
 
