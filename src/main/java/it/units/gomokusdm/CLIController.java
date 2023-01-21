@@ -1,7 +1,5 @@
 package it.units.gomokusdm;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import java.io.*;
 import java.util.Arrays;
@@ -115,7 +113,7 @@ public class CLIController {
     public void printBoard() {
         StringBuilder tmp = new StringBuilder();
         String repeatedLine = "|\t".repeat(board.getBoardDimension());
-        List<List<String>> boardPartitionString = Lists.partition(Arrays.stream(board.toString().split("")).toList(), board.getBoardDimension());
+        List<List<String>> boardPartitionString = Utilities.partition(Arrays.stream(board.toString().split("")).toList(), board.getBoardDimension());
         tmp.append(System.lineSeparator());
         for (int row = 0; row < boardPartitionString.size(); row++) {
             tmp.append(String.format("%1s", row)).append("\t");
@@ -124,10 +122,9 @@ public class CLIController {
                     tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
                             .append(System.lineSeparator());
                 } else {
-                    //tmp.append(String.format("%-4s", test.get(row).get(stone)).replace(" ", "-"));
-                    tmp.append(Strings.padEnd(boardPartitionString.get(row).get(stone), 4, '-'));
+                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
+                            .replace(" ", "-"));
                 }
-
             }
             if (!(row == boardPartitionString.size() - 1)) {
                 tmp.append("\t")
@@ -137,9 +134,9 @@ public class CLIController {
         }
         tmp.append("\t");
         IntStream.range(0, board.getBoardDimension())
-                .forEach(pos -> tmp.append(String.format("%1s", pos)).append("\t"));
+                .forEach(value ->
+                        tmp.append(String.format("%1s", value)).append("\t"));
         tmp.append(System.lineSeparator());
-
         outputStream.print(tmp);
     }
 
