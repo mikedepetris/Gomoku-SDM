@@ -18,11 +18,17 @@ public class Game {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
+        if (!checkPlayerNames(player1, player2))
+            throw new Exception("invalid player names");
         if (checkPlayerColours(player1, player2)) {
             makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
         } else {
             throw new Exception("invalid player colors");
         }
+    }
+
+    private static boolean checkPlayerNames(Player player1, Player player2) {
+        return player1.getUsername() != player2.getUsername();
     }
 
     private static boolean checkPlayerColours(Player player1, Player player2) {

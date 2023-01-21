@@ -19,13 +19,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void test2PlayersCreationAreDifferent() {
-        Player player1 = new Player("xyz", Stone.BLACK);
-        Player player2 = new Player("xyz", Stone.WHITE);
-        Assertions.assertNotEquals(player1, player2);
-    }
-
-    @Test
     public void testGetPlayerColour() {
         Player player = new Player("xyz", Stone.BLACK);
         Assertions.assertEquals(Stone.BLACK, player.getColour());
