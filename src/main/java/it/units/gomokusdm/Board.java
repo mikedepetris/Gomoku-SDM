@@ -5,25 +5,29 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class Board {
-    private final int boardDimension;
-    private final Map<Coordinates, Stone> board = new LinkedHashMap<>();
-
-    public Board(int boardDimension) {
-        this.boardDimension = boardDimension;
-        IntStream.range(0, this.boardDimension)
-                .forEach(row -> IntStream.range(0, this.boardDimension)
-                        .forEach(col -> board.put(new Coordinates(row, col), Stone.EMPTY)));
+    private final Map<Coordinates, Stone> board;
+    private int boardDimension;
+    public Board() {
+        this.boardDimension = 0;
+        this.board = new LinkedHashMap<>();
     }
 
-    public Board() {
-        this(19);
+    public void setupBoard(int boardDimension) {
+        this.setBoardDimension(boardDimension);
+        IntStream.range(0, this.getBoardDimension())
+                .forEach(row -> IntStream.range(0, this.getBoardDimension())
+                        .forEach(col -> this.setCell(Stone.EMPTY, new Coordinates(row, col))));
     }
 
     public int getBoardDimension() {
         return boardDimension;
     }
 
-    public int getNumberOfEmptyPositionInBoard(){
+    private void setBoardDimension(int boardDimension) {
+        this.boardDimension = boardDimension;
+    }
+
+    public int getNumberOfEmptyPositionInBoard() {
         return (int) this.board
                 .values()
                 .stream()
@@ -31,7 +35,7 @@ public class Board {
                 .count();
     }
 
-    public int getNumberOfOccupiedPositionInBoard(){
+    public int getNumberOfOccupiedPositionInBoard() {
         return (int) Math.pow(this.boardDimension, 2) - getNumberOfEmptyPositionInBoard();
     }
 
@@ -55,24 +59,24 @@ public class Board {
                 (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
     }
 
-/**
-    public String toString() {
-        StringBuilder temp = new StringBuilder();
-        for (int i = 0; i < boardDimension; i++) {
-            for (int j = 0; j < boardDimension; j++) {
-                switch (board.get(new Coordinates(i, j))) {
-                    case EMPTY -> temp.append("|0");
-                    case BLACK -> temp.append("|B");
-                    case WHITE -> temp.append("|W");
-                }
-            }
-            temp.append("|");
-            temp.append("\n");
-        }
-        return temp.toString();
-
-    }
- **/
+    /**
+     * public String toString() {
+     * StringBuilder temp = new StringBuilder();
+     * for (int i = 0; i < boardDimension; i++) {
+     * for (int j = 0; j < boardDimension; j++) {
+     * switch (board.get(new Coordinates(i, j))) {
+     * case EMPTY -> temp.append("|0");
+     * case BLACK -> temp.append("|B");
+     * case WHITE -> temp.append("|W");
+     * }
+     * }
+     * temp.append("|");
+     * temp.append("\n");
+     * }
+     * return temp.toString();
+     * <p>
+     * }
+     **/
 
     public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);

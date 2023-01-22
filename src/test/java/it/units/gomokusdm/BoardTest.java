@@ -11,10 +11,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BoardTest {
-
+    private int defaultBoardSize = 19;
     @Test
     public void testBoardInitWithDefaultBoardSizeOf19x19() {
         Board board = new Board();
+        board.setupBoard(defaultBoardSize);
         int numOfNonEmptyStones = board.getNumberOfOccupiedPositionInBoard();
         Assertions.assertEquals(0, numOfNonEmptyStones);
     }
@@ -22,14 +23,15 @@ public class BoardTest {
     @Test
     public void testDefaultBoardSize() {
         Board board = new Board();
-        int defaultGomokuBoardSize = 19;
-        Assertions.assertEquals(defaultGomokuBoardSize, board.getBoardDimension());
+        board.setupBoard(defaultBoardSize);
+        Assertions.assertEquals(defaultBoardSize, board.getBoardDimension());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {5, 9, 15})
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new Board(boardSize);
+        Board board = new Board();
+        board.setupBoard(boardSize);
         Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
 
@@ -47,6 +49,7 @@ public class BoardTest {
     @MethodSource("generateSomeValidCoordinates")
     public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
         Board board = new Board();
+        board.setupBoard(defaultBoardSize);
         Assertions.assertTrue(board.areValidCoordinates(coordinates));
     }
 
@@ -62,13 +65,15 @@ public class BoardTest {
     @MethodSource("generateSomeInvalidCoordinates")
     public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates) {
         Board board = new Board();
+        board.setupBoard(defaultBoardSize);
         Assertions.assertFalse(board.areValidCoordinates(coordinates));
     }
 
-    private static Board occupyAllTheBoard() {
+    private Board occupyAllTheBoard() {
         Board board = new Board();
-        IntStream.range(0, 19).forEach(row ->
-                IntStream.range(0, 19)
+        board.setupBoard(defaultBoardSize);
+        IntStream.range(0, defaultBoardSize).forEach(row ->
+                IntStream.range(0, defaultBoardSize)
                         .forEach(col -> {
                             if (col % 2 == 0) {
                                 board.setCell(Stone.BLACK, new Coordinates(row, col));
@@ -117,6 +122,7 @@ public class BoardTest {
     @Test
     public void testBoardToStringAtTheBeginning() {
         Board board = new Board();
+        board.setupBoard(defaultBoardSize);
         String result = board.toString();
         int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
         String expected_result = "*".repeat(numberOfStonesInAFullBoard);
@@ -127,6 +133,7 @@ public class BoardTest {
     @Test
     public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
         Board board = new Board();
+        board.setupBoard(defaultBoardSize);
         Coordinates coordinates = new Coordinates(0, 0);
         Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
     }

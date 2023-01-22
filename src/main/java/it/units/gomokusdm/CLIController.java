@@ -60,6 +60,7 @@ public class CLIController {
 
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
+        setGameInitialStatus();
         setPlayerNames(player1);
         setPlayerNames(player2);
     }
@@ -67,7 +68,6 @@ public class CLIController {
     public void startGameClI() throws IOException {
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
-
         while (!game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
@@ -91,6 +91,21 @@ public class CLIController {
         } else {
             String defaultUsername = player.equals(player1) ? "Player_1" : "Player_2";
             player.setUsername(defaultUsername);
+        }
+    }
+
+    private void setGameInitialStatus() throws IOException {
+        outputStream.println("Select board size to use for this game:");
+        outputStream.printf("\t1. %s\n \t2. %s\n", "19x19", "15x15");
+        String line;
+        while ((line = reader.readLine()) != null){
+            try{
+                int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
+                this.game.setupGame(selectedBoardSize);
+                break;
+            }catch (NumberFormatException e){
+                outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
+            }
         }
     }
 
