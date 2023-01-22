@@ -3,9 +3,7 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class CLIControllerTest {
@@ -120,5 +118,26 @@ public class CLIControllerTest {
         cli.startGameClI();
         Assertions.assertEquals(cli.getWinner(), player1);
     }
+
+    @Test
+    void testGameStoppedByPlayerInputs() throws IOException {
+        String inputString =
+                """
+                        player one
+                        player two
+                        STOP
+                        """;
+        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream outputStream = new PrintStream(byteArrayOutputStream);
+        CLIController.closeInstance();
+        CLIController cli = CLIController.createInstance(outputStream, inputStream);
+        cli.initializeGameCLI();
+        cli.startGameClI();
+        String cliOutput = byteArrayOutputStream.toString();
+
+        Assertions.assertTrue(cliOutput.contains("Game has been stopped by player one"));
+    }
+
 
 }
