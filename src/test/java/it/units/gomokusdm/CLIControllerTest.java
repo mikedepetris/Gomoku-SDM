@@ -30,7 +30,7 @@ public class CLIControllerTest {
 
     @Test
     void testPlayersInitialization() throws IOException {
-        String inputString = "Player One\nPlayer Two\n";
+        String inputString = "1\nPlayer One\nPlayer Two\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -41,7 +41,7 @@ public class CLIControllerTest {
 
     @Test
     void testDefaultPlayersInitializationWithoutUsername() throws IOException {
-        String inputString = "\n\n";
+        String inputString = "1\n\n\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -75,7 +75,7 @@ public class CLIControllerTest {
     @Test
     void testCompleteGameSimulation() throws IOException {
         String inputString =
-                "player one\n" +
+                "1\nplayer one\n" +
                         "player two\n" +
                         "9\n10\n" +
                         "9\n8\n" +
@@ -98,7 +98,7 @@ public class CLIControllerTest {
     @Test
     void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException {
         String inputString =
-                "player one\n" +
+                "1\nplayer one\n" +
                         "player two\n" +
                         "9\n10\n" +
                         "9\n8\n" +

@@ -20,9 +20,7 @@ public class Game {
         this.player2 = player2;
         if (!checkPlayerNames(player1, player2))
             throw new Exception("invalid player names");
-        if (checkPlayerColours(player1, player2)) {
-            makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
-        } else {
+        if (!checkPlayerColours(player1, player2)) {
             throw new Exception("invalid player colors");
         }
     }
@@ -37,6 +35,11 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public void setupGame(int boardDimension){
+        this.board.setupBoard(boardDimension);
+        makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
     }
 
     public Player getPlayer1() {
