@@ -8,11 +8,19 @@ import java.io.IOException;
 public class GomokuSdmApplication {
 
     public static void main(String[] args) throws IOException {
-//        SpringApplication.run(GomokuSdmApplication.class, args);
+        // CLI Controller:
+        /*
+        SpringApplication.run(GomokuSdmApplication.class, args);
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, System.in);
         cli.initializeGameCLI();
         cli.startGameClI();
+         */
+
+        // Interfaccia Grafica:
+        new GUI();
+
+
     }
 
 }
