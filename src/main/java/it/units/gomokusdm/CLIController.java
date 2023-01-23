@@ -18,7 +18,9 @@ public class CLIController {
     private final Player player1;
     private final Player player2;
     private Player winner;
+
     private boolean isStopped;
+    private static final int NULL_COORDINATE = -1;
 
     private CLIController(PrintStream outputStream, InputStream inputStream) {
         this.outputStream = outputStream;
@@ -75,7 +77,7 @@ public class CLIController {
             printBoard();
             outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
             Coordinates coordinates = getCoordinatesByPlayerInput(nextMovingPlayer);
-            if (coordinates == null) {
+            if (isStopped) {
                 break;
             }
             try {
@@ -88,7 +90,7 @@ public class CLIController {
             winner = game.getLastMovingPlayer();
             outputStream.printf("\n%s won the game!", winner.getUsername());
         } else {
-            outputStream.printf("\nGame stopped by %s\n", game.getNextMovingPlayer().getUsername());
+            outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
         }
     }
 
@@ -122,7 +124,7 @@ public class CLIController {
         String lineRead = reader.readLine();
         if (lineRead != null && lineRead.equals("STOP")) {
             stopGameCLI();
-            return 0;
+            return NULL_COORDINATE;
         }
         return Integer.parseInt(lineRead);
     }
