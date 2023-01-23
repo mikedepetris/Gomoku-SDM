@@ -221,12 +221,12 @@ public class GUI implements ActionListener, MouseListener {
                 title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
             }
         } catch (Exception ex) {
-            title.setText("Mossa non valida, " + game.getPlayer1().getUsername() + " riprova");
+            title.setText("Mossa non valida, " + game.getNextMovingPlayer().getUsername() + " riprova");
             throw new RuntimeException(ex);
         }
 
         if(game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
-            title.setText(game.getNextMovingPlayer().getUsername() + " ha vinto!");
+            title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
             // mi aspetto un metodo per uscire dal gioco / ricominciare
         }
         grid_panel.repaint();
