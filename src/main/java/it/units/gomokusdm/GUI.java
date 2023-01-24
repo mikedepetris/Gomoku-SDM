@@ -67,6 +67,7 @@ public class GUI implements ActionListener, MouseListener {
         upper_panel.setBounds(0, 0, 800, 100);
         upper_panel.add(title);
 
+        // non va bene, è senza layout, è provvisorio
         start_panel.setLayout(null);
         start_panel.setBackground(new Color(234, 214, 84));
 
@@ -82,8 +83,11 @@ public class GUI implements ActionListener, MouseListener {
         title.setText("Gomoku");
         title.setOpaque(true);
     }
+
     public void showStartingWindow() {
         int x_starting_components = 250; //allineare nella x gli elementi
+        // è un allineamento provvisorio perchè non va bene, bisogna decidere un layout!
+
         // Bottone Play
         JButton play = new JButton("Play");
         initial_buttons[0] = play;
@@ -129,7 +133,7 @@ public class GUI implements ActionListener, MouseListener {
         }
     }
 
-    public void showGrid() {
+    public void showBoard() {
         // Settings della board
         String user1 = input_player1.getText();
         String user2 = input_player2.getText();
@@ -139,6 +143,7 @@ public class GUI implements ActionListener, MouseListener {
         frame.add(grid_panel);
         //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
         // if board dimension = 19...
+        this.game.setupGame(19);
         grid_panel.add(board_img_19);
         board_img_19.addMouseListener(this);
 
@@ -149,9 +154,17 @@ public class GUI implements ActionListener, MouseListener {
 
         title.setText("Turno: "+game.getPlayer2().getUsername());
 
-
     }
 
+    public void showStone(BufferedImage stone_img, int resize_x, int resize_y) {
+        JLabel stone = new JLabel(new ImageIcon(stone_img));
+        // è +22 per size=19
+        stone.setBounds(resize_x+22, resize_y+22, 24, 24);
+        board_img_19.add(stone);
+        title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
+    }
+
+    // EVENTS
 
 
     // Gestione evento del click su un pulsante nelle finestre
@@ -161,7 +174,7 @@ public class GUI implements ActionListener, MouseListener {
             case 0:
                 if (e.getSource() == initial_buttons[0]) { // Ho cliccato Play
                     frame.remove(start_panel);
-                    showGrid();
+                    showBoard();
                 }
                 if (e.getSource() == initial_buttons[1]) { // Ho cliccato Settings
                     // da fare, dobbiamo decidere che impostazioni cambiare
@@ -182,11 +195,19 @@ public class GUI implements ActionListener, MouseListener {
     // Gestione eventi riguardo al mouse
     @Override
     public void mouseReleased(MouseEvent e) {
+
+
+    }
+
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
         int padding_board = 30; // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
         // Rilevo le x,y del mouse dopo aver cliccato
         int x=e.getX()-padding_board; int y=e.getY()-padding_board;
-
-
         int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
 
         int resize_x = 0; int resize_y = 0; // resize x e y rispetto a dove posizionare la stone come immagine
@@ -203,44 +224,27 @@ public class GUI implements ActionListener, MouseListener {
         // Provo a eseguire una mossa
         Player nextMovingPlayer = game.getNextMovingPlayer();
         try {
-            game.makeMove(game.getNextMovingPlayer(), new Coordinates(new_x, new_y));
+            game.makeMove(nextMovingPlayer, new Coordinates(new_x, new_y));
             printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
-
             // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
             if (nextMovingPlayer.getColour() == Stone.WHITE) {
-                JLabel whitestone = new JLabel(new ImageIcon(white_stone_img));
-                // è +22 per size=19
-                whitestone.setBounds(resize_x+22, resize_y+22, 24, 24);
-                board_img_19.add(whitestone);
-                title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
+                showStone(white_stone_img, resize_x, resize_y);
             } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
-                JLabel blackstone = new JLabel(new ImageIcon(black_stone_img));
-                // è +22 per size=19
-                blackstone.setBounds(resize_x+22, resize_y+22, 24, 24);
-                board_img_19.add(blackstone);
-                title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
+                showStone(black_stone_img, resize_x, resize_y);
             }
         } catch (Exception ex) {
-            title.setText("Mossa non valida, " + game.getNextMovingPlayer().getUsername() + " riprova");
+            title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
             throw new RuntimeException(ex);
         }
 
-        if(game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
+        if (game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
             title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
             // mi aspetto un metodo per uscire dal gioco / ricominciare
         }
         grid_panel.repaint();
-
     }
 
-    public void mouseClicked(MouseEvent e) {
 
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
 
     @Override
     public void mouseEntered(MouseEvent e) {
