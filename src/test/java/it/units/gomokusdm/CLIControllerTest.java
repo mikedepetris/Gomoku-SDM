@@ -123,6 +123,7 @@ public class CLIControllerTest {
     void testGameStoppedByPlayerInputs() throws IOException {
         String inputString =
                 """
+                        1
                         player one
                         player two
                         STOP
@@ -136,7 +137,7 @@ public class CLIControllerTest {
         cli.startGameClI();
         String cliOutput = byteArrayOutputStream.toString();
 
-        Assertions.assertTrue(cliOutput.contains("Game has been stopped by player one"));
+        Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
     }
 
 
