@@ -76,11 +76,9 @@ public class Game {
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws Exception {
-        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && lastMovingPlayer.getMovesList().size() <= 60) {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && player.getMovesList().size() < 60) {
             board.setCell(player.getColour(), coordinates);
-            //lastMoveCoordinates = new Coordinates(coordinates.getRowIndex(), coordinates.getColIndex());
             lastMovingPlayer = player;
-            //lastMovingPlayer.addMove(lastMoveCoordinates);
             lastMovingPlayer.addMove(coordinates);
         } else {
             throw new Exception("Invalid Arguments");
