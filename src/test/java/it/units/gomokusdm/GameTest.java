@@ -306,7 +306,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new Board();
         Game game = null;
-        int totalMovesCounter = 0;
         try {
             game = new Game(board, firstPlayer, secondPlayer);
             game.setupGame(defaultBoardSize);
@@ -317,11 +316,10 @@ public class GameTest {
                 actualPlayer = secondPlayer;
                 i--;
                 game.makeMove(secondPlayer, new Coordinates(i, i));
-                totalMovesCounter++;
+
                 if (i > 0) {
                     i--;
                     game.makeMove(firstPlayer, new Coordinates(i, i));
-                    totalMovesCounter++;
                     actualPlayer = firstPlayer;
                 }
             }
@@ -330,8 +328,6 @@ public class GameTest {
             i = 0;
             while (i < board.getBoardDimension()) {
                 while (j < board.getBoardDimension()) {
-                    //System.out.print(i); System.out.print(j);
-                    //System.out.println("");
                     if (board.isEmptyCell(new Coordinates(i, j))) {
                         if (actualPlayer.getColour() == Stone.BLACK) {
                             actualPlayer = secondPlayer;
@@ -339,7 +335,6 @@ public class GameTest {
                             actualPlayer = firstPlayer;
                         }
                         game.makeMove(actualPlayer, new Coordinates(i, j));
-                        totalMovesCounter++;
                     }
                     j++;
                 }
@@ -348,7 +343,9 @@ public class GameTest {
             }
         } catch (Exception e) {
             // Mi aspetto che lanci un'eccezione quando ho raggiunto il limite di 60 per ogni giocatore
+            // Quindi dovrei avere esattamente 120 mosse fatte, e il player ha tentato di oltrepassare il limite
             int movesLimit = 60 * 2;
+            int totalMovesCounter = game.getPlayer1().getMovesList().size() + game.getPlayer2().getMovesList().size();
             Assertions.assertEquals(movesLimit, totalMovesCounter);
         }
 
