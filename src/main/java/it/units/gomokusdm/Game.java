@@ -3,6 +3,7 @@ package it.units.gomokusdm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 // solo un test per circleci
 public class Game {
@@ -14,19 +15,19 @@ public class Game {
     //private Coordinates lastMoveCoordinates;
     private Player lastMovingPlayer;
 
-    public Game(Board board, Player player1, Player player2) throws Exception {
+    public Game(Board board, Player player1, Player player2) {
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
         if (!checkPlayerNames(player1, player2))
-            throw new Exception("invalid player names");
+            throw new IllegalArgumentException("invalid player names");
         if (!checkPlayerColours(player1, player2)) {
-            throw new Exception("invalid player colors");
+            throw new IllegalArgumentException("invalid player colors");
         }
     }
 
     private static boolean checkPlayerNames(Player player1, Player player2) {
-        return player1.getUsername() != player2.getUsername();
+        return !Objects.equals(player1.getUsername(), player2.getUsername());
     }
 
     private static boolean checkPlayerColours(Player player1, Player player2) {
@@ -75,13 +76,17 @@ public class Game {
         lastMovingPlayer.addMove(boardCenter);
     }
 
-    public void makeMove(Player player, Coordinates coordinates) throws Exception {
+    public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveException {
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && player.getMovesList().size() < 60) {
             board.setCell(player.getColour(), coordinates);
             lastMovingPlayer = player;
             lastMovingPlayer.addMove(coordinates);
         } else {
-            throw new Exception("Invalid Arguments");
+            String exceptionMessage = "";
+            if (!isFeasibleMove(coordinates)) { exceptionMessage += "Move not feasible "; }
+            if (!isTurnOfPlayer(player)) { exceptionMessage += "Is not " + player.getUsername() + "'s turn "; }
+            if (!(player.getMovesList().size() < 60)) { exceptionMessage += player.getUsername() + " has terminated the number of moves allowed "; }
+            throw new InvalidMoveException(exceptionMessage);
         }
     }
 
@@ -194,5 +199,14 @@ public class Game {
     public boolean isFeasibleMove(Coordinates coordinates) {
         return board.areValidCoordinates(coordinates) && board.isEmptyCell(coordinates)
                 && isThereAnAdjacentStone(coordinates);
+    }
+
+    public static class InvalidMoveException extends Throwable {
+        public InvalidMoveException() {
+            super();
+        }
+        public InvalidMoveException(String errorMessage) {
+            super(errorMessage);
+        }
     }
 }

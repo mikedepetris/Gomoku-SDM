@@ -72,14 +72,18 @@ public class GameTest {
     // The second player (white) tries to make the move, in adjacent coordinates (8,9)
 
     @Test
-    public void testMakeFirstMoveAdjacent() throws Exception {
+    public void testMakeFirstMoveAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         //
-        game.makeMove(secondPlayer, new Coordinates(8, 9));
+        try {
+            game.makeMove(secondPlayer, new Coordinates(8, 9));
+        } catch (Game.InvalidMoveException e) {
+            e.printStackTrace();
+        }
         Stone stoneColor = board.getStoneAt(new Coordinates(8, 9));
         Assertions.assertEquals(stoneColor, secondPlayer.getColour());
     }
@@ -97,7 +101,7 @@ public class GameTest {
         game.setupGame(defaultBoardSize);
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 1));
-        } catch (Exception e) {
+        } catch (Game.InvalidMoveException e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             Stone stoneColor = board.getStoneAt(new Coordinates(1, 1));
@@ -119,7 +123,7 @@ public class GameTest {
 
 
     @Test
-    public void testMakeConsecutiveMoves() throws Exception {
+    public void testMakeConsecutiveMoves() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -128,7 +132,7 @@ public class GameTest {
         // pedina non adiacente, mi aspetto che non faccia nulla
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 2));
-        } catch (Exception e) {
+        } catch (Game.InvalidMoveException e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
@@ -167,7 +171,7 @@ public class GameTest {
     }
 
     @Test
-    public void testMakeConsecutiveMovesOutsideTheBoard() throws Exception {
+    public void testMakeConsecutiveMovesOutsideTheBoard() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -186,7 +190,7 @@ public class GameTest {
             game.makeMove(secondPlayer, new Coordinates(9, 18));
             game.makeMove(firstPlayer, new Coordinates(0, 18));
             game.makeMove(firstPlayer, new Coordinates(9, 19));
-        } catch (Exception e) {
+        } catch (Game.InvalidMoveException e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             int[][] expectedBoard =
@@ -222,7 +226,7 @@ public class GameTest {
 
 
     @Test
-    public void testIsPlayerWinningGame() throws Exception {
+    public void testIsPlayerWinningGame() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -288,7 +292,7 @@ public class GameTest {
             result.add(game.checkIfPlayerWins());
             game.makeMove(firstPlayer, new Coordinates(5, 5));
             result.add(game.checkIfPlayerWins());
-        } catch (Exception e) {
+        } catch (Game.InvalidMoveException e) {
             throw new RuntimeException(e);
         }
 
@@ -341,7 +345,7 @@ public class GameTest {
                 j = 0;
                 i++;
             }
-        } catch (Exception e) {
+        } catch (Game.InvalidMoveException e) {
             // Mi aspetto che lanci un'eccezione quando ho raggiunto il limite di 60 per ogni giocatore
             // Quindi dovrei avere esattamente 120 mosse fatte, e il player ha tentato di oltrepassare il limite
             int movesLimit = 60 * 2;
@@ -351,5 +355,54 @@ public class GameTest {
 
     }
 
+    @Test
+    void testWrongPlayerUsernamesAssignments() {
+        Player player1 = new Player("player", Stone.BLACK);
+        Player player2 = new Player("player", Stone.WHITE);
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+                "invalid player names");
+    }
+
+    @Test
+    void testWrongPlayerColourAssignments() {
+        Player player1 = new Player("player1", Stone.BLACK);
+        Player player2 = new Player("player2", Stone.BLACK);
+
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+                "invalid player colours");
+    }
+
+    @Test
+    void testInvalidMoves() {
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Board board = new BoardImplementation();
+        board.setupBoard(defaultBoardSize);
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        game.setupGame(defaultBoardSize);
+
+
+        Assertions.assertThrowsExactly(
+                Game.InvalidMoveException.class,
+                () -> game.makeMove(secondPlayer, new Coordinates(0,0)),
+                "Move not feasible"
+        );
+
+        Assertions.assertThrowsExactly(
+                Game.InvalidMoveException.class,
+                () -> game.makeMove(firstPlayer, new Coordinates(0,0)),
+                "Is not First's turn"
+        );
+
+        for (int i = 0; i < 60; i++) {
+            secondPlayer.getMovesList().add(new Coordinates(0, 0));
+        }
+        Assertions.assertThrowsExactly(
+                Game.InvalidMoveException.class,
+                () -> game.makeMove(secondPlayer, new Coordinates(9,10)),
+                "Second has terminated the number of moves allowed"
+        );
+    }
 
 }
