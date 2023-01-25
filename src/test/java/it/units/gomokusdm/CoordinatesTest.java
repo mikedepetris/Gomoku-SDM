@@ -35,27 +35,6 @@ public class CoordinatesTest {
     }
 
     @Test
-    void testGetAdjacentCoordinates() {
-        Coordinates coordinate = new Coordinates(1, 1);
-        Coordinates[] expectedAdjacentCoordinates =
-                {
-                        new Coordinates(0, 0),
-                        new Coordinates(0, 1),
-                        new Coordinates(0, 2),
-                        new Coordinates(1, 0),
-                        new Coordinates(1, 1),      //potrebbe essere rimosso (non è adiacente nel senso stretto)
-                        new Coordinates(1, 2),
-                        new Coordinates(2, 0),
-                        new Coordinates(2, 1),
-                        new Coordinates(2, 2)
-                };
-        ArrayList<Coordinates> adjacentCoordinates = coordinate.getAdjacentCoordinates();
-        for (int index = 0; index < adjacentCoordinates.size(); index++) {
-            Assertions.assertEquals(adjacentCoordinates.get(index), expectedAdjacentCoordinates[index]);
-        }
-    }
-
-    @Test
     void testEqualsCoordinates() {
         Coordinates firstCoordinates = new Coordinates(1, 1);
         Coordinates secondCoordinates = new Coordinates(1, 1);

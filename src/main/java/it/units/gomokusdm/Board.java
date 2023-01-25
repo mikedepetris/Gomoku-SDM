@@ -1,7 +1,7 @@
 package it.units.gomokusdm;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Board {
@@ -45,6 +45,13 @@ public class Board {
             return board.get(coordinates).equals(Stone.EMPTY);
         else
             return true;
+    }
+
+    public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates){
+        return Arrays.stream(Direction.values())
+                .map(direction -> coordinates.getCoordinateMovedInDirectionWithStep(direction, 1))
+                .filter(adjcoord -> !adjcoord.equals(coordinates))
+                .collect(Collectors.toList());
     }
 
     public boolean areValidCoordinates(Coordinates coordinates) {

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -136,6 +137,26 @@ public class BoardTest {
         board.setupBoard(defaultBoardSize);
         Coordinates coordinates = new Coordinates(0, 0);
         Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
+    }
+
+    @Test
+    void testGetAdjacentCoordinates() {
+        Board board = new Board();
+        board.setupBoard(defaultBoardSize);
+        Coordinates coordinateUsedToGetAdjCoordinates = new Coordinates(1, 1);
+        List<Coordinates> expectedAdjacentCoordinates =List.of(
+                        new Coordinates(0, 0),
+                        new Coordinates(0, 1),
+                        new Coordinates(0, 2),
+                        new Coordinates(1, 0),
+                        new Coordinates(1, 2),
+                        new Coordinates(2, 0),
+                        new Coordinates(2, 1),
+                        new Coordinates(2, 2)
+        );
+        List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinateUsedToGetAdjCoordinates);
+        expectedAdjacentCoordinates
+                .forEach(expctedAdjCoord -> Assertions.assertTrue(adjacentCoordinates.contains(expctedAdjCoord)));
     }
 
 }
