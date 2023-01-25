@@ -1,72 +1,25 @@
 package it.units.gomokusdm;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.List;
 
-public class Board {
-    private final Map<Coordinates, Stone> board;
-    public Board() {
-        this.board = new LinkedHashMap<>();
-    }
+public interface Board {
+    void setupBoard(int boardDimension);
 
-    public void setupBoard(int boardDimension) {
-        IntStream.range(0, boardDimension)
-                .forEach(row -> IntStream.range(0, boardDimension)
-                        .forEach(col -> this.setCell(Stone.EMPTY, new Coordinates(row, col))));
-    }
+    int getBoardDimension();
 
-    public int getBoardDimension() {
-        return (int) Math.sqrt(this.board.size());
-    }
+    int getNumberOfEmptyPositionInBoard();
 
-    public int getNumberOfEmptyPositionInBoard() {
-        return (int) this.board
-                .values()
-                .stream()
-                .filter(stone -> stone.equals(Stone.EMPTY))
-                .count();
-    }
+    int getNumberOfOccupiedPositionInBoard();
 
-    public int getNumberOfOccupiedPositionInBoard() {
-        return (int) Math.pow(this.getBoardDimension(), 2) - getNumberOfEmptyPositionInBoard();
-    }
+    Stone getStoneAt(Coordinates coordinates);
 
-    public Stone getStoneAt(Coordinates coordinates) {
-        return board.get(coordinates);
-    }
+    void setCell(Stone stone, Coordinates coordinates);
 
-    public void setCell(Stone stone, Coordinates coordinates) {
-        board.put(coordinates, stone);
-    }
+    boolean isEmptyCell(Coordinates coordinates);
 
-    public boolean isEmptyCell(Coordinates coordinates) {
-        if (areValidCoordinates(coordinates))
-            return board.get(coordinates).equals(Stone.EMPTY);
-        else
-            return true;
-    }
+    List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates);
 
-    public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates){
-        return Arrays.stream(Direction.values())
-                .map(direction -> coordinates.getCoordinateMovedInDirectionWithStep(direction, 1))
-                .filter(adjcoord -> !adjcoord.equals(coordinates))
-                .collect(Collectors.toList());
-    }
+    boolean areValidCoordinates(Coordinates coordinates);
 
-    public boolean areValidCoordinates(Coordinates coordinates) {
-        return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
-                (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
-    }
-
-    public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
-        return getStoneAt(current) == getStoneAt(coordinateInDirection);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder tmp = new StringBuilder();
-        board.values().forEach(tmp::append);
-        return tmp.toString();
-    }
+    boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection);
 }

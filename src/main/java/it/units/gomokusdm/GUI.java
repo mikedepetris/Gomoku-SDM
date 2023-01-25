@@ -38,7 +38,7 @@ public class GUI implements ActionListener, MouseListener {
         // Base Settings
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
-        this.board = new Board();
+        this.board = new BoardImplementation();
         try {
             this.game = new Game(board, player1, player2);
         } catch (Exception e) {
