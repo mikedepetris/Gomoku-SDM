@@ -11,9 +11,8 @@ public class CLIController {
     private static CLIController cli = null;
 
     private final PrintStream outputStream;
-    private final InputStream inputStream;
     private final BufferedReader reader;
-    private Board board;
+    private final Board board;
     private Game game;
     private final Player player1;
     private final Player player2;
@@ -24,7 +23,6 @@ public class CLIController {
 
     private CLIController(PrintStream outputStream, InputStream inputStream) {
         this.outputStream = outputStream;
-        this.inputStream = inputStream;
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
@@ -60,15 +58,15 @@ public class CLIController {
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
         setGameInitialStatus();
-        setPlayerNames(player1);
-        setPlayerNames(player2);
+        setPlayerName(player1);
+        setPlayerName(player2);
     }
 
     public void startGameClI() throws IOException {
         this.isStopped = false;
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
-        while (!game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
+        while (!thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
             outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
@@ -90,7 +88,11 @@ public class CLIController {
         }
     }
 
-    private void setPlayerNames(Player player) throws IOException {
+    private boolean thereIsAWinner() {
+        return game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour());
+    }
+
+    private void setPlayerName(Player player) throws IOException {
         outputStream.printf("Player %d name:   ", player.equals(player1) ? 1 : 2);
         String playerName = reader.readLine();
         if (!playerName.isBlank()) {
@@ -119,12 +121,14 @@ public class CLIController {
     public int getSingleCoordinateByPlayer() throws IOException {
         String lineRead = reader.readLine();
 
-        if (lineRead != null && lineRead.matches("^[0-9]+$")) {
-            return Integer.parseInt(lineRead);
-        }
+        if (lineRead != null) {
+            if (lineRead.matches("^[0-9]+$")) {
+                return Integer.parseInt(lineRead);
+            }
 
-        if (lineRead.equals("STOP")) {
-            stopGameCLI();
+            if (lineRead.equals("STOP")) {
+                stopGameCLI();
+            }
         }
 
         return NULL_COORDINATE;
