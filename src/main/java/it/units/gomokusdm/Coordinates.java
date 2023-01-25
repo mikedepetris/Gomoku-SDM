@@ -34,18 +34,6 @@ public class Coordinates {
         this.colIndex = colIndex;
     }
 
-    public ArrayList<Coordinates> getAdjacentCoordinates() {
-        ArrayList<Coordinates> adjacentCoordinates = new ArrayList<>();
-        for (int row = -1; row <= 1; row++) {
-            for (int col = -1; col <= 1; col++) {
-                int rowCoordinate = rowIndex + row;
-                int columnCoordinate = colIndex + col;
-                adjacentCoordinates.add(new Coordinates(rowCoordinate, columnCoordinate));
-            }
-        }
-        return adjacentCoordinates;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coordinates otherCoordinates) {

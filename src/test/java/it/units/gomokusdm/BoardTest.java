@@ -7,30 +7,31 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BoardTest {
-    private int defaultBoardSize = 19;
+    private static final int DEFAULT_BOARD_SIZE = 19;
     @Test
     public void testBoardInitWithDefaultBoardSizeOf19x19() {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
         int numOfNonEmptyStones = board.getNumberOfOccupiedPositionInBoard();
         Assertions.assertEquals(0, numOfNonEmptyStones);
     }
 
     @Test
     public void testDefaultBoardSize() {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
-        Assertions.assertEquals(defaultBoardSize, board.getBoardDimension());
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
+        Assertions.assertEquals(DEFAULT_BOARD_SIZE, board.getBoardDimension());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {5, 9, 15})
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new Board();
+        Board board = new BoardImplementation();
         board.setupBoard(boardSize);
         Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
@@ -48,8 +49,8 @@ public class BoardTest {
     @ParameterizedTest
     @MethodSource("generateSomeValidCoordinates")
     public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
         Assertions.assertTrue(board.areValidCoordinates(coordinates));
     }
 
@@ -64,16 +65,16 @@ public class BoardTest {
     @ParameterizedTest
     @MethodSource("generateSomeInvalidCoordinates")
     public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates) {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
         Assertions.assertFalse(board.areValidCoordinates(coordinates));
     }
 
     private Board occupyAllTheBoard() {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
-        IntStream.range(0, defaultBoardSize).forEach(row ->
-                IntStream.range(0, defaultBoardSize)
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
+        IntStream.range(0, DEFAULT_BOARD_SIZE).forEach(row ->
+                IntStream.range(0, DEFAULT_BOARD_SIZE)
                         .forEach(col -> {
                             if (col % 2 == 0) {
                                 board.setCell(Stone.BLACK, new Coordinates(row, col));
@@ -121,8 +122,8 @@ public class BoardTest {
      **/
     @Test
     public void testBoardToStringAtTheBeginning() {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
+        BoardImplementation board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
         String result = board.toString();
         int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
         String expected_result = "*".repeat(numberOfStonesInAFullBoard);
@@ -132,10 +133,30 @@ public class BoardTest {
 
     @Test
     public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
-        Board board = new Board();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
         Coordinates coordinates = new Coordinates(0, 0);
         Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
+    }
+
+    @Test
+    void testGetAdjacentCoordinates() {
+        Board board = new BoardImplementation();
+        board.setupBoard(DEFAULT_BOARD_SIZE);
+        Coordinates coordinateUsedToGetAdjCoordinates = new Coordinates(1, 1);
+        List<Coordinates> expectedAdjacentCoordinates =List.of(
+                        new Coordinates(0, 0),
+                        new Coordinates(0, 1),
+                        new Coordinates(0, 2),
+                        new Coordinates(1, 0),
+                        new Coordinates(1, 2),
+                        new Coordinates(2, 0),
+                        new Coordinates(2, 1),
+                        new Coordinates(2, 2)
+        );
+        List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinateUsedToGetAdjCoordinates);
+        expectedAdjacentCoordinates
+                .forEach(expctedAdjCoord -> Assertions.assertTrue(adjacentCoordinates.contains(expctedAdjCoord)));
     }
 
 }

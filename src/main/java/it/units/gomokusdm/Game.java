@@ -182,7 +182,7 @@ public class Game {
     // controlla se esiste una stone adiacente intorno a quella che sto inserendo. se ne esiste almeno una,
     // posso inserire la stone
     public boolean isThereAnAdjacentStone(Coordinates coordinates) {
-        ArrayList<Coordinates> adjacentCoordinates = coordinates.getAdjacentCoordinates();
+        List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinates);
         for (Coordinates el : adjacentCoordinates) {
             if (board.areValidCoordinates(coordinates) && !board.isEmptyCell(el)) {
                 return true;

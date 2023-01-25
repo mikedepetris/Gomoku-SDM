@@ -12,7 +12,7 @@ public class GameTest {
     public void testGameInstantiation() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         Assertions.assertEquals(game.getBoard(), board);
         Assertions.assertEquals(game.getPlayer1(), firstPlayer);
@@ -23,7 +23,7 @@ public class GameTest {
     public void testInvalidGameInstantiation() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Assertions.assertThrows(Exception.class, () -> {
             Game game = new Game(board, firstPlayer, secondPlayer);
         });
@@ -33,7 +33,7 @@ public class GameTest {
     public void testInvalidGameInstantiationWithPlayerNamesEqual() {
         Player firstPlayer = new Player("SameName", Stone.BLACK);
         Player secondPlayer = new Player("SameName", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Assertions.assertThrows(Exception.class, () -> {
             Game game = new Game(board, firstPlayer, secondPlayer);
         });
@@ -45,7 +45,7 @@ public class GameTest {
     public void testIsFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
@@ -58,7 +58,7 @@ public class GameTest {
     public void testIsNotFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
@@ -75,7 +75,7 @@ public class GameTest {
     public void testMakeFirstMoveAdjacent() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         //
@@ -92,7 +92,7 @@ public class GameTest {
     public void testMakeFirstMoveNotAdjacent() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         try {
@@ -109,7 +109,7 @@ public class GameTest {
     public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
@@ -122,7 +122,7 @@ public class GameTest {
     public void testMakeConsecutiveMoves() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         // pedina non adiacente, mi aspetto che non faccia nulla
@@ -170,7 +170,7 @@ public class GameTest {
     public void testMakeConsecutiveMovesOutsideTheBoard() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         board.setupBoard(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
@@ -225,7 +225,7 @@ public class GameTest {
     public void testIsPlayerWinningGame() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = new Game(board, firstPlayer, secondPlayer);
         game.setupGame(defaultBoardSize);
         boolean[] result = new boolean[8];
@@ -266,7 +266,7 @@ public class GameTest {
 
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         board.setupBoard(defaultBoardSize);
         Game game = null;
         try {
@@ -304,7 +304,7 @@ public class GameTest {
     public void testLimitMovesPlayer() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new Board();
+        Board board = new BoardImplementation();
         Game game = null;
         try {
             game = new Game(board, firstPlayer, secondPlayer);
