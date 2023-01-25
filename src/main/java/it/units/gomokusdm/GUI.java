@@ -232,9 +232,8 @@ public class GUI implements ActionListener, MouseListener {
             } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
                 showStone(black_stone_img, resize_x, resize_y);
             }
-        } catch (Exception ex) {
+        } catch (Game.InvalidMoveException ex) {
             title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
-            throw new RuntimeException(ex);
         }
 
         if (game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
