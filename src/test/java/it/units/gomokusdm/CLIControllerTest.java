@@ -96,7 +96,7 @@ public class CLIControllerTest {
     }
 
     @Test
-    void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException {
+    void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException, NumberFormatException {
         String inputString =
                 "1\nplayer one\n" +
                         "player two\n" +
@@ -139,6 +139,7 @@ public class CLIControllerTest {
 
         Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
     }
+
 
 
 }

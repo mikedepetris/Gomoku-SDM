@@ -29,11 +29,7 @@ public class CLIController {
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
         this.board = new BoardImplementation();
-        try {
-            this.game = new Game(board, player1, player2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.game = new Game(board, player1, player2);
     }
 
     public static CLIController createInstance(PrintStream outputStream, InputStream inputStream) {
@@ -82,7 +78,7 @@ public class CLIController {
             }
             try {
                 game.makeMove(nextMovingPlayer, coordinates);
-            } catch (Exception e) {
+            } catch (Game.InvalidMoveException e) {
                 outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
@@ -122,18 +118,23 @@ public class CLIController {
 
     public int getSingleCoordinateByPlayer() throws IOException {
         String lineRead = reader.readLine();
-        if (lineRead != null && lineRead.equals("STOP")) {
-            stopGameCLI();
-            return NULL_COORDINATE;
+
+        if (lineRead != null && lineRead.matches("^[0-9]+$")) {
+            return Integer.parseInt(lineRead);
         }
-        return Integer.parseInt(lineRead);
+
+        if (lineRead.equals("STOP")) {
+            stopGameCLI();
+        }
+
+        return NULL_COORDINATE;
     }
 
     private void stopGameCLI() {
         isStopped = true;
     }
 
-    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException, NumberFormatException {
+    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException {
 
         outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
         int rowCoordinate = getSingleCoordinateByPlayer();
@@ -145,7 +146,7 @@ public class CLIController {
         if (isStopped) {
             return null;
         }
-        return new Coordinates(rowCoordinate, columnCoordinate);
+        return rowCoordinate > 0 && columnCoordinate > 0 ? new Coordinates(rowCoordinate, columnCoordinate) : null;
     }
 
     public void printBoard() {
