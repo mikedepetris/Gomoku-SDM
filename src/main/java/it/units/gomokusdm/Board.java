@@ -6,25 +6,18 @@ import java.util.stream.IntStream;
 
 public class Board {
     private final Map<Coordinates, Stone> board;
-    private int boardDimension;
     public Board() {
-        this.boardDimension = 0;
         this.board = new LinkedHashMap<>();
     }
 
     public void setupBoard(int boardDimension) {
-        this.setBoardDimension(boardDimension);
-        IntStream.range(0, this.getBoardDimension())
-                .forEach(row -> IntStream.range(0, this.getBoardDimension())
+        IntStream.range(0, boardDimension)
+                .forEach(row -> IntStream.range(0, boardDimension)
                         .forEach(col -> this.setCell(Stone.EMPTY, new Coordinates(row, col))));
     }
 
     public int getBoardDimension() {
-        return boardDimension;
-    }
-
-    private void setBoardDimension(int boardDimension) {
-        this.boardDimension = boardDimension;
+        return (int) Math.sqrt(this.board.size());
     }
 
     public int getNumberOfEmptyPositionInBoard() {
@@ -36,7 +29,7 @@ public class Board {
     }
 
     public int getNumberOfOccupiedPositionInBoard() {
-        return (int) Math.pow(this.boardDimension, 2) - getNumberOfEmptyPositionInBoard();
+        return (int) Math.pow(this.getBoardDimension(), 2) - getNumberOfEmptyPositionInBoard();
     }
 
     public Stone getStoneAt(Coordinates coordinates) {
@@ -58,25 +51,6 @@ public class Board {
         return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
                 (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
     }
-
-    /**
-     * public String toString() {
-     * StringBuilder temp = new StringBuilder();
-     * for (int i = 0; i < boardDimension; i++) {
-     * for (int j = 0; j < boardDimension; j++) {
-     * switch (board.get(new Coordinates(i, j))) {
-     * case EMPTY -> temp.append("|0");
-     * case BLACK -> temp.append("|B");
-     * case WHITE -> temp.append("|W");
-     * }
-     * }
-     * temp.append("|");
-     * temp.append("\n");
-     * }
-     * return temp.toString();
-     * <p>
-     * }
-     **/
 
     public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);
