@@ -20,7 +20,7 @@ public class GameTest {
     }
 
     @Test
-    public void testInvalidGameInstantiation() {
+    public void testInvalidGameInstantiationWithColorPlayersEqual() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new BoardImplementation();
@@ -277,21 +277,21 @@ public class GameTest {
             game = new Game(board, firstPlayer, secondPlayer);
             game.setupGame(defaultBoardSize);
             game.makeMove(secondPlayer, new Coordinates(9, 10));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(8, 8));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
             game.makeMove(secondPlayer, new Coordinates(9, 11));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(7, 7));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
             game.makeMove(secondPlayer, new Coordinates(9, 12));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(6, 6));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
             game.makeMove(secondPlayer, new Coordinates(9, 13));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(5, 5));
-            result.add(game.checkIfPlayerWins());
+            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
         } catch (Game.InvalidMoveException e) {
             throw new RuntimeException(e);
         }
@@ -300,60 +300,7 @@ public class GameTest {
         Assertions.assertEquals(expected_result, result);
     }
 
-    /* Genero una sequenza di makeMove validi alternando fra bianco e nero (senza controllare la vittoria), per riempire
-     tutta la board. Si dovrebbe interrompere prima di un tot limite mosse, lanciando l'eccezione.
-     */
 
-    @Test
-    public void testLimitMovesPlayer() {
-        Player firstPlayer = new Player("First", Stone.BLACK);
-        Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
-        Game game = null;
-        try {
-            game = new Game(board, firstPlayer, secondPlayer);
-            game.setupGame(defaultBoardSize);
-            int i = board.getBoardDimension() / 2;
-            Player actualPlayer = firstPlayer;
-            // traccio diagonale di mosse alternate per raggiungere la cima
-            while (i > 0) {
-                actualPlayer = secondPlayer;
-                i--;
-                game.makeMove(secondPlayer, new Coordinates(i, i));
-
-                if (i > 0) {
-                    i--;
-                    game.makeMove(firstPlayer, new Coordinates(i, i));
-                    actualPlayer = firstPlayer;
-                }
-            }
-            // ora riempo la board
-            int j = 0;
-            i = 0;
-            while (i < board.getBoardDimension()) {
-                while (j < board.getBoardDimension()) {
-                    if (board.isEmptyCell(new Coordinates(i, j))) {
-                        if (actualPlayer.getColour() == Stone.BLACK) {
-                            actualPlayer = secondPlayer;
-                        } else {
-                            actualPlayer = firstPlayer;
-                        }
-                        game.makeMove(actualPlayer, new Coordinates(i, j));
-                    }
-                    j++;
-                }
-                j = 0;
-                i++;
-            }
-        } catch (Game.InvalidMoveException e) {
-            // Mi aspetto che lanci un'eccezione quando ho raggiunto il limite di 60 per ogni giocatore
-            // Quindi dovrei avere esattamente 120 mosse fatte, e il player ha tentato di oltrepassare il limite
-            int movesLimit = 60 * 2;
-            int totalMovesCounter = game.getPlayer1().getMovesList().size() + game.getPlayer2().getMovesList().size();
-            Assertions.assertEquals(movesLimit, totalMovesCounter);
-        }
-
-    }
 
     @Test
     void testWrongPlayerUsernamesAssignments() {
@@ -396,7 +343,7 @@ public class GameTest {
         );
 
         for (int i = 0; i < 60; i++) {
-            secondPlayer.getMovesList().add(new Coordinates(0, 0));
+            secondPlayer.addMove(new Coordinates(0, 0));
         }
         Assertions.assertThrowsExactly(
                 Game.InvalidMoveException.class,

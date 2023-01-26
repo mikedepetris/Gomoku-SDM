@@ -54,6 +54,7 @@ public class BoardImplementation implements Board {
             return true;
     }
 
+
     @Override
     public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates){
         return Arrays.stream(Direction.values())
@@ -61,6 +62,8 @@ public class BoardImplementation implements Board {
                 .filter(adjcoord -> !adjcoord.equals(coordinates))
                 .collect(Collectors.toList());
     }
+
+
 
     @Override
     public boolean areValidCoordinates(Coordinates coordinates) {
