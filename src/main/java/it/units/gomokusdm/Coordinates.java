@@ -13,10 +13,12 @@ public class Coordinates {
         this.colIndex = colIndex;
     }
 
+    /*
     @Override
     public String toString() {
         return "(" + this.getRowIndex() + "," + this.getColIndex() + ")";
     }
+    */
 
     public int getRowIndex() {
         return rowIndex;
@@ -41,6 +43,7 @@ public class Coordinates {
         }
         return false;
     }
+
 
     public Coordinates getCoordinateMovedInDirectionWithStep(Direction direction, int step) {
         return new Coordinates(this.rowIndex + step * direction.getRowIdx(),
