@@ -47,5 +47,4 @@ public class PlayerTest {
         Assertions.assertEquals("W", player.getUsername());
     }
 
-
 }

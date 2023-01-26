@@ -105,12 +105,12 @@ public class CLIController {
         outputStream.println("Select board size to use for this game:");
         outputStream.printf("\t1. %s\n \t2. %s\n", "19x19", "15x15");
         String line;
-        while ((line = reader.readLine()) != null){
-            try{
+        while ((line = reader.readLine()) != null) {
+            try {
                 int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
                 this.game.setupGame(selectedBoardSize);
                 break;
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
             }
         }
