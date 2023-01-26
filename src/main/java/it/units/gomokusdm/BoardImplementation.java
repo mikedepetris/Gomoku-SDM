@@ -1,11 +1,15 @@
 package it.units.gomokusdm;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
     private final Map<Coordinates, Stone> board;
+
     public BoardImplementation() {
         this.board = new LinkedHashMap<>();
     }
@@ -56,7 +60,7 @@ public class BoardImplementation implements Board {
 
 
     @Override
-    public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates){
+    public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates) {
         return Arrays.stream(Direction.values())
                 .map(direction -> coordinates.getCoordinateMovedInDirectionWithStep(direction, 1))
                 .filter(adjcoord -> !adjcoord.equals(coordinates))
