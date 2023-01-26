@@ -31,8 +31,7 @@ public class BoardTest {
     @ParameterizedTest
     @ValueSource(ints = {5, 9, 15})
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new BoardImplementation();
-        board.setupBoard(boardSize);
+        Board board = new BoardImplementation(boardSize);
         Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
 
@@ -124,7 +123,7 @@ public class BoardTest {
     public void testBoardToStringAtTheBeginning() {
         BoardImplementation board = new BoardImplementation();
         board.setupBoard(DEFAULT_BOARD_SIZE);
-        String result = board.toString();
+        String result = board.getBoardInLine();
         int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
         String expected_result = "*".repeat(numberOfStonesInAFullBoard);
         Assertions.assertEquals(expected_result, result);

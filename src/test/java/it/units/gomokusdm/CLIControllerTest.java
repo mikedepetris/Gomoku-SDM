@@ -51,25 +51,27 @@ public class CLIControllerTest {
     }
 
     @Test
-    void testPlayersCoordinatesInput() throws IOException {
-        String inputString = "1\n1\n"; //position (1,1)
+    void testPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
+        String inputString = "1,1\n"; //position (1,1)
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player = new Player("A", Stone.WHITE);
-        Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
+        String input = cli.getPlayerInput(player);
+        Coordinates coordinates = cli.getCoordinatesFromString(input);
         Assertions.assertEquals(new Coordinates(1, 1), coordinates);
     }
 
     @Test
-    void testNonNumericPlayersCoordinatesInput() throws IOException {
+    void testNonNumericPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
         String inputString = "a\na\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player = new Player("A", Stone.WHITE);
-        Coordinates coordinates = cli.getCoordinatesByPlayerInput(player);
-        Assertions.assertNull(coordinates);
+        String input = cli.getPlayerInput(player);
+        Assertions.assertThrowsExactly(CLIController.WrongStringFormatException.class,
+                () -> cli.getCoordinatesFromString(input));
     }
 
     @Test
@@ -77,19 +79,18 @@ public class CLIControllerTest {
         String inputString =
                 "1\nplayer one\n" +
                         "player two\n" +
-                        "9\n10\n" +
-                        "9\n8\n" +
-                        "9\n11\n" +
-                        "9\n7\n" +
-                        "9\n12\n" +
-                        "9\n6\n" +
-                        "9\n13\n" +
-                        "9\n5\n";
+                        "9, 10\n" +
+                        "9, 8\n" +
+                        "9, 11\n" +
+                        "9, 7\n" +
+                        "9, 12\n" +
+                        "9, 6\n" +
+                        "9, 13\n" +
+                        "9, 5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player1 = cli.getPlayer1();
-        Player player2 = cli.getPlayer2();
         cli.initializeGameCLI();
         cli.startGameClI();
         Assertions.assertEquals(cli.getWinner(), player1);
@@ -100,15 +101,15 @@ public class CLIControllerTest {
         String inputString =
                 "1\nplayer one\n" +
                         "player two\n" +
-                        "9\n10\n" +
-                        "9\n8\n" +
-                        "9\n11\n" +
-                        "9\n7\n" +
-                        "9\n12\n" +
-                        "9\n6\n" +
-                        "9\n13\n" +
-                        "9\n*!&%x\n" +
-                        "9\n5\n";
+                        "9, 10\n" +
+                        "9, 8\n" +
+                        "9, 11\n" +
+                        "9, 7\n" +
+                        "9, 12\n" +
+                        "9, 6\n" +
+                        "9, 13\n" +
+                        "9, *!&%x\n" +
+                        "9, 5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);

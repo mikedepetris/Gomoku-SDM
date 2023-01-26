@@ -24,6 +24,7 @@ public class Game {
         if (!checkPlayerColours(player1, player2)) {
             throw new IllegalArgumentException("invalid player colors");
         }
+        setupGame();
     }
 
     private static boolean checkPlayerNames(Player player1, Player player2) {
@@ -38,8 +39,7 @@ public class Game {
         return board;
     }
 
-    public void setupGame(int boardDimension){
-        this.board.setupBoard(boardDimension);
+    public void setupGame(){
         makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
     }
 

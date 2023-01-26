@@ -5,9 +5,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
+    private final int DEFAULT_BOARD_DIMENSION = 19;
     private final Map<Coordinates, Stone> board;
+
     public BoardImplementation() {
         this.board = new LinkedHashMap<>();
+        setupBoard(DEFAULT_BOARD_DIMENSION);
+    }
+
+    public BoardImplementation(int boardDimension) {
+        this.board = new LinkedHashMap<>();
+        setupBoard(boardDimension);
     }
 
     @Override
@@ -73,10 +81,40 @@ public class BoardImplementation implements Board {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);
     }
 
+    public String getBoardInLine() {
+        StringBuilder tmp = new StringBuilder();
+        board.values().forEach(tmp::append);
+        return tmp.toString();
+    }
+
     @Override
     public String toString() {
         StringBuilder tmp = new StringBuilder();
-        board.values().forEach(tmp::append);
+        String repeatedLine = "|\t".repeat(getBoardDimension());
+        List<List<String>> boardPartitionString = Utilities.partition(Arrays.stream(board.toString().split("")).toList(), getBoardDimension());
+        tmp.append(System.lineSeparator());
+        for (int row = 0; row < boardPartitionString.size(); row++) {
+            tmp.append(String.format("%1s", row)).append("\t");
+            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
+                if (stone == boardPartitionString.get(row).size() - 1) {
+                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
+                            .append(System.lineSeparator());
+                } else {
+                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
+                            .replace(" ", "-"));
+                }
+            }
+            if (!(row == boardPartitionString.size() - 1)) {
+                tmp.append("\t")
+                        .append(repeatedLine)
+                        .append(System.lineSeparator());
+            }
+        }
+        tmp.append("\t");
+        IntStream.range(0, getBoardDimension())
+                .forEach(value ->
+                        tmp.append(String.format("%1s", value)).append("\t"));
+        tmp.append(System.lineSeparator());
         return tmp.toString();
     }
 }

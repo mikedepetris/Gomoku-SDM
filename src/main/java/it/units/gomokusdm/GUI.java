@@ -143,7 +143,6 @@ public class GUI implements ActionListener, MouseListener {
         frame.add(grid_panel);
         //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
         // if board dimension = 19...
-        this.game.setupGame(19);
         grid_panel.add(board_img_19);
         board_img_19.addMouseListener(this);
 

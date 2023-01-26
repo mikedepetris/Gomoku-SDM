@@ -2,9 +2,7 @@ package it.units.gomokusdm;
 
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.InputMismatchException;
 
 public class CLIController {
 
@@ -12,7 +10,7 @@ public class CLIController {
 
     private final PrintStream outputStream;
     private final BufferedReader reader;
-    private final Board board;
+    private Board board;
     private Game game;
     private final Player player1;
     private final Player player2;
@@ -26,8 +24,6 @@ public class CLIController {
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
-        this.board = new BoardImplementation();
-        this.game = new Game(board, player1, player2);
     }
 
     public static CLIController createInstance(PrintStream outputStream, InputStream inputStream) {
@@ -57,7 +53,8 @@ public class CLIController {
 
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
-        setGameInitialStatus();
+        setBoardDimension();
+        game = new Game(board, player1, player2);
         setPlayerName(player1);
         setPlayerName(player2);
     }
@@ -70,21 +67,21 @@ public class CLIController {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
             outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
-            Coordinates coordinates = getCoordinatesByPlayerInput(nextMovingPlayer);
-            if (isStopped) {
+            String playerInput = getPlayerInput(nextMovingPlayer);
+            if (playerInput.equals("STOP")) {
+                outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
                 break;
             }
             try {
+                Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
-            } catch (Game.InvalidMoveException e) {
+            } catch (Game.InvalidMoveException | WrongStringFormatException e) {
                 outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
-        if (!isStopped) {
+        if (thereIsAWinner()) {
             winner = game.getLastMovingPlayer();
             outputStream.printf("\n%s won the game!", winner.getUsername());
-        } else {
-            outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
         }
     }
 
@@ -103,84 +100,46 @@ public class CLIController {
         }
     }
 
-    private void setGameInitialStatus() throws IOException {
+    private void setBoardDimension() throws IOException {
         outputStream.println("Select board size to use for this game:");
         outputStream.printf("\t1. %s\n \t2. %s\n", "19x19", "15x15");
-        String line;
-        while ((line = reader.readLine()) != null){
-            try{
-                int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
-                this.game.setupGame(selectedBoardSize);
-                break;
-            }catch (NumberFormatException e){
-                outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
-            }
+        String line = reader.readLine();
+        try {
+            int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
+            board = new BoardImplementation(selectedBoardSize);
+        } catch (NumberFormatException e){
+            outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
         }
     }
 
-    public int getSingleCoordinateByPlayer() throws IOException {
-        String lineRead = reader.readLine();
-
-        if (lineRead != null) {
-            if (lineRead.matches("^[0-9]+$")) {
-                return Integer.parseInt(lineRead);
-            }
-
-            if (lineRead.equals("STOP")) {
-                stopGameCLI();
-            }
+    public Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
+        if (string != null && isAValidStringForCoordinates(string)) {
+            String[] tokens = string.split(",");
+            return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
         }
-
-        return NULL_COORDINATE;
+        throw new WrongStringFormatException("string doesn't match the expected format");
     }
 
-    private void stopGameCLI() {
-        isStopped = true;
+    public String getPlayerInput(Player player) throws IOException {
+        outputStream.printf("%s insert coordinate [row, column]:   ", player.getUsername());
+        return readPlayerInputFromInputStream();
     }
 
-    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException {
+    private String readPlayerInputFromInputStream() throws IOException {
+        return reader.readLine();
+    }
 
-        outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
-        int rowCoordinate = getSingleCoordinateByPlayer();
-        if (isStopped) {
-            return null;
-        }
-        outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
-        int columnCoordinate = getSingleCoordinateByPlayer();
-        if (isStopped) {
-            return null;
-        }
-        return rowCoordinate > 0 && columnCoordinate > 0 ? new Coordinates(rowCoordinate, columnCoordinate) : null;
+    private boolean isAValidStringForCoordinates(String string) {
+        return string.matches("^[0-9]+,[\" \"]*[0-9]+$");
     }
 
     public void printBoard() {
-        StringBuilder tmp = new StringBuilder();
-        String repeatedLine = "|\t".repeat(board.getBoardDimension());
-        List<List<String>> boardPartitionString = Utilities.partition(Arrays.stream(board.toString().split("")).toList(), board.getBoardDimension());
-        tmp.append(System.lineSeparator());
-        for (int row = 0; row < boardPartitionString.size(); row++) {
-            tmp.append(String.format("%1s", row)).append("\t");
-            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
-                if (stone == boardPartitionString.get(row).size() - 1) {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
-                            .append(System.lineSeparator());
-                } else {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
-                            .replace(" ", "-"));
-                }
-            }
-            if (!(row == boardPartitionString.size() - 1)) {
-                tmp.append("\t")
-                        .append(repeatedLine)
-                        .append(System.lineSeparator());
-            }
-        }
-        tmp.append("\t");
-        IntStream.range(0, board.getBoardDimension())
-                .forEach(value ->
-                        tmp.append(String.format("%1s", value)).append("\t"));
-        tmp.append(System.lineSeparator());
-        outputStream.print(tmp);
+        outputStream.print(board.toString());
     }
 
+    public static class WrongStringFormatException extends Exception {
+        public WrongStringFormatException(String message) {
+            super(message);
+        }
+    }
 }
