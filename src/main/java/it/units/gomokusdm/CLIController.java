@@ -64,7 +64,7 @@ public class CLIController {
         setPlayerNames(player2);
     }
 
-    public void startGameClI() throws IOException {
+    public void startGameClI() throws IOException, Game.InvalidMoveException {
         this.isStopped = false;
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
@@ -116,7 +116,7 @@ public class CLIController {
         }
     }
 
-    public int getSingleCoordinateByPlayer() throws IOException {
+    public int getSingleCoordinateByPlayer() throws IOException, Game.InvalidMoveException {
         String lineRead = reader.readLine();
 
         if (lineRead != null && lineRead.matches("^[0-9]+$")) {
@@ -126,15 +126,15 @@ public class CLIController {
         if (lineRead.equals("STOP")) {
             stopGameCLI();
         }
-
-        return NULL_COORDINATE;
+        throw new Game.InvalidMoveException("Wrong coordinate input:%s".formatted(lineRead));
+//        return NULL_COORDINATE;
     }
 
     private void stopGameCLI() {
         isStopped = true;
     }
 
-    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException {
+    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException, Game.InvalidMoveException {
 
         outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
         int rowCoordinate = getSingleCoordinateByPlayer();
