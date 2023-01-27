@@ -51,115 +51,73 @@ public class CLIControllerTest {
     }
 
     @Test
-    void testPlayersCoordinatesInput() throws IOException {
-        String inputString = "1\n1\n"; //position (1,1)
+    void testPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
+        String inputString = "1,1\n"; //position (1,1)
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player = new Player("A", Stone.WHITE);
-        Coordinates coordinates;
-        try {
-            coordinates = cli.getCoordinatesByPlayerInput(player);
-        } catch (Game.InvalidMoveException e) {
-            throw new RuntimeException(e);
-        }
+        String input = cli.getPlayerInput(player);
+        Coordinates coordinates = cli.getCoordinatesFromString(input);
         Assertions.assertEquals(new Coordinates(1, 1), coordinates);
     }
 
     @Test
-    void testNonNumericPlayersCoordinatesInput() throws IOException {
+    void testNonNumericPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
         String inputString = "a\na\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player = new Player("A", Stone.WHITE);
-        Coordinates coordinates;
-        try {
-            coordinates = cli.getCoordinatesByPlayerInput(player);
-        } catch (Game.InvalidMoveException e) {
-            //throw new RuntimeException(e);
-        }
-        //TODO: assert exception
-        //Assertions.assertNull(coordinates);
+        String input = cli.getPlayerInput(player);
+        Assertions.assertThrowsExactly(CLIController.WrongStringFormatException.class,
+                () -> cli.getCoordinatesFromString(input));
     }
 
     @Test
     void testCompleteGameSimulation() throws IOException {
         String inputString =
-                """
-                        1
-                        player one
-                        player two
-                        9
-                        10
-                        9
-                        8
-                        9
-                        11
-                        9
-                        7
-                        9
-                        12
-                        9
-                        6
-                        9
-                        13
-                        9
-                        5
-                        """;
+                "1\nplayer one\n" +
+                        "player two\n" +
+                        "9, 10\n" +
+                        "9, 8\n" +
+                        "9, 11\n" +
+                        "9, 7\n" +
+                        "9, 12\n" +
+                        "9, 6\n" +
+                        "9, 13\n" +
+                        "9, 5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player1 = cli.getPlayer1();
-        //Player player2 = cli.getPlayer2();
         cli.initializeGameCLI();
-        try {
-            cli.startGameClI();
-        } catch (Game.InvalidMoveException e) {
-            throw new RuntimeException(e);
-        }
+        cli.startGameClI();
         Assertions.assertEquals(cli.getWinner(), player1);
     }
 
     @Test
     void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException, NumberFormatException {
         String inputString =
-                """
-                        1
-                        player one
-                        player two
-                        9
-                        10
-                        9
-                        8
-                        9
-                        11
-                        9
-                        7
-                        9
-                        12
-                        9
-                        6
-                        9
-                        13
-                        9
-                        *!&%x
-                        9
-                        5
-                        """;
+                "1\nplayer one\n" +
+                        "player two\n" +
+                        "9, 10\n" +
+                        "9, 8\n" +
+                        "9, 11\n" +
+                        "9, 7\n" +
+                        "9, 12\n" +
+                        "9, 6\n" +
+                        "9, 13\n" +
+                        "9, *!&%x\n" +
+                        "9, 5\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player1 = cli.getPlayer1();
-        //Player player2 = cli.getPlayer2();
+        Player player2 = cli.getPlayer2();
         cli.initializeGameCLI();
-        try {
-            cli.startGameClI();
-        } catch (Game.InvalidMoveException e) {
-            //throw new RuntimeException(e);
-        }
-        //TODO: assert exception
-        //Assertions.assertEquals(cli.getWinner(), player1);
+        cli.startGameClI();
+        Assertions.assertEquals(cli.getWinner(), player1);
     }
 
     @Test
@@ -177,15 +135,12 @@ public class CLIControllerTest {
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(outputStream, inputStream);
         cli.initializeGameCLI();
-        try {
-            cli.startGameClI();
-        } catch (Game.InvalidMoveException e) {
-            //throw new RuntimeException(e);
-        }
+        cli.startGameClI();
         String cliOutput = byteArrayOutputStream.toString();
 
-        //TODO: assert exception
-        //Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
+        Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
     }
+
+
 
 }

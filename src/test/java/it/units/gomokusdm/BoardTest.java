@@ -37,8 +37,7 @@ public class BoardTest {
     @ParameterizedTest
     @ValueSource(ints = {5, 9, 15})
     public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new BoardImplementation();
-        board.setupBoard(boardSize);
+        Board board = new BoardImplementation(boardSize);
         Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
 
@@ -118,7 +117,7 @@ public class BoardTest {
     public void testBoardToStringAtTheBeginning() {
         BoardImplementation board = new BoardImplementation();
         board.setupBoard(DEFAULT_BOARD_SIZE);
-        String result = board.toString();
+        String result = board.getBoardInLine();
         int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
         String expected_result = "*".repeat(numberOfStonesInAFullBoard);
         Assertions.assertEquals(expected_result, result);
@@ -243,8 +242,7 @@ public class BoardTest {
     public void testLoadBoard4() {
         int[][] intBoard = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 1}, {0, 0, 0, 0},};
         final int boardDimension = intBoard.length;
-        Board board = new BoardImplementation();
-        board.setupBoard(boardDimension);
+        Board board = new BoardImplementation(boardDimension);
         for (int xcoord = 0; xcoord < boardDimension; xcoord++) {
             for (int ycoord = 0; ycoord < boardDimension; ycoord++) {
                 if (intBoard[xcoord][ycoord] == 1) board.setCell(Stone.BLACK, new Coordinates(xcoord, ycoord));
@@ -262,8 +260,7 @@ public class BoardTest {
         //intBoard = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 1}, {0, 0, 0, 0},};
         int[][] intBoard = getIntBoardFromLines(lines);
         final int boardDimension = intBoard.length;
-        Board board = new BoardImplementation();
-        board.setupBoard(boardDimension);
+        Board board = new BoardImplementation(boardDimension);
         for (int xcoord = 0; xcoord < boardDimension; xcoord++) {
             for (int ycoord = 0; ycoord < boardDimension; ycoord++) {
                 if (intBoard[xcoord][ycoord] == 1) board.setCell(Stone.BLACK, new Coordinates(xcoord, ycoord));

@@ -11,7 +11,6 @@ public class CLIController {
     private static CLIController cli = null;
 
     private final PrintStream outputStream;
-    private final InputStream inputStream;
     private final BufferedReader reader;
     private Board board;
     private Game game;
@@ -19,17 +18,12 @@ public class CLIController {
     private final Player player2;
     private Player winner;
 
-    private boolean isStopped;
-    private static final int NULL_COORDINATE = -1;
 
     private CLIController(PrintStream outputStream, InputStream inputStream) {
         this.outputStream = outputStream;
-        this.inputStream = inputStream;
         this.reader = new BufferedReader(new InputStreamReader(inputStream));
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
-        this.board = new BoardImplementation();
-        this.game = new Game(board, player1, player2);
     }
 
     public static CLIController createInstance(PrintStream outputStream, InputStream inputStream) {
@@ -59,38 +53,42 @@ public class CLIController {
 
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************\nGOMOKU\n*************************");
-        setGameInitialStatus();
-        setPlayerNames(player1);
-        setPlayerNames(player2);
+        setBoardDimension();
+        game = new Game(board, player1, player2);
+        setPlayerName(player1);
+        setPlayerName(player2);
     }
 
-    public void startGameClI() throws IOException, Game.InvalidMoveException {
-        this.isStopped = false;
+    public void startGameClI() throws IOException {
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
-        while (!game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
+        while (!thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
             outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
-            Coordinates coordinates = getCoordinatesByPlayerInput(nextMovingPlayer);
-            if (isStopped) {
+            String playerInput = getPlayerInput(nextMovingPlayer);
+            if (playerInput.equals("STOP")) {
+                outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
                 break;
             }
             try {
+                Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
-            } catch (Game.InvalidMoveException e) {
+            } catch (Game.InvalidMoveException | WrongStringFormatException e) {
                 outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
-        if (!isStopped) {
+        if (thereIsAWinner()) {
             winner = game.getLastMovingPlayer();
             outputStream.printf("\n%s won the game!", winner.getUsername());
-        } else {
-            outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
         }
     }
 
-    private void setPlayerNames(Player player) throws IOException {
+    private boolean thereIsAWinner() {
+        return game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour());
+    }
+
+    private void setPlayerName(Player player) throws IOException {
         outputStream.printf("Player %d name:   ", player.equals(player1) ? 1 : 2);
         String playerName = reader.readLine();
         if (!playerName.isBlank()) {
@@ -101,52 +99,37 @@ public class CLIController {
         }
     }
 
-    private void setGameInitialStatus() throws IOException {
+    private void setBoardDimension() throws IOException {
         outputStream.println("Select board size to use for this game:");
         outputStream.printf("\t1. %s\n \t2. %s\n", "19x19", "15x15");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            try {
-                int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
-                this.game.setupGame(selectedBoardSize);
-                break;
-            } catch (NumberFormatException e) {
-                outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
-            }
+        String line = reader.readLine();
+        try {
+            int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
+            board = new BoardImplementation(selectedBoardSize);
+        } catch (NumberFormatException e){
+            outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
         }
     }
 
-    public int getSingleCoordinateByPlayer() throws IOException, Game.InvalidMoveException {
-        String lineRead = reader.readLine();
-
-        if (lineRead != null && lineRead.matches("^[0-9]+$")) {
-            return Integer.parseInt(lineRead);
+    public Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
+        if (string != null && isAValidStringForCoordinates(string)) {
+            String[] tokens = string.split(",");
+            return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
         }
-
-        if (lineRead.equals("STOP")) {
-            stopGameCLI();
-        }
-        throw new Game.InvalidMoveException("Wrong coordinate input:%s".formatted(lineRead));
-//        return NULL_COORDINATE;
+        throw new WrongStringFormatException("string doesn't match the expected format");
     }
 
-    private void stopGameCLI() {
-        isStopped = true;
+    public String getPlayerInput(Player player) throws IOException {
+        outputStream.printf("%s insert coordinate [row, column]:   ", player.getUsername());
+        return readPlayerInputFromInputStream();
     }
 
-    public Coordinates getCoordinatesByPlayerInput(Player player) throws IOException, Game.InvalidMoveException {
+    private String readPlayerInputFromInputStream() throws IOException {
+        return reader.readLine();
+    }
 
-        outputStream.printf("%s insert coordinate for row index:   ", player.getUsername());
-        int rowCoordinate = getSingleCoordinateByPlayer();
-        if (isStopped) {
-            return null;
-        }
-        outputStream.printf("%s insert coordinate for column index:   ", player.getUsername());
-        int columnCoordinate = getSingleCoordinateByPlayer();
-        if (isStopped) {
-            return null;
-        }
-        return rowCoordinate > 0 && columnCoordinate > 0 ? new Coordinates(rowCoordinate, columnCoordinate) : null;
+    private boolean isAValidStringForCoordinates(String string) {
+        return string.matches("^[0-9]+,[\" \"]*[0-9]+$");
     }
 
     public void printBoard() {
@@ -179,4 +162,9 @@ public class CLIController {
         outputStream.print(tmp);
     }
 
+    public static class WrongStringFormatException extends Exception {
+        public WrongStringFormatException(String message) {
+            super(message);
+        }
+    }
 }

@@ -8,10 +8,17 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
+    private final int DEFAULT_BOARD_DIMENSION = 19;
     private final Map<Coordinates, Stone> board;
 
     public BoardImplementation() {
         this.board = new LinkedHashMap<>();
+        setupBoard(DEFAULT_BOARD_DIMENSION);
+    }
+
+    public BoardImplementation(int boardDimension) {
+        this.board = new LinkedHashMap<>();
+        setupBoard(boardDimension);
     }
 
     @Override
@@ -78,6 +85,12 @@ public class BoardImplementation implements Board {
     @Override
     public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
         return getStoneAt(current) == getStoneAt(coordinateInDirection);
+    }
+
+    public String getBoardInLine() {
+        StringBuilder tmp = new StringBuilder();
+        board.values().forEach(tmp::append);
+        return tmp.toString();
     }
 
     @Override

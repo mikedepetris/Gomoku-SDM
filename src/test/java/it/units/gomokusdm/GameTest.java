@@ -45,9 +45,9 @@ public class GameTest {
     public void testIsFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         boolean result = game.isFeasibleMove(new Coordinates(8, 9));
         Assertions.assertTrue(result);
@@ -58,9 +58,9 @@ public class GameTest {
     public void testIsNotFeasibleMove() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         Assertions.assertFalse(game.isFeasibleMove(new Coordinates(1, 1)));
         Assertions.assertFalse(game.isFeasibleMove(new Coordinates(19, 19)));
@@ -75,9 +75,9 @@ public class GameTest {
     public void testMakeFirstMoveAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         //
         try {
             game.makeMove(secondPlayer, new Coordinates(8, 9));
@@ -96,9 +96,9 @@ public class GameTest {
     public void testMakeFirstMoveNotAdjacent() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 1));
         } catch (Game.InvalidMoveException e) {
@@ -113,9 +113,9 @@ public class GameTest {
     public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() throws Exception {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
                 board.getBoardDimension() / 2);
         Assertions.assertEquals(Stone.BLACK, board.getStoneAt(coordinates));
@@ -126,9 +126,9 @@ public class GameTest {
     public void testMakeConsecutiveMoves() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         // pedina non adiacente, mi aspetto che non faccia nulla
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 2));
@@ -174,10 +174,9 @@ public class GameTest {
     public void testMakeConsecutiveMovesOutsideTheBoard() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         try {
             game.makeMove(secondPlayer, new Coordinates(9, 10));
             game.makeMove(firstPlayer, new Coordinates(9, 11));
@@ -229,9 +228,9 @@ public class GameTest {
     public void testIsPlayerWinningGame() throws Game.InvalidMoveException {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
         boolean[] result = new boolean[8];
         int i = 0;
         game.makeMove(secondPlayer, new Coordinates(9, 10));
@@ -270,12 +269,11 @@ public class GameTest {
 
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = null;
         try {
             game = new Game(board, firstPlayer, secondPlayer);
-            game.setupGame(defaultBoardSize);
+            game.setupGame();
             game.makeMove(secondPlayer, new Coordinates(9, 10));
             result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(8, 8));
@@ -324,10 +322,9 @@ public class GameTest {
     void testInvalidMoves() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Board board = new BoardImplementation();
-        board.setupBoard(defaultBoardSize);
+        Board board = new BoardImplementation(defaultBoardSize);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame(defaultBoardSize);
+        game.setupGame();
 
 
         Assertions.assertThrowsExactly(
