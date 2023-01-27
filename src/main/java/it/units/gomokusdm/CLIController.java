@@ -3,7 +3,6 @@ package it.units.gomokusdm;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -19,8 +18,6 @@ public class CLIController {
     private final Player player2;
     private Player winner;
 
-    private boolean isStopped;
-    private static final int NULL_COORDINATE = -1;
 
     private CLIController(PrintStream outputStream, InputStream inputStream) {
         this.outputStream = outputStream;
@@ -63,7 +60,6 @@ public class CLIController {
     }
 
     public void startGameClI() throws IOException {
-        this.isStopped = false;
         outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
         while (!thereIsAWinner()) {
