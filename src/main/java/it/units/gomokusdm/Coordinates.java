@@ -13,12 +13,12 @@ public class Coordinates {
         this.colIndex = colIndex;
     }
 
-    /*
+
     @Override
     public String toString() {
         return "(" + this.getRowIndex() + "," + this.getColIndex() + ")";
     }
-    */
+
 
     public int getRowIndex() {
         return rowIndex;
