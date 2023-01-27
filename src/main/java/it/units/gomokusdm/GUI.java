@@ -179,7 +179,6 @@ public class GUI implements ActionListener, MouseListener {
                     // da fare, dobbiamo decidere che impostazioni cambiare
                     // si suppone che board_dimension possa cambiare..
                 }
-
                 break;
             case 1:
 

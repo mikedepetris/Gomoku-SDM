@@ -5,14 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// solo un test per circleci
 public class Game {
 
     private Board board;
     private Player player1;
     private Player player2;
-
-    //private Coordinates lastMoveCoordinates;
     private Player lastMovingPlayer;
 
     public Game(Board board, Player player1, Player player2) {
@@ -51,12 +48,6 @@ public class Game {
         return player2;
     }
 
-    /*
-    public Coordinates getLastMoveCoordinates() {
-        return lastMoveCoordinates;
-    }
-    */
-
 
     public Player getLastMovingPlayer() {
         return lastMovingPlayer;
@@ -94,93 +85,72 @@ public class Game {
         return player != lastMovingPlayer;
     }
 
-    // Implemento metodo super basico che verifica se ci sono nstones dello stesso colore,
-    // basandosi su i,j per le direzioni
-    // metodo poco leggibile anche se funziona, aperto al refactoring
-    public boolean countStones(int colDirection, int rowDirection, int winningColour, int n) {
 
-        Coordinates lastMoveCoordinates = lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size()-1);
-        int rowIndex = lastMoveCoordinates.getRowIndex();
-        int colIndex = lastMoveCoordinates.getColIndex();
-        int i = colDirection * (n - 1);
-        int j = rowDirection * (n - 1);
-        int i_increment = i / (n - 1);
-        int j_increment = j / (n - 1);
-        int counterStones = 0;
-        if (n <= board.getBoardDimension() && n > 0) {
-            while (i <= (n - 1) && i >= -(n - 1) && j <= (n - 1) && j >= -(n - 1)) {
-                if (board.areValidCoordinates(new Coordinates(rowIndex + j, colIndex + i))) {
-                    Stone stoneColourNumber = board.getStoneAt(new Coordinates(rowIndex + j, colIndex + i));
-                    if (stoneColourNumber == Stone.castIntToStone(winningColour)) {
-                        counterStones++;
-                    } else {
-                        if (counterStones != n) {
-                            counterStones = 0;
-                        } else {
-                            i = (n - 1);
-                            j = (n - 1); // stop while, there are already five consecutive stones
-                        }
-                    }
-                }
-                i = i - i_increment;
-                j = j - j_increment;
-            }
-        }
-        return (counterStones == n);
+
+
+    // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
+    private static boolean areInRange(int i, int j, int checkingStones) {
+        return (i <= checkingStones && i >= -checkingStones && j <= checkingStones && j >= -checkingStones);
     }
 
-    public boolean checkIfPlayerWins() {
-        return getAllDirectionsResultOfConsecutiveNStones(5).contains(Boolean.TRUE);
+    /* vale davvero la pena usarlo?
+    private boolean isValidNumberOfStones (int numberOfStones) {
+        return (numberOfStones <= board.getBoardDimension() && numberOfStones > 0);
+    }
+    */
+
+    private Coordinates getLastMoveCoordinates() {
+        return lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size() - 1);
     }
 
-    private List<Boolean> getAllDirectionsResultOfConsecutiveNStones(int N) {
-        List<Boolean> valuesOfAdjStonesInAllDirection = new ArrayList<>();
-        for (Direction direction : Direction.values()) {
-            valuesOfAdjStonesInAllDirection.add(checkIfThereAreNConsecutiveStonesInDirection(direction, N));
-        }
-        return valuesOfAdjStonesInAllDirection;
-    }
-
-    private boolean checkIfThereAreNConsecutiveStonesInDirection(Direction direction, int N) {
-        List<Boolean> valueOfAdjacentStones = new ArrayList<>();
-        Coordinates lastMoveCoordinates = lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size()-1);
-        Coordinates currentCoordinate = lastMoveCoordinates;
-        valueOfAdjacentStones.add(Boolean.TRUE);
-        int valueToControl = N - 1;
-        while (valueToControl > 0) {
-            Coordinates coordinatesInDirection = currentCoordinate.getCoordinateMovedInDirectionWithStep(direction, 1);
-            if (!board.areValidCoordinates(coordinatesInDirection) || !checkIfStonesAreEqual(currentCoordinate, coordinatesInDirection)) {
-                valueOfAdjacentStones.add(Boolean.FALSE);
-                break;
-            }
-            valueOfAdjacentStones.add(Boolean.TRUE);
-            currentCoordinate = coordinatesInDirection;
-            valueToControl--;
-        }
-        return valueOfAdjacentStones.size() == N && !valueOfAdjacentStones.contains(Boolean.FALSE);
-    }
-
-    private boolean checkIfStonesAreEqual(Coordinates firstCoordinate, Coordinates secondCoordinate) {
-        return board.areStonesOfSameColourAt(firstCoordinate, secondCoordinate);
-    }
 
     public boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
-        boolean areThereFiveStones = false;
-        int winningColour = 1;
-        if (stone == Stone.WHITE) {
-            winningColour = 2;
-        }
-        int[] directions = {-1, 0, 0, -1, -1, -1, 1, -1}; // -1 -> sx - +1 -> dx
+        int numberOfStones = 5;
+        boolean areStonesEqual = false;
+        Direction[] directions = {Direction.LEFT, Direction.UP, Direction.UP_MAIN_DIAGONAL, Direction.UP_ANTI_DIAGONAL};
         int len = 0;
-        while (len < directions.length) {
-            areThereFiveStones = countStones(directions[len], directions[len + 1], winningColour, 5);
-            if (areThereFiveStones) {
-                len = directions.length; // stop while if I've already found 5 stones in a direction
-            }
-            len = len + 2;
+        Coordinates[] coordinatesToCheck = new Coordinates[(numberOfStones*2)-1];
+        while (len < directions.length && !areStonesEqual) {
+            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx(), numberOfStones);
+            areStonesEqual = checkNStonesEqual(coordinatesToCheck, stone, numberOfStones);
+            len++;
         }
-        return (areThereFiveStones);
+        return areStonesEqual;
+    }
 
+    public void findStonesToCheck(Coordinates[] coordinates, int colDirection, int rowDirection, int nStones) {
+        int checkingStones = nStones - 1;
+        Coordinates insertedStoneCoordinates = getLastMoveCoordinates();
+        int insertedStoneRow = insertedStoneCoordinates.getRowIndex();
+        int insertedStoneCol = insertedStoneCoordinates.getColIndex();
+
+        int i = colDirection * checkingStones; int j = rowDirection * checkingStones;
+        int i_increment = i / checkingStones; int j_increment = j / checkingStones;
+
+        int i_coordinates = 0;
+        while (areInRange(i, j, checkingStones)) {
+            Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
+            if (board.areValidCoordinates(possibleCoordinates)) {
+                coordinates[i_coordinates] = possibleCoordinates;
+                i_coordinates++;
+            }
+            i = i - i_increment; j = j - j_increment;
+        }
+    }
+
+    boolean checkNStonesEqual(Coordinates[] coordinates, Stone stone, int nStones) {
+        int i = 0;
+        int counterStones = 0;
+        while (i<coordinates.length & counterStones != nStones) {
+            Stone actualStone = board.getStoneAt(coordinates[i]);
+            if (actualStone.toString() == stone.toString()) {
+                counterStones++;
+            } else {
+                counterStones = 0;
+            }
+            i++;
+        }
+        return (counterStones == nStones);
     }
 
 
@@ -209,4 +179,87 @@ public class Game {
             super(errorMessage);
         }
     }
+
+    /* // metodi vecchi di Marta
+       public boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
+        boolean areThereFiveStones = false;
+        int numberOfStonesToWin = 5;
+        int[] directions = {-1, 0, 0, -1, -1, -1, 1, -1}; // -1 -> sx - +1 -> dx
+        int len = 0;
+        while (len < directions.length & isValidNumberOfStones(numberOfStonesToWin) & !areThereFiveStones) {
+            areThereFiveStones = countStones(directions[len], directions[len + 1], stone, numberOfStonesToWin);
+            len = len + 2;
+        }
+        return (areThereFiveStones);
+
+    }
+
+    public boolean countStones(int colDirection, int rowDirection, Stone winningStone, int numberOfStones) {
+        int checkingStones = numberOfStones - 1;
+        Coordinates insertedStoneCoordinates = getLastMoveCoordinates();
+        int insertedStoneRow = insertedStoneCoordinates.getRowIndex(); int insertedStoneCol = insertedStoneCoordinates.getColIndex();
+
+        int i = colDirection * checkingStones; int j = rowDirection * checkingStones;
+        int counterStones = getCounterStones(winningStone, checkingStones, insertedStoneRow, insertedStoneCol, i, j);
+
+        return (counterStones == numberOfStones);
+    }
+
+    private int getCounterStones(Stone winningStone, int checkingStones, int rowIndex, int colIndex, int i, int j) {
+        int counterStones = 0;
+        int i_increment = i / checkingStones; int j_increment = j / checkingStones;
+        while (areInRange(i, j, checkingStones) && (counterStones != checkingStones+1)) {
+            if (board.areValidCoordinates(new Coordinates(rowIndex + j, colIndex + i))) {
+                Stone actualStone = board.getStoneAt(new Coordinates(rowIndex + j, colIndex + i));
+                if (actualStone.toString() == winningStone.toString()) {
+                    counterStones++;
+                } else {
+                    counterStones = 0;
+                }
+            }
+            i = i - i_increment;
+            j = j - j_increment;
+        }
+        return counterStones;
+    }
+
+
+
+     */
+    //Sposto sotto i metodi di Biagio..
+
+     /*public boolean checkIfPlayerWins() {
+        return getAllDirectionsResultOfConsecutiveNStones(5).contains(Boolean.TRUE);
+    }*/
+
+    /*private List<Boolean> getAllDirectionsResultOfConsecutiveNStones(int N) {
+        List<Boolean> valuesOfAdjStonesInAllDirection = new ArrayList<>();
+        for (Direction direction : Direction.values()) {
+            valuesOfAdjStonesInAllDirection.add(checkIfThereAreNConsecutiveStonesInDirection(direction, N));
+        }
+        return valuesOfAdjStonesInAllDirection;
+    }*/
+
+    /*private boolean checkIfThereAreNConsecutiveStonesInDirection(Direction direction, int N) {
+        List<Boolean> valueOfAdjacentStones = new ArrayList<>();
+        Coordinates lastMoveCoordinates = lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size()-1);
+        Coordinates currentCoordinate = lastMoveCoordinates;
+        valueOfAdjacentStones.add(Boolean.TRUE);
+        int valueToControl = N - 1;
+        while (valueToControl > 0) {
+            Coordinates coordinatesInDirection = currentCoordinate.getCoordinateMovedInDirectionWithStep(direction, 1);
+            if (!board.areValidCoordinates(coordinatesInDirection) || !checkIfStonesAreEqual(currentCoordinate, coordinatesInDirection)) {
+                valueOfAdjacentStones.add(Boolean.FALSE);
+                break;
+            }
+            valueOfAdjacentStones.add(Boolean.TRUE);
+            currentCoordinate = coordinatesInDirection;
+            valueToControl--;
+        }
+        return valueOfAdjacentStones.size() == N && !valueOfAdjacentStones.contains(Boolean.FALSE);
+    }*/
+
+    /*private boolean checkIfStonesAreEqual(Coordinates firstCoordinate, Coordinates secondCoordinate) {
+        return board.areStonesOfSameColourAt(firstCoordinate, secondCoordinate);
+    }*/
 }

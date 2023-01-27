@@ -41,9 +41,9 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    filter {
-        includeTestsMatching "it.units.gomokusdm.GomokuSdmApplicationTests"
-    }
+//    filter {
+//        includeTestsMatching "it.units.gomokusdm.GomokuSdmApplicationTests"
+//    }
 }
 
 configurations {
