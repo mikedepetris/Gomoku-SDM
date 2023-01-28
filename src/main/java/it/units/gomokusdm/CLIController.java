@@ -48,7 +48,6 @@ public class CLIController {
     }
 
     public void initializeGameCLI() throws IOException {
-        outputStream.println("*************************" + System.lineSeparator() + "GOMOKU" + System.lineSeparator() + "*************************");
         setBoardDimension();
         setPlayerName(player1);
         setPlayerName(player2);
@@ -61,9 +60,9 @@ public class CLIController {
         while (!thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
-            outputStream.printf(System.lineSeparator() + "It's %s's turn." + System.lineSeparator(), nextMovingPlayer.getUsername());
+            outputStream.printf(System.lineSeparator() + "It's %s's turn. Insert \"STOP\" to end game." + System.lineSeparator(), nextMovingPlayer.getUsername());
             String playerInput = getPlayerInput(nextMovingPlayer);
-            if (playerInput.equals("STOP")) {
+            if (playerInput.equalsIgnoreCase("STOP")) {
                 outputStream.printf(System.lineSeparator() + "Game has been stopped by %s" + System.lineSeparator(), game.getNextMovingPlayer().getUsername());
                 break;
             }
