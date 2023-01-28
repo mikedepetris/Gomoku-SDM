@@ -33,7 +33,7 @@ public class Player {
         return movesList;
     }
 
-    public void addMove(Coordinates coordinates){
+    public void addMove(Coordinates coordinates) {
         this.movesList.add(coordinates);
     }
 

@@ -50,9 +50,9 @@ public class CLIController {
     public void initializeGameCLI() throws IOException {
         outputStream.println("*************************" + System.lineSeparator() + "GOMOKU" + System.lineSeparator() + "*************************");
         setBoardDimension();
-        game = new Game(board, player1, player2);
         setPlayerName(player1);
         setPlayerName(player2);
+        game = new Game(board, player1, player2);
     }
 
     public void startGameClI() throws IOException {
