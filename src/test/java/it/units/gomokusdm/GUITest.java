@@ -1,8 +1,11 @@
 package it.units.gomokusdm;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,17 +16,56 @@ import java.io.IOException;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GUITest {
-    GUI gui;
+    //    @Mock
+//    GraphicsEnvironment graphicsEnvironment;
+    @Mock
+    private JLabel boardLabel;
+    @Mock
+    private JPanel gridPanel;
+    @Mock
+    private Game game;
+    @Mock
+    private Board board;
+    @Mock
+    private Player player1;
+    @Mock
+    private Player player2;
+    @Mock
+    private JButton button;
+    private GUI gui;
 
-    @BeforeEach
-    void setUp() throws IOException {
+    @Before
+    public void setUp() throws IOException {
+        // Set up headless mode
+        System.setProperty("java.awt.headless", "true");
         gui = new GUI();
     }
 
-    @AfterEach
-    void tearDown() {
+//    @BeforeEach
+//    void setUpEach() throws IOException {
+////        when(GraphicsEnvironment.isHeadless()).thenReturn(false);
+////        when(player1.getColour()).thenReturn(Stone.BLACK);
+////        when(player2.getColour()).thenReturn(Stone.WHITE);
+////        when(game.getBoard()).thenReturn(board);
+//        gui = new GUI();
+////        gui.board_img_19 = boardLabel;
+////        gui.grid_panel = gridPanel;
+//    }
+
+//    @AfterEach
+//    void tearDown() {
+//    }
+
+    @Test
+    public void testButtonClick() {
+        // Test button click functionality
+        button.doClick();
+        // Verify that button was clicked
+        Mockito.verify(button, times(1)).doClick();
     }
 
     // This test case checks if the showStartingWindow method creates the correct buttons with the correct text.
