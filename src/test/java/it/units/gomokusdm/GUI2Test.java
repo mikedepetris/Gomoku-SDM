@@ -5,13 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
-
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GUI2Test {
