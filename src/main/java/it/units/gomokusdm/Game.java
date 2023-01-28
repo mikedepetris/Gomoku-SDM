@@ -1,12 +1,13 @@
 package it.units.gomokusdm;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.ArrayList;
 
 public class Game {
 
+    public static final int MAX_NUMBER_OF_STONES = 60;
     private final Board board;
     private final Player player1;
     private final Player player2;
@@ -36,7 +37,7 @@ public class Game {
         return board;
     }
 
-    public void setupGame(){
+    public void setupGame() {
         makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
     }
 
@@ -66,15 +67,21 @@ public class Game {
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveException {
-        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && player.getMovesList().size() < 60) {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && player.getMovesList().size() < MAX_NUMBER_OF_STONES) {
             board.setCell(player.getColour(), coordinates);
             lastMovingPlayer = player;
             lastMovingPlayer.addMove(coordinates);
         } else {
             String exceptionMessage = "";
-            if (!isFeasibleMove(coordinates)) { exceptionMessage += "Move not feasible "; }
-            if (!isTurnOfPlayer(player)) { exceptionMessage += "Is not " + player.getUsername() + "'s turn "; }
-            if (!(player.getMovesList().size() < 60)) { exceptionMessage += player.getUsername() + " has terminated the number of moves allowed "; }
+            if (!isFeasibleMove(coordinates)) {
+                exceptionMessage += "Move not feasible ";
+            }
+            if (!isTurnOfPlayer(player)) {
+                exceptionMessage += "Is not " + player.getUsername() + "'s turn ";
+            }
+            if (!(player.getMovesList().size() < MAX_NUMBER_OF_STONES)) {
+                exceptionMessage += player.getUsername() + " has terminated the number of moves allowed ";
+            }
             throw new InvalidMoveException(exceptionMessage);
         }
     }
@@ -82,8 +89,6 @@ public class Game {
     private boolean isTurnOfPlayer(Player player) {
         return player != lastMovingPlayer;
     }
-
-
 
 
     // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
@@ -122,8 +127,10 @@ public class Game {
         int insertedStoneRow = insertedStoneCoordinates.getRowIndex();
         int insertedStoneCol = insertedStoneCoordinates.getColIndex();
 
-        int i = colDirection * checkingStones; int j = rowDirection * checkingStones;
-        int i_increment = i / checkingStones; int j_increment = j / checkingStones;
+        int i = colDirection * checkingStones;
+        int j = rowDirection * checkingStones;
+        int i_increment = i / checkingStones;
+        int j_increment = j / checkingStones;
 
         while (areInRange(i, j, checkingStones)) {
             Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
@@ -131,7 +138,8 @@ public class Game {
 
                 coordinates.add(possibleCoordinates);
             }
-            i = i - i_increment; j = j - j_increment;
+            i = i - i_increment;
+            j = j - j_increment;
             //coordinates.clear();
         }
     }
@@ -139,9 +147,9 @@ public class Game {
     private boolean checkNStonesEqual(List<Coordinates> coordinates, Stone stone, int nStones) {
         int i = 0;
         int counterStones = 0;
-        while (i<coordinates.size() & counterStones != nStones) {
+        while (i < coordinates.size() & counterStones != nStones) {
             Stone actualStone = board.getStoneAt(coordinates.get(i));
-            if (actualStone.toString() == stone.toString()) {
+            if (Objects.equals(actualStone.toString(), stone.toString())) {
                 counterStones++;
             } else {
                 counterStones = 0;
@@ -173,6 +181,7 @@ public class Game {
         public InvalidMoveException() {
             super();
         }
+
         public InvalidMoveException(String errorMessage) {
             super(errorMessage);
         }

@@ -1,6 +1,5 @@
 package it.units.gomokusdm;
 
-
 import java.io.*;
 
 public class CLIController {
@@ -49,7 +48,7 @@ public class CLIController {
     }
 
     public void initializeGameCLI() throws IOException {
-        outputStream.println("*************************\nGOMOKU\n*************************");
+        outputStream.println("*************************" + System.lineSeparator() + "GOMOKU" + System.lineSeparator() + "*************************");
         setBoardDimension();
         game = new Game(board, player1, player2);
         setPlayerName(player1);
@@ -57,27 +56,27 @@ public class CLIController {
     }
 
     public void startGameClI() throws IOException {
-        outputStream.printf("(%s) Black player's first move must be in the center of the board.\n",
+        outputStream.printf("(%s) Black player's first move must be in the center of the board." + System.lineSeparator(),
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
         while (!thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
-            outputStream.printf("\nIt's %s's turn.\n", nextMovingPlayer.getUsername());
+            outputStream.printf(System.lineSeparator() + "It's %s's turn." + System.lineSeparator(), nextMovingPlayer.getUsername());
             String playerInput = getPlayerInput(nextMovingPlayer);
             if (playerInput.equals("STOP")) {
-                outputStream.printf("\nGame has been stopped by %s\n", game.getNextMovingPlayer().getUsername());
+                outputStream.printf(System.lineSeparator() + "Game has been stopped by %s" + System.lineSeparator(), game.getNextMovingPlayer().getUsername());
                 break;
             }
             try {
                 Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
             } catch (Game.InvalidMoveException | WrongStringFormatException e) {
-                outputStream.println("Invalid coordinates!\nTry again."); //aggiungere il motivo dell'errore (con e.getMessage())
+                outputStream.println("Invalid coordinates!" + System.lineSeparator() + "Try again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
         if (thereIsAWinner()) {
             winner = game.getLastMovingPlayer();
-            outputStream.printf("\n%s won the game!", winner.getUsername());
+            outputStream.printf(System.lineSeparator() + "%s won the game!", winner.getUsername());
         }
     }
 
@@ -98,13 +97,13 @@ public class CLIController {
 
     private void setBoardDimension() throws IOException {
         outputStream.println("Select board size to use for this game:");
-        outputStream.printf("\t1. %s\n \t2. %s\n", "19x19", "15x15");
+        outputStream.printf("\t1. %s" + System.lineSeparator() + " \t2. %s" + System.lineSeparator(), "19x19", "15x15");
         String line = reader.readLine();
         try {
             int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
             board = new BoardImplementation(selectedBoardSize);
-        } catch (NumberFormatException e){
-            outputStream.printf("Please, select option %d or %d.\nYour input was \"%s\". \n", 1, 2, line);
+        } catch (NumberFormatException e) {
+            outputStream.printf("Please, select option %d or %d." + System.lineSeparator() + "Your input was \"%s\". " + System.lineSeparator(), 1, 2, line);
         }
     }
 
@@ -126,7 +125,7 @@ public class CLIController {
     }
 
     private boolean isAValidStringForCoordinates(String string) {
-        return string.matches("^[0-9]+,[\" \"]*[0-9]+$");
+        return string.matches("^[0-9]+,[\" ]*[0-9]+$");
     }
 
     public void printBoard() {

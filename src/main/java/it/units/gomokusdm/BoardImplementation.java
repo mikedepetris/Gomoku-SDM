@@ -75,7 +75,6 @@ public class BoardImplementation implements Board {
     }
 
 
-
     @Override
     public boolean areValidCoordinates(Coordinates coordinates) {
         return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
