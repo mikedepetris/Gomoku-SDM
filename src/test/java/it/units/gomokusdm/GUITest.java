@@ -3,6 +3,7 @@ package it.units.gomokusdm;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIf;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisabledIf(value = "java.awt.GraphicsEnvironment#isHeadless", disabledReason = "headless environment")
 //@ExtendWith(MockitoExtension.class)
 public class GUITest {
 
@@ -22,13 +24,17 @@ public class GUITest {
     @Before
     public void setUp() {
         // Set up headless mode
-        System.out.println("@Before: Set up headless mode");
-        System.setProperty("java.awt.headless", "true");
+//        System.out.println("@Before: Set up headless mode");
+//        System.setProperty("java.awt.headless", "true");
+//        System.out.println("@Before: GraphicsEnvironment.isHeadless()=" + GraphicsEnvironment.isHeadless());
     }
 
     @BeforeEach
     void setUpEach() throws IOException {
-//        when(GraphicsEnvironment.isHeadless()).thenReturn(false);
+        // Set up headless mode
+//        System.out.println("@BeforeEach: Set up headless mode");
+//        System.setProperty("java.awt.headless", "true");
+//        System.out.println("@BeforeEach: GraphicsEnvironment.isHeadless()=" + GraphicsEnvironment.isHeadless());
 //        when(player1.getColour()).thenReturn(Stone.BLACK);
 //        when(player2.getColour()).thenReturn(Stone.WHITE);
 //        when(game.getBoard()).thenReturn(board);
