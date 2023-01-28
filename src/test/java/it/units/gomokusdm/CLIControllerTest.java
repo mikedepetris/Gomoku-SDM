@@ -63,7 +63,7 @@ public class CLIControllerTest {
     }
 
     @Test
-    void testNonNumericPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
+    void testNonNumericPlayersCoordinatesInput() throws IOException {
         String inputString = "a\na\n";
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
@@ -77,16 +77,19 @@ public class CLIControllerTest {
     @Test
     void testCompleteGameSimulation() throws IOException {
         String inputString =
-                "1\nplayer one\n" +
-                        "player two\n" +
-                        "9, 10\n" +
-                        "9, 8\n" +
-                        "9, 11\n" +
-                        "9, 7\n" +
-                        "9, 12\n" +
-                        "9, 6\n" +
-                        "9, 13\n" +
-                        "9, 5\n";
+                """
+                        1
+                        player one
+                        player two
+                        9, 10
+                        9, 8
+                        9, 11
+                        9, 7
+                        9, 12
+                        9, 6
+                        9, 13
+                        9, 5
+                        """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -99,22 +102,24 @@ public class CLIControllerTest {
     @Test
     void testCompleteGameSimulationWithWrongPlayerInputs() throws IOException, NumberFormatException {
         String inputString =
-                "1\nplayer one\n" +
-                        "player two\n" +
-                        "9, 10\n" +
-                        "9, 8\n" +
-                        "9, 11\n" +
-                        "9, 7\n" +
-                        "9, 12\n" +
-                        "9, 6\n" +
-                        "9, 13\n" +
-                        "9, *!&%x\n" +
-                        "9, 5\n";
+                """
+                        1
+                        player one
+                        player two
+                        9, 10
+                        9, 8
+                        9, 11
+                        9, 7
+                        9, 12
+                        9, 6
+                        9, 13
+                        9, *!&%x
+                        9, 5
+                        """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
         Player player1 = cli.getPlayer1();
-        Player player2 = cli.getPlayer2();
         cli.initializeGameCLI();
         cli.startGameClI();
         Assertions.assertEquals(cli.getWinner(), player1);
@@ -140,7 +145,6 @@ public class CLIControllerTest {
 
         Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
     }
-
 
 
 }
