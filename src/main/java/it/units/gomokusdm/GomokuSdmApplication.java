@@ -8,6 +8,7 @@ import java.io.IOException;
 public class GomokuSdmApplication {
 
     public static void main(String[] args) throws IOException {
+
         // CLI Controller:
         //SpringApplication.run(GomokuSdmApplication.class, args);
         CLIController.closeInstance();
