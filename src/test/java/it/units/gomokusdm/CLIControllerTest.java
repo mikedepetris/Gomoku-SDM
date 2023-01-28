@@ -30,7 +30,7 @@ public class CLIControllerTest {
 
     @Test
     void testPlayersInitialization() throws IOException {
-        String inputString = "1\nPlayer One\nPlayer Two\n";
+        String inputString = "1" + System.lineSeparator() + "Player One" + System.lineSeparator() + "Player Two" + System.lineSeparator();
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -41,7 +41,7 @@ public class CLIControllerTest {
 
     @Test
     void testDefaultPlayersInitializationWithoutUsername() throws IOException {
-        String inputString = "1\n\n\n";
+        String inputString = "1" + System.lineSeparator() + System.lineSeparator() + System.lineSeparator();
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -52,7 +52,7 @@ public class CLIControllerTest {
 
     @Test
     void testPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
-        String inputString = "1,1\n"; //position (1,1)
+        String inputString = "1,1" + System.lineSeparator(); //position (1,1)
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
@@ -64,7 +64,7 @@ public class CLIControllerTest {
 
     @Test
     void testNonNumericPlayersCoordinatesInput() throws IOException {
-        String inputString = "a\na\n";
+        String inputString = "a" + System.lineSeparator() + "a" + System.lineSeparator();
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);
