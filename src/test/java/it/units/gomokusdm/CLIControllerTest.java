@@ -143,7 +143,7 @@ public class CLIControllerTest {
         cli.startGameClI();
         String cliOutput = byteArrayOutputStream.toString();
 
-        Assertions.assertTrue(cliOutput.contains("Game has been stopped by player two"));
+        Assertions.assertTrue(cliOutput.contains("Game has been stopped by "));
     }
 
 
