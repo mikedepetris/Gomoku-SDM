@@ -12,38 +12,38 @@ public class BoardFormatterTest {
         Board board = new BoardImplementation(BOARD_DIMENSION);
         String formattedBoard = BoardFormatter.formatBoard(board);
 
-        String expectedOutputString = "\r\n" +
-                "0\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "3\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "4\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "5\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "6\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "7\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "8\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "9\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "10\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "11\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "12\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "13\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "14\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
+        String expectedOutputString = System.lineSeparator() +
+                "0\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "3\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "4\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "5\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "6\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "7\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "8\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "9\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "10\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "11\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "12\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "13\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "14\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
                 "\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t" +
-                "\r\n";
+                System.lineSeparator();
 
         Assertions.assertEquals(expectedOutputString, formattedBoard);
     }
@@ -55,38 +55,38 @@ public class BoardFormatterTest {
         game.setupGame();
         String formattedBoard = BoardFormatter.formatBoard(board);
 
-        String expectedOutputString = "\r\n" +
-                "0\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "3\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "4\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "5\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "6\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "7\t*---*---*---*---*---*---*---B---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "8\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "9\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "10\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "11\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "12\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "13\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
-                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t\r\n" +
-                "14\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   \r\n" +
+        String expectedOutputString = System.lineSeparator() +
+                "0\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "3\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "4\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "5\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "6\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "7\t*---*---*---*---*---*---*---B---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "8\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "9\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "10\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "11\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "12\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "13\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "14\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
                 "\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t" +
-                "\r\n";
+                System.lineSeparator();
 
         Assertions.assertEquals(expectedOutputString, formattedBoard);
     }
