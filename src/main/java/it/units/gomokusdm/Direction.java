@@ -3,7 +3,6 @@ package it.units.gomokusdm;
 /**
  * Enum that represents the direction in which to move.
  * It is used to avoid working with two integers to move in a certain direction
- *
  * Idea from this stackoverflow discussion https://codereview.stackexchange.com/questions/115278/enums-for-the-four-directions
  */
 public enum Direction {

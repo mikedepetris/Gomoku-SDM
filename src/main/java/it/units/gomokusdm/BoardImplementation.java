@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
-    private final int DEFAULT_BOARD_DIMENSION = 19;
     private final Map<Coordinates, Stone> board;
 
     public BoardImplementation() {
         this.board = new LinkedHashMap<>();
+        int DEFAULT_BOARD_DIMENSION = 19;
         setupBoard(DEFAULT_BOARD_DIMENSION);
     }
 

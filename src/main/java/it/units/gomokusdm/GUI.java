@@ -14,24 +14,24 @@ import java.util.stream.IntStream;
 
 public class GUI implements ActionListener, MouseListener {
     int current_window; // finestra in cui mi trovo nel gioco
-    private Board board;
-    private Game game;
+    private final Board board;
+    private final Game game;
     private final Player player1;
     private final Player player2;
     //private Player winner; //come in CLI Controller
 
-    JFrame frame = new JFrame(); // frame totale
-    JPanel upper_panel = new JPanel(); // pannello soprastante con il titolo
-    JLabel title = new JLabel();
-    JPanel start_panel = new JPanel();
-    JTextField input_player1 = new JTextField("Player 1");
-    JTextField input_player2 = new JTextField("Player 2");
-    JPanel grid_panel = new JPanel();
-    JButton[] initial_buttons = new JButton[2];
-    JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
+    final JFrame frame = new JFrame(); // frame totale
+    final JPanel upper_panel = new JPanel(); // pannello soprastante con il titolo
+    final JLabel title = new JLabel();
+    final JPanel start_panel = new JPanel();
+    final JTextField input_player1 = new JTextField("Player 1");
+    final JTextField input_player2 = new JTextField("Player 2");
+    final JPanel grid_panel = new JPanel();
+    final JButton[] initial_buttons = new JButton[2];
+    final JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
     JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
-    BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
-    BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
+    final BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
+    final BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
 
     GUI() throws IOException {
 

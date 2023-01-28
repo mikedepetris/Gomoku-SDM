@@ -290,7 +290,6 @@ public class BoardTest {
 
     private static long countNonZeroes(int[][] intBoard) {
         long nonZeroes = Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
-//        long nonZeroes2 = Arrays.stream(intBoard).mapToInt(row -> (int) Arrays.stream(row).filter(i -> i != 0).count()).sum();
         return nonZeroes;
     }
 
