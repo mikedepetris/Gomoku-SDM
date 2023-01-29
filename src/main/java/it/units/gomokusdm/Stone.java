@@ -36,7 +36,7 @@ public enum Stone {
 
     @Override
     public String toString() {
-        return switch (castIntToStone(this.integerValueOfStone)){
+        return switch (castIntToStone(this.integerValueOfStone)) {
             case EMPTY -> "*";
             case BLACK -> "B";
             case WHITE -> "W";

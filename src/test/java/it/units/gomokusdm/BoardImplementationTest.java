@@ -19,6 +19,69 @@ import java.util.stream.Stream;
 public class BoardImplementationTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
+    private static Stream<Arguments> generateSomeValidCoordinates() {
+        return Stream.of(Arguments.of(new Coordinates(10, 10)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(8, 1)), Arguments.of(new Coordinates(0, 15)), Arguments.of(new Coordinates(18, 17)));
+    }
+
+    private static Stream<Arguments> generateSomeInvalidCoordinates() {
+        return Stream.of(Arguments.of(new Coordinates(-2, 3)), Arguments.of(new Coordinates(28, 21)), Arguments.of(new Coordinates(41, 0)), Arguments.of(new Coordinates(20, 4)));
+    }
+
+    private static void fillBoardFromIntBoard(Board board, int[][] intBoard) {
+        int boardDimension = intBoard.length;
+//      This version of the code uses nested IntStreams to iterate over the intBoard array and set the cells on the Board object based on the values in the array.
+//      The forEach method is used to perform the operations on each coordinate in the array.
+//      The method insertLineSeparatorFunctional is used to format the output string.
+//      Note that this code still using a nested loops and it could be refactored further to use flatMap, but I think this is the most simple and readable way to refactor it.
+        IntStream.range(0, boardDimension).forEach(x ->
+                IntStream.range(0, boardDimension).forEach(y -> {
+                    if (intBoard[x][y] == 1)
+                        board.setCell(Stone.BLACK, new Coordinates(x, y));
+                    else if (intBoard[x][y] == 2)
+                        board.setCell(Stone.WHITE, new Coordinates(x, y));
+                })
+        );
+
+    }
+
+    private static String insertLineSeparatorFunctional(String input, int lineLength) {
+        return IntStream.range(0, input.length() / lineLength + 1)
+                .mapToObj(i -> input.substring(i * lineLength, Math.min((i + 1) * lineLength, input.length())))
+                .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private static String insertLineSeparator(String input, int lineLength) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < input.length(); i += lineLength) {
+            int endIndex = Math.min(i + lineLength, input.length());
+            output.append(input, i, endIndex);
+            output.append(System.lineSeparator());
+        }
+        return output.toString();
+    }
+
+    private static long countNonZeroes(int[][] intBoard) {
+        return Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
+    }
+
+    private static int[][] readBoardFromFile() {
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(Paths.get("path/to/file.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return getIntBoardFromLines(lines);
+    }
+
+    private static int[][] getIntBoardFromLines(List<String> lines) {
+        return lines.stream()
+                .map(line -> line.chars()
+                        .map(c -> c == '*' ? 0 : c == 'B' ? 1 : 2)
+                        .toArray())
+                .toArray(int[][]::new);
+    }
+
     @Test
     public void testBoardInitWithDefaultBoardSizeOf19x19() {
         BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -39,19 +102,11 @@ public class BoardImplementationTest {
         Assertions.assertEquals(boardSize, board.getBoardDimension());
     }
 
-    private static Stream<Arguments> generateSomeValidCoordinates() {
-        return Stream.of(Arguments.of(new Coordinates(10, 10)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(8, 1)), Arguments.of(new Coordinates(0, 15)), Arguments.of(new Coordinates(18, 17)));
-    }
-
     @ParameterizedTest
     @MethodSource("generateSomeValidCoordinates")
     public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
         BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Assertions.assertTrue(board.areValidCoordinates(coordinates));
-    }
-
-    private static Stream<Arguments> generateSomeInvalidCoordinates() {
-        return Stream.of(Arguments.of(new Coordinates(-2, 3)), Arguments.of(new Coordinates(28, 21)), Arguments.of(new Coordinates(41, 0)), Arguments.of(new Coordinates(20, 4)));
     }
 
     @ParameterizedTest
@@ -88,7 +143,6 @@ public class BoardImplementationTest {
         String expected_result = "*".repeat(numberOfStonesInAFullBoard);
         Assertions.assertEquals(expected_result, result);
     }
-
 
     @Test
     public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
@@ -174,23 +228,6 @@ public class BoardImplementationTest {
         Assertions.assertEquals(boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
     }
 
-    private static void fillBoardFromIntBoard(Board board, int[][] intBoard) {
-        int boardDimension = intBoard.length;
-//      This version of the code uses nested IntStreams to iterate over the intBoard array and set the cells on the Board object based on the values in the array.
-//      The forEach method is used to perform the operations on each coordinate in the array.
-//      The method insertLineSeparatorFunctional is used to format the output string.
-//      Note that this code still using a nested loops and it could be refactored further to use flatMap, but I think this is the most simple and readable way to refactor it.
-        IntStream.range(0, boardDimension).forEach(x ->
-                IntStream.range(0, boardDimension).forEach(y -> {
-                    if (intBoard[x][y] == 1)
-                        board.setCell(Stone.BLACK, new Coordinates(x, y));
-                    else if (intBoard[x][y] == 2)
-                        board.setCell(Stone.WHITE, new Coordinates(x, y));
-                })
-        );
-
-    }
-
     @Test
     public void testLoadBoard4() {
         int[][] intBoard = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 1}, {0, 0, 0, 0},};
@@ -222,44 +259,5 @@ public class BoardImplementationTest {
         System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
         int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
         Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
-    }
-
-    private static String insertLineSeparatorFunctional(String input, int lineLength) {
-        return IntStream.range(0, input.length() / lineLength + 1)
-                .mapToObj(i -> input.substring(i * lineLength, Math.min((i + 1) * lineLength, input.length())))
-                .collect(Collectors.joining(System.lineSeparator()));
-    }
-
-    private static String insertLineSeparator(String input, int lineLength) {
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < input.length(); i += lineLength) {
-            int endIndex = Math.min(i + lineLength, input.length());
-            output.append(input, i, endIndex);
-            output.append(System.lineSeparator());
-        }
-        return output.toString();
-    }
-
-    private static long countNonZeroes(int[][] intBoard) {
-        long nonZeroes = Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
-        return nonZeroes;
-    }
-
-    private static int[][] readBoardFromFile() {
-        List<String> lines;
-        try {
-            lines = Files.readAllLines(Paths.get("path/to/file.txt"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return getIntBoardFromLines(lines);
-    }
-
-    private static int[][] getIntBoardFromLines(List<String> lines) {
-        return lines.stream()
-                .map(line -> line.chars()
-                        .map(c -> c == '*' ? 0 : c == 'B' ? 1 : 2)
-                        .toArray())
-                .toArray(int[][]::new);
     }
 }

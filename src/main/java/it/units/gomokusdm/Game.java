@@ -33,6 +33,11 @@ public class Game {
         return player1.getColour() != player2.getColour();
     }
 
+    // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
+    private static boolean areInRange(int i, int j, int checkingStones) {
+        return (i <= checkingStones && i >= -checkingStones && j <= checkingStones && j >= -checkingStones);
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -48,7 +53,6 @@ public class Game {
     public Player getPlayer2() {
         return player2;
     }
-
 
     public Player getLastMovingPlayer() {
         return lastMovingPlayer;
@@ -66,9 +70,8 @@ public class Game {
         lastMovingPlayer.addMove(boardCenter);
     }
 
-    public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveException {
+    public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
-//                && player.getMovesList().size() < MAX_NUMBER_OF_STONES) {
             board.setCell(player.getColour(), coordinates);
             lastMovingPlayer = player;
             lastMovingPlayer.addMove(coordinates);
@@ -80,28 +83,13 @@ public class Game {
             if (!isTurnOfPlayer(player)) {
                 exceptionMessage += "Is not " + player.getUsername() + "'s turn ";
             }
-//            if (!(player.getMovesList().size() < MAX_NUMBER_OF_STONES)) {
-//                exceptionMessage += player.getUsername() + " has terminated the number of moves allowed ";
-//            }
-            throw new InvalidMoveException(exceptionMessage);
+            throw new InvalidMoveThrowable(exceptionMessage);
         }
     }
 
     private boolean isTurnOfPlayer(Player player) {
         return player != lastMovingPlayer;
     }
-
-
-    // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
-    private static boolean areInRange(int i, int j, int checkingStones) {
-        return (i <= checkingStones && i >= -checkingStones && j <= checkingStones && j >= -checkingStones);
-    }
-
-    /* vale davvero la pena usarlo?
-    private boolean isValidNumberOfStones (int numberOfStones) {
-        return (numberOfStones <= board.getBoardDimension() && numberOfStones > 0);
-    }
-    */
 
     private Coordinates getLastMoveCoordinates() {
         return lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size() - 1);
@@ -135,23 +123,23 @@ public class Game {
 
         int i = colDirection * checkingStones;
         int j = rowDirection * checkingStones;
-        int i_increment = i / checkingStones;
-        int j_increment = j / checkingStones;
+        int iIncrement = i / checkingStones;
+        int jIncrement = j / checkingStones;
 
         while (areInRange(i, j, checkingStones)) {
             Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
             if (board.areValidCoordinates(possibleCoordinates)) {
                 coordinates.add(possibleCoordinates);
             }
-            i = i - i_increment;
-            j = j - j_increment;
+            i = i - iIncrement;
+            j = j - jIncrement;
         }
     }
 
     private boolean checkNStonesEqual(List<Coordinates> coordinates, Stone stone, int nStones) {
         int i = 0;
         int counterStones = 0;
-        while (i < coordinates.size() & counterStones != nStones) {
+        while (i < coordinates.size() && counterStones != nStones) {
             Stone actualStone = board.getStoneAt(coordinates.get(i));
             if (Objects.equals(actualStone.toString(), stone.toString())) {
                 counterStones++;
@@ -181,12 +169,12 @@ public class Game {
                 && isThereAnAdjacentStone(coordinates);
     }
 
-    public static class InvalidMoveException extends Throwable {
-        public InvalidMoveException() {
+    public static class InvalidMoveThrowable extends Throwable {
+        public InvalidMoveThrowable() {
             super();
         }
 
-        public InvalidMoveException(String errorMessage) {
+        public InvalidMoveThrowable(String errorMessage) {
             super(errorMessage);
         }
     }

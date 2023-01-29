@@ -7,15 +7,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class CLIControllerTest {
-
-    @Test
-    void test() {
-        Board board = new BoardImplementation();
-        board.setCell(Stone.BLACK, new Coordinates(0, 0));
-        CLIController cli = CLIController.createInstance(System.out, System.in);
-        cli.printBoard();
-    }
-
     @Test
     void testCLICreation() {
         CLIController cli = CLIController.createInstance(System.out, System.in);

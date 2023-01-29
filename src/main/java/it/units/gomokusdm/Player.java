@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+    private final List<Coordinates> movesList = new ArrayList<>();
     private String username;
     private Stone assignedStone;
-    private final List<Coordinates> movesList = new ArrayList<>();
 
     public Player(String username, Stone assignedStone) {
         this.username = username.equals("") ? assignedStone.toString() : username;

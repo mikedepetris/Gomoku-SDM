@@ -12,18 +12,12 @@ import static it.units.gomokusdm.Utilities.checkInputAndGet;
 @SpringBootApplication
 public class GomokuSdmApplication {
 
-    private final static String PATH_TO_LOGGING_PROPERTIES_LOADED_AS_RESOURCE = "/logging.properties";
-    private final static String ARG_TO_START_GUI = "gui";
-    private final static String ARG_TO_START_CLI = "cli";
+    private static final String PATH_TO_LOGGING_PROPERTIES_LOADED_AS_RESOURCE = "/logging.properties";
+    private static final String ARG_TO_START_GUI = "gui";
+    private static final String ARG_TO_START_CLI = "cli";
 
     public static void main(String[] args) throws IOException {
-
-        //new GUI();
-
-        System.out.println("*************************" + System.lineSeparator()
-                + "GOMOKU" + System.lineSeparator()
-                + "*************************");
-
+        System.out.printf("%s %n%S %n%s %n", "*".repeat(10), "gomoku", "*".repeat(10));
         try {
             LogManager.getLogManager().readConfiguration(GomokuSdmApplication.class.getResourceAsStream(PATH_TO_LOGGING_PROPERTIES_LOADED_AS_RESOURCE));
         } catch (IOException e) {
@@ -51,9 +45,6 @@ public class GomokuSdmApplication {
             case ARG_TO_START_CLI -> CLIMain();
             default -> throw new IllegalArgumentException();
         }
-
-
-
     }
 
     private static void GUIMain() throws IOException {
@@ -62,8 +53,6 @@ public class GomokuSdmApplication {
     }
 
     private static void CLIMain() throws IOException {
-        // CLI Controller:
-        //SpringApplication.run(GomokuSdmApplication.class, args);
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, System.in);
         cli.initializeGameCLI();

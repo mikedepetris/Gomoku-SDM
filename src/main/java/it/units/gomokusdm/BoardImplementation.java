@@ -4,15 +4,14 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
+    private static final int DEFAULT_BOARD_DIMENSION = 19;
     private final Map<Coordinates, Stone> board;
 
     public BoardImplementation() {
         this.board = new LinkedHashMap<>();
-        int DEFAULT_BOARD_DIMENSION = 19;
         setupBoard(DEFAULT_BOARD_DIMENSION);
     }
 
@@ -69,7 +68,7 @@ public class BoardImplementation implements Board {
         return Arrays.stream(Direction.values())
                 .map(direction -> coordinates.getCoordinateMovedInDirectionWithStep(direction, 1))
                 .filter(adjcoord -> !adjcoord.equals(coordinates))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
