@@ -17,164 +17,30 @@ import java.util.stream.IntStream;
 
 public class GUI implements ActionListener, MouseListener {
 
-    private boolean isGameFinished = false;
+    public static final String GAME_TITLE = "Gomoku";
+    private final JPanel settingsPanel = new JPanel();
+    private final String[] dimensions = {"15x15", "19x19"};
+    private final JComboBox comboDimensions = new JComboBox(dimensions);
     int currentWindow; // finestra in cui mi trovo nel gioco
     int selectedBoardSize;
+    private boolean isGameFinished = false;
     private Board board;
+    //private Player winner; //come in CLI Controller
     private Game game;
     private Player player1;
     private Player player2;
-    //private Player winner; //come in CLI Controller
-
     private JFrame frame = new JFrame(); // frame totale
-    private JPanel upper_panel = new JPanel(); // pannello soprastante con il titolo
+    private JPanel upperPanel = new JPanel(); // pannello soprastante con il titolo
     private JLabel title = new JLabel();
-    private JPanel start_panel = new JPanel();
-    private JPanel settings_panel = new JPanel();
-    private JTextField input_player1 = new JTextField("Player 1");
-    private JTextField input_player2 = new JTextField("Player 2");
-    private JPanel grid_panel = new JPanel();
+    private JPanel startPanel = new JPanel();
+    private JTextField inputPlayer1 = new JTextField("Player 1");
+    private JTextField inputPlayer2 = new JTextField("Player 2");
+    private JPanel gridPanel = new JPanel();
     private JButton[] buttons = new JButton[3];
-    private JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
-    private JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
-    private BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
-    private BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
-    private String[] dimensions = {"15x15", "19x19"};
-    private JComboBox comboDimensions = new JComboBox(dimensions);
-    public int getCurrentWindow() {
-        return currentWindow;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public Player getPlayer2() {
-        return player2;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public JPanel getUpper_panel() {
-        return upper_panel;
-    }
-
-    public JLabel getTitle() {
-        return title;
-    }
-
-    public JPanel getStart_panel() {
-        return start_panel;
-    }
-
-    public JTextField getInput_player1() {
-        return input_player1;
-    }
-
-    public JTextField getInput_player2() {
-        return input_player2;
-    }
-
-    public JPanel getGrid_panel() {
-        return grid_panel;
-    }
-
-    public JButton[] getButtons() {
-        return buttons;
-    }
-
-    public JLabel getBoard_img_19() {
-        return board_img_19;
-    }
-
-    public JLabel getBoard_img_15() {
-        return board_img_15;
-    }
-
-    public BufferedImage getBlack_stone_img() {
-        return black_stone_img;
-    }
-
-    public BufferedImage getWhite_stone_img() {
-        return white_stone_img;
-    }
-    public void setCurrentWindow(int currentWindow) {
-        this.currentWindow = currentWindow;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
-
-    public void setUpper_panel(JPanel upper_panel) {
-        this.upper_panel = upper_panel;
-    }
-
-    public void setTitle(JLabel title) {
-        this.title = title;
-    }
-
-    public void setStart_panel(JPanel start_panel) {
-        this.start_panel = start_panel;
-    }
-
-    public void setInput_player1(JTextField input_player1) {
-        this.input_player1 = input_player1;
-    }
-
-    public void setInput_player2(JTextField input_player2) {
-        this.input_player2 = input_player2;
-    }
-
-    public void setGrid_panel(JPanel grid_panel) {
-        this.grid_panel = grid_panel;
-    }
-
-    public void setButtons(JButton[] buttons) {
-        this.buttons = buttons;
-    }
-
-    public void setBoard_img_19(JLabel board_img_19) {
-        this.board_img_19 = board_img_19;
-    }
-
-    public void setBoard_img_15(JLabel board_img_15) {
-        this.board_img_15 = board_img_15;
-    }
-
-    public void setBlack_stone_img(BufferedImage black_stone_img) {
-        this.black_stone_img = black_stone_img;
-    }
-
-    public void setWhite_stone_img(BufferedImage white_stone_img) {
-        this.white_stone_img = white_stone_img;
-    }
-
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
-    }
-
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
-    }
+    private JLabel boardImg19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
+    private JLabel boardImg15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
+    private BufferedImage blackStoneImg = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
+    private BufferedImage whiteStoneImg = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
 
     public GUI() throws IOException {
         this.selectedBoardSize = 19;
@@ -186,113 +52,243 @@ public class GUI implements ActionListener, MouseListener {
         startFrame();
     }
 
+    public int getCurrentWindow() {
+        return currentWindow;
+    }
+
+    public void setCurrentWindow(int currentWindow) {
+        this.currentWindow = currentWindow;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getUpperPanel() {
+        return upperPanel;
+    }
+
+    public void setUpperPanel(JPanel upperPanel) {
+        this.upperPanel = upperPanel;
+    }
+
+    public JLabel getTitle() {
+        return title;
+    }
+
+    public void setTitle(JLabel title) {
+        this.title = title;
+    }
+
+    public JPanel getStartPanel() {
+        return startPanel;
+    }
+
+    public void setStartPanel(JPanel startPanel) {
+        this.startPanel = startPanel;
+    }
+
+    public JTextField getInputPlayer1() {
+        return inputPlayer1;
+    }
+
+    public void setInputPlayer1(JTextField inputPlayer1) {
+        this.inputPlayer1 = inputPlayer1;
+    }
+
+    public JTextField getInputPlayer2() {
+        return inputPlayer2;
+    }
+
+    public void setInputPlayer2(JTextField inputPlayer2) {
+        this.inputPlayer2 = inputPlayer2;
+    }
+
+    public JPanel getGridPanel() {
+        return gridPanel;
+    }
+
+    public void setGridPanel(JPanel gridPanel) {
+        this.gridPanel = gridPanel;
+    }
+
+    public JButton[] getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(JButton[] buttons) {
+        this.buttons = buttons;
+    }
+
+    public JLabel getBoardImg19() {
+        return boardImg19;
+    }
+
+    public void setBoardImg19(JLabel boardImg19) {
+        this.boardImg19 = boardImg19;
+    }
+
+    public JLabel getBoardImg15() {
+        return boardImg15;
+    }
+
+    public void setBoardImg15(JLabel boardImg15) {
+        this.boardImg15 = boardImg15;
+    }
+
+    public BufferedImage getBlackStoneImg() {
+        return blackStoneImg;
+    }
+
+    public void setBlackStoneImg(BufferedImage blackStoneImg) {
+        this.blackStoneImg = blackStoneImg;
+    }
+
+    public BufferedImage getWhiteStoneImg() {
+        return whiteStoneImg;
+    }
+
+    public void setWhiteStoneImg(BufferedImage whiteStoneImg) {
+        this.whiteStoneImg = whiteStoneImg;
+    }
+
     public void setMainElements() {
         // Settings of Main elements: frame, title, panels
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 700); // Size della finestra
         frame.getContentPane().setBackground(new Color(50, 50, 50)); // Colore della finestra
-        frame.setTitle("Gomoku"); // Titolo finestra
+        frame.setTitle(GAME_TITLE); // Titolo finestra
         frame.setLayout(new BorderLayout()); // Layout Frame
         frame.setVisible(true);
 
-        upper_panel.setLayout(new BorderLayout());
-        upper_panel.setBounds(0, 0, 800, 100);
-        upper_panel.add(title);
+        upperPanel.setLayout(new BorderLayout());
+        upperPanel.setBounds(0, 0, 800, 100);
+        upperPanel.add(title);
 
         // non va bene, è senza layout, è provvisorio
-        start_panel.setLayout(null);
-        start_panel.setBackground(new Color(234, 214, 84));
+        startPanel.setLayout(null);
+        startPanel.setBackground(new Color(234, 214, 84));
 
-        grid_panel.setBackground(new Color(234, 214, 84));
+        gridPanel.setBackground(new Color(234, 214, 84));
 
-        settings_panel.setLayout(null);
-        settings_panel.setBackground(new Color(234, 214, 84));
+        settingsPanel.setLayout(null);
+        settingsPanel.setBackground(new Color(234, 214, 84));
 
-        frame.add(upper_panel, BorderLayout.NORTH);
+        frame.add(upperPanel, BorderLayout.NORTH);
 
         title.setBackground(new Color(234, 214, 84)); // Colore testo
         title.setForeground(new Color(3, 3, 3)); // Colore testo
         title.setFont(new Font("Ink Free", Font.BOLD, 30)); // Font testo
         title.setHorizontalAlignment(JLabel.CENTER);
-        title.setText("Gomoku");
+        title.setText(GAME_TITLE);
         title.setOpaque(true);
     }
 
     public void showStartingWindow() {
         this.currentWindow = 0;
-        title.setText("Gomoku");
-        frame.add(start_panel);
-        int x_starting_components = 250; //allineare nella x gli elementi
+        title.setText(GAME_TITLE);
+        frame.add(startPanel);
+        int xStartingComponents = 250; //allineare nella x gli elementi
         // è un allineamento provvisorio perchè non va bene, bisogna decidere un layout!
 
         // Bottone Play
         JButton play = new JButton("Play");
         buttons[0] = play;
-        //play.setFont(new Font("", Font.BOLD, 12));
-        play.setBounds(x_starting_components, 150, 200, 20);
+        play.setBounds(xStartingComponents, 150, 200, 20);
         play.addActionListener(this);
 
         // Bottone Settings
         JButton settings = new JButton("Settings");
         buttons[1] = settings;
-        //play.setFont(new Font("", Font.BOLD, 12));
-        settings.setBounds(x_starting_components, 200, 200, 20);
+        settings.setBounds(xStartingComponents, 200, 200, 20);
         settings.addActionListener(this);
 
         // Labels/Text Field per inserimento nome Giocatore 1/2
-        JLabel insert_player1 = new JLabel("Inserisci il nome del Giocatore 1:");
-        JLabel insert_player2 = new JLabel("Inserisci il nome del Giocatore 2:");
+        JLabel insertPlayer1 = new JLabel("Inserisci il nome del Giocatore 1:");
+        JLabel insertPlayer2 = new JLabel("Inserisci il nome del Giocatore 2:");
 
         // Allineo
-        insert_player1.setBounds(x_starting_components, 260, 200, 20);
-        input_player1.setBounds(x_starting_components, 290, 200, 20);
-        insert_player2.setBounds(x_starting_components, 320, 200, 20);
-        input_player2.setBounds(x_starting_components, 350, 200, 20);
+        insertPlayer1.setBounds(xStartingComponents, 260, 200, 20);
+        inputPlayer1.setBounds(xStartingComponents, 290, 200, 20);
+        insertPlayer2.setBounds(xStartingComponents, 320, 200, 20);
+        inputPlayer2.setBounds(xStartingComponents, 350, 200, 20);
 
         // Aggiungo elementi al pannello iniziale
-        start_panel.add(play);
-        start_panel.add(settings);
-        start_panel.add(insert_player1);
-        start_panel.add(insert_player2);
-        start_panel.add(input_player1);
-        start_panel.add(input_player2);
-
-
+        startPanel.add(play);
+        startPanel.add(settings);
+        startPanel.add(insertPlayer1);
+        startPanel.add(insertPlayer2);
+        startPanel.add(inputPlayer1);
+        startPanel.add(inputPlayer2);
     }
 
     public void startFrame() {
         try {
             title.setText("Loading....");
             Thread.sleep(1000);
-            title.setText("Gomoku");
+            title.setText(GAME_TITLE);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
     public void showSettings() {
         // Settings
         this.currentWindow = 1;
-        frame.add(settings_panel);
+        frame.add(settingsPanel);
 
         JLabel insertSize = new JLabel("Choose the dimension of the Board:");
-        settings_panel.add(insertSize);
+        settingsPanel.add(insertSize);
         insertSize.setBounds(250, 120, 300, 20);
 
         // Bottone Back to Main Menu
         JButton backToMainMenu = new JButton("Back to Main Menu");
-        settings_panel.add(backToMainMenu);
+        settingsPanel.add(backToMainMenu);
         buttons[2] = backToMainMenu;
-        //play.setFont(new Font("", Font.BOLD, 12));
         backToMainMenu.setBounds(250, 190, 200, 20);
         backToMainMenu.addActionListener(this);
 
         comboDimensions.setSelectedIndex(1);
         comboDimensions.addActionListener(this);
         comboDimensions.setBounds(250, 150, 200, 20);
-        settings_panel.add(comboDimensions);
-
+        settingsPanel.add(comboDimensions);
 
 
         title.setText("Settings");
@@ -310,30 +306,30 @@ public class GUI implements ActionListener, MouseListener {
         }
 
         // Settings della board
-        String user1 = input_player1.getText();
-        String user2 = input_player2.getText();
+        String user1 = inputPlayer1.getText();
+        String user2 = inputPlayer2.getText();
         player1.setUsername(user1);
         player2.setUsername(user2);
 
         this.currentWindow = 2;
-        frame.add(grid_panel);
+        frame.add(gridPanel);
 
-        JLabel blackstone = new JLabel(new ImageIcon(black_stone_img));
+        JLabel blackstone = new JLabel(new ImageIcon(blackStoneImg));
         //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
         switch (board.getBoardDimension()) {
             case 19:
-                grid_panel.add(board_img_19);
-                board_img_19.addMouseListener(this);
+                gridPanel.add(boardImg19);
+                boardImg19.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
                 blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
-                board_img_19.add(blackstone);
+                boardImg19.add(blackstone);
                 break;
             case 15:
-                grid_panel.add(board_img_15);
-                board_img_15.addMouseListener(this);
+                gridPanel.add(boardImg15);
+                boardImg15.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
                 blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
-                board_img_15.add(blackstone);
+                boardImg15.add(blackstone);
                 break;
         }
 
@@ -341,20 +337,20 @@ public class GUI implements ActionListener, MouseListener {
 
     }
 
-    public void showStone(BufferedImage stone_img, int resize_x, int resize_y) {
-        JLabel stone = new JLabel(new ImageIcon(stone_img));
+    public void showStone(BufferedImage stoneImg, int resizeX, int resizeY) {
+        JLabel stone = new JLabel(new ImageIcon(stoneImg));
         int resize = 0;
 
         switch (board.getBoardDimension()) {
             case 19:
                 resize = 22;
-                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
-                board_img_19.add(stone);
+                stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
+                boardImg19.add(stone);
                 break;
             case 15:
-                resize = 22+54;
-                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
-                board_img_15.add(stone);
+                resize = 22 + 54;
+                stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
+                boardImg15.add(stone);
                 break;
         }
 
@@ -371,31 +367,30 @@ public class GUI implements ActionListener, MouseListener {
         switch (this.currentWindow) {
             case 0:
                 if (e.getSource() == buttons[0]) { // Ho cliccato Play
-                    frame.remove(start_panel);
+                    frame.remove(startPanel);
                     showBoard();
                 }
                 if (e.getSource() == buttons[1]) { // Ho cliccato Settings
-                    frame.remove(start_panel);
+                    frame.remove(startPanel);
                     showSettings();
                 }
                 break;
             case 1:
                 if (e.getSource() == comboDimensions) {
-                    JComboBox cb = (JComboBox)e.getSource();
-                    String lineDimension = (String)cb.getSelectedItem();
-                    this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0,2));
+                    JComboBox cb = (JComboBox) e.getSource();
+                    String lineDimension = (String) cb.getSelectedItem();
+                    this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
                 if (e.getSource() == buttons[2]) { // Ho cliccato Settings
-                    frame.remove(settings_panel);
+                    frame.remove(settingsPanel);
                     frame.repaint();
                     this.currentWindow = 0;
                     title.setText("Gomoku");
-                    frame.add(start_panel);
+                    frame.add(startPanel);
                 }
                 break;
-            case 2:
-
+            default:
                 break;
         }
 
@@ -413,48 +408,47 @@ public class GUI implements ActionListener, MouseListener {
     public void mousePressed(MouseEvent e) {
 
         if (!isGameFinished) {
-            int padding_board = 30;
+            int paddingBoard = 30;
             switch (board.getBoardDimension()) {
                 case 19:
-                    padding_board = 30;
+                    paddingBoard = 30;
                     break;
                 case 15:
-                    padding_board = 84;
+                    paddingBoard = 84;
                     break;
             }
             // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
             // Rilevo le x,y del mouse dopo aver cliccato
-            int x = e.getX() - padding_board;
-            int y = e.getY() - padding_board;
-            System.out.println("coordinate: "+x+" "+y);
+            int x = e.getX() - paddingBoard;
+            int y = e.getY() - paddingBoard;
+            System.out.println("coordinate: " + x + " " + y);
             int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
 
-            int resize_x = 0;
-            int resize_y = 0; // resize x e y rispetto a dove posizionare la stone come immagine
-            int new_x = 0;
-            int new_y = 0; // le vere coordinate che vengono rilevate per makeMove
-            while (resize_x < ((x + 7) - cell_dimension)) {
-                resize_x = resize_x + cell_dimension;
-                new_y++;
+            int resizeX = 0;
+            int resizeY = 0; // resize x e y rispetto a dove posizionare la stone come immagine
+            int newX = 0;
+            int newY = 0; // le vere coordinate che vengono rilevate per makeMove
+            while (resizeX < ((x + 7) - cell_dimension)) {
+                resizeX = resizeX + cell_dimension;
+                newY++;
             }
-            while (resize_y < ((y + 7) - cell_dimension)) {
-                resize_y = resize_y + cell_dimension;
-                new_x++;
+            while (resizeY < ((y + 7) - cell_dimension)) {
+                resizeY = resizeY + cell_dimension;
+                newX++;
             }
-            System.out.println("coordinate Game: "+new_y+" "+new_x);
+            System.out.println("coordinate Game: " + newY + " " + newX);
             // Provo a eseguire una mossa
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
-                game.makeMove(nextMovingPlayer, new Coordinates(new_x, new_y));
+                game.makeMove(nextMovingPlayer, new Coordinates(newX, newY));
                 printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
-                    showStone(white_stone_img, resize_x, resize_y);
+                    showStone(whiteStoneImg, resizeX, resizeY);
                 } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
-                    showStone(black_stone_img, resize_x, resize_y);
+                    showStone(blackStoneImg, resizeX, resizeY);
                 }
-            } catch (Game.InvalidMoveException ex) {
-                //System.out.println(ex);
+            } catch (Game.InvalidMoveThrowable ex) {
                 title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
             }
             if (isGameTie()) {
@@ -466,7 +460,7 @@ public class GUI implements ActionListener, MouseListener {
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             }
-            grid_panel.repaint();
+            gridPanel.repaint();
         }
     }
 

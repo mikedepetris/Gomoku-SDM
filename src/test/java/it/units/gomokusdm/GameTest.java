@@ -83,7 +83,7 @@ public class GameTest {
         //
         try {
             game.makeMove(secondPlayer, new Coordinates(8, 9));
-        } catch (Game.InvalidMoveException e) {
+        } catch (Game.InvalidMoveThrowable e) {
             e.printStackTrace();
         }
         Stone stoneColor = board.getStoneAt(new Coordinates(8, 9));
@@ -103,7 +103,7 @@ public class GameTest {
         game.setupGame();
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 1));
-        } catch (Game.InvalidMoveException e) {
+        } catch (Game.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             Stone stoneColor = board.getStoneAt(new Coordinates(1, 1));
@@ -125,7 +125,7 @@ public class GameTest {
 
 
     @Test
-    public void testMakeConsecutiveMoves() throws Game.InvalidMoveException {
+    public void testMakeConsecutiveMoves() throws Game.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -134,7 +134,7 @@ public class GameTest {
         // pedina non adiacente, mi aspetto che non faccia nulla
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 2));
-        } catch (Game.InvalidMoveException e) {
+        } catch (Game.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
@@ -191,7 +191,7 @@ public class GameTest {
             game.makeMove(secondPlayer, new Coordinates(9, 18));
             game.makeMove(firstPlayer, new Coordinates(0, 18));
             game.makeMove(firstPlayer, new Coordinates(9, 19));
-        } catch (Game.InvalidMoveException e) {
+        } catch (Game.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             int[][] expectedBoard =
@@ -227,7 +227,7 @@ public class GameTest {
 
 
     @Test
-    public void testIsPlayerWinningGame() throws Game.InvalidMoveException {
+    public void testIsPlayerWinningGame() throws Game.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -292,7 +292,7 @@ public class GameTest {
             result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(5, 5));
             result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
-        } catch (Game.InvalidMoveException e) {
+        } catch (Game.InvalidMoveThrowable e) {
             throw new RuntimeException(e);
         }
 
@@ -329,13 +329,13 @@ public class GameTest {
 
 
         Assertions.assertThrowsExactly(
-                Game.InvalidMoveException.class,
+                Game.InvalidMoveThrowable.class,
                 () -> game.makeMove(secondPlayer, new Coordinates(0, 0)),
                 "Move not feasible"
         );
 
         Assertions.assertThrowsExactly(
-                Game.InvalidMoveException.class,
+                Game.InvalidMoveThrowable.class,
                 () -> game.makeMove(firstPlayer, new Coordinates(0, 0)),
                 "Is not First's turn"
         );
@@ -357,7 +357,7 @@ public class GameTest {
         secondPlayer.addMove(new Coordinates(0, 0));
         Assertions.assertTrue(game.checkIfStonesOfAPlayerAreFinished());
         Assertions.assertEquals(60, secondPlayer.getMovesList().size());
-        Assertions.assertFalse(secondPlayer.getMovesList().size()>60);
+        Assertions.assertFalse(secondPlayer.getMovesList().size() > 60);
     }
 
 }

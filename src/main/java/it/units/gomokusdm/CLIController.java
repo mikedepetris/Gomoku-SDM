@@ -8,10 +8,10 @@ public class CLIController {
 
     private final PrintStream outputStream;
     private final BufferedReader reader;
-    private Board board;
-    private Game game;
     private final Player player1;
     private final Player player2;
+    private Board board;
+    private Game game;
     private Player winner;
 
 
@@ -55,30 +55,29 @@ public class CLIController {
     }
 
     public void startGameClI() throws IOException {
-        outputStream.printf("(%s) Black player's first move must be in the center of the board." + System.lineSeparator(),
+        outputStream.printf("(%s) Black player's first move must be in the center of the board. %n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
         while (!isGameTie() && !thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
-            outputStream.printf(System.lineSeparator() + "It's %s's turn. Insert \"STOP\" to end game." + System.lineSeparator(), nextMovingPlayer.getUsername());
+            outputStream.printf("It's %s's turn. Insert \"STOP\" to end game. %n", nextMovingPlayer.getUsername());
             String playerInput = getPlayerInput(nextMovingPlayer);
             if (playerInput.equalsIgnoreCase("STOP")) {
-                outputStream.printf(System.lineSeparator() + "Game has been stopped by %s" + System.lineSeparator(), game.getNextMovingPlayer().getUsername());
+                outputStream.printf("Game has been stopped by %s %n", game.getNextMovingPlayer().getUsername());
                 break;
             }
             try {
                 Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
-            } catch (Game.InvalidMoveException | WrongStringFormatException e) {
-                outputStream.println("Invalid coordinates!" + System.lineSeparator() + "Try again."); //aggiungere il motivo dell'errore (con e.getMessage())
+            } catch (Game.InvalidMoveThrowable | WrongStringFormatException e) {
+                outputStream.printf("Invalid coordinates! %s %nTry again.", e.getMessage()); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
         if (isGameTie()) {
-            //winner = game.getLastMovingPlayer();
-            outputStream.printf(System.lineSeparator() + "Nobody won, the game is tie!");
+            outputStream.printf("Nobody won, the game is tie! %n");
         } else if (thereIsAWinner()) {
             winner = game.getLastMovingPlayer();
-            outputStream.printf(System.lineSeparator() + "%s won the game!", winner.getUsername());
+            outputStream.printf("%s won the game! %n", winner.getUsername());
         }
     }
 
@@ -103,13 +102,13 @@ public class CLIController {
 
     private void setBoardDimension() throws IOException {
         outputStream.println("Select board size to use for this game:");
-        outputStream.printf("\t1. %s" + System.lineSeparator() + " \t2. %s" + System.lineSeparator(), "19x19", "15x15");
+        outputStream.printf("\t1. %s %n \t2. %s %n", "19x19", "15x15");
         String line = reader.readLine();
         try {
             int selectedBoardSize = Integer.parseInt(line) == 1 ? 19 : 15;
             board = new BoardImplementation(selectedBoardSize);
         } catch (NumberFormatException e) {
-            outputStream.printf("Please, select option %d or %d." + System.lineSeparator() + "Your input was \"%s\". " + System.lineSeparator(), 1, 2, line);
+            outputStream.printf("Please, select option %d or %d.%nYour input was \"%s\".%n", 1, 2, line);
         }
     }
 
@@ -118,7 +117,7 @@ public class CLIController {
             String[] tokens = string.split(",");
             return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
         }
-        throw new WrongStringFormatException("string doesn't match the expected format");
+        throw new WrongStringFormatException("String doesn't match the expected format: row,col");
     }
 
     public String getPlayerInput(Player player) throws IOException {
@@ -131,7 +130,7 @@ public class CLIController {
     }
 
     private boolean isAValidStringForCoordinates(String string) {
-        return string.matches("^[0-9]+,[\" ]*[0-9]+$");
+        return string.matches("^\\d+,[\" ]*\\d+$");
     }
 
     public void printBoard() {

@@ -69,8 +69,8 @@ public class GUITest {
         assertEquals(gui.currentWindow, 0);
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
-        assertTrue(gui.getInput_player1().isVisible());
-        assertTrue(gui.getInput_player2().isVisible());
+        assertTrue(gui.getInputPlayer1().isVisible());
+        assertTrue(gui.getInputPlayer2().isVisible());
     }
 
     @Test
@@ -87,9 +87,9 @@ public class GUITest {
         assertEquals(gui.currentWindow, 0); // 0
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
-        assertTrue(gui.getInput_player1().isVisible());
-        assertTrue(gui.getInput_player2().isVisible());
-        assertTrue(gui.getGrid_panel().isVisible());
+        assertTrue(gui.getInputPlayer1().isVisible());
+        assertTrue(gui.getInputPlayer2().isVisible());
+        assertTrue(gui.getGridPanel().isVisible());
     }
 
     @Test
@@ -99,15 +99,15 @@ public class GUITest {
         assertEquals(gui.currentWindow, 2); // 1
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
-        assertTrue(gui.getInput_player1().isVisible());
-        assertTrue(gui.getInput_player2().isVisible());
-        assertTrue(gui.getGrid_panel().isVisible());
+        assertTrue(gui.getInputPlayer1().isVisible());
+        assertTrue(gui.getInputPlayer2().isVisible());
+        assertTrue(gui.getGridPanel().isVisible());
     }
 
     @Test
     public void testMouseClicked() {
         // Simulate clicking on the board
-        gui.getGrid_panel().dispatchEvent(new MouseEvent(gui.getGrid_panel(), MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 100, 100, 1, false));
+        gui.getGridPanel().dispatchEvent(new MouseEvent(gui.getGridPanel(), MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 100, 100, 1, false));
         // Check that the board has been updated with a stone
         //assertTrue(gui.board.getStones().contains(new Point(100, 100)));
     }
@@ -116,7 +116,7 @@ public class GUITest {
     public void testSetMainElements() {
         gui.setMainElements();
         JFrame frame = gui.getFrame();
-        JPanel upper_panel = gui.getUpper_panel();
+        JPanel upper_panel = gui.getUpperPanel();
         assertEquals(700, frame.getWidth());
         assertEquals(700, frame.getHeight());
         assertEquals("Gomoku", frame.getTitle());
@@ -128,28 +128,17 @@ public class GUITest {
     @Test
     public void testShowBoard() {
         gui.showBoard();
-        assertNotNull(gui.getGrid_panel());
-        assertTrue(gui.getGrid_panel().isVisible());
-    }
-
-    @Test
-    public void testShowStone() throws IOException {
-        BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
-        gui.showStone(white_stone_img, 5, 5);
-        assertNull(gui.getGrid_panel().getComponentAt(2, 3));
-        //TODO: assertNotNull(gui.getGrid_panel().getComponentAt(2, 3));
-        assertFalse(gui.getGrid_panel().getComponentAt(2, 3) instanceof JLabel);
-        //TODO: assertTrue(gui.getGrid_panel().getComponentAt(2, 3) instanceof JLabel);
-        JLabel label = (JLabel) gui.getGrid_panel().getComponentAt(2, 3);
-        assertNull(label);
-        //TODO: assertNotNull(label.getIcon());
+        assertNotNull(gui.getGridPanel());
+        assertTrue(gui.getGridPanel().isVisible());
     }
 
     @Test
     public void testPrintBoard() {
+        int boardDimension = 19;
+        gui.setBoard(new BoardImplementation(boardDimension));
         gui.printBoard();
-        assertNotNull(gui.getBoard_img_19());
-        assertTrue(gui.getBoard_img_19().isVisible());
+        assertNotNull(gui.getBoardImg19());
+        assertTrue(gui.getBoardImg19().isVisible());
     }
 
     // It is worth noting that these test methods might not be able to run correctly, because ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png")) and other similar lines will throw IOException when there is no internet connection, and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
@@ -157,14 +146,6 @@ public class GUITest {
     public void testShowStartingWindow() {
         gui.setMainElements();
         gui.showStartingWindow();
-//        // Verify that the frame's content pane is set to the start_panel
-//        verify(frame).setContentPane(start_panel);
-//        // Verify that the start_panel is visible
-//        verify(start_panel).setVisible(true);
-//        // Verify that the input_player1 and input_player2 fields are visible
-//        verify(input_player1).setVisible(true);
-//        verify(input_player2).setVisible(true);
-
         assertEquals(0, gui.currentWindow); // 1
         assertEquals("Play", gui.getButtons()[0].getText());
         assertEquals("Settings", gui.getButtons()[1].getText());

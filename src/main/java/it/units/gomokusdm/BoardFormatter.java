@@ -22,7 +22,7 @@ public class BoardFormatter {
                             .replace(" ", "-"));
                 }
             }
-            if (!(row == boardPartitionString.size() - 1)) {
+            if (row != boardPartitionString.size() - 1) {
                 stringBuilder.append("\t")
                         .append(repeatedLine)
                         .append(System.lineSeparator());
