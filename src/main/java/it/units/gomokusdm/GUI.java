@@ -19,6 +19,7 @@ public class GUI implements ActionListener, MouseListener {
 
     public static final String GAME_TITLE = "Gomoku";
     private final JPanel settingsPanel = new JPanel();
+    private boolean settings_panel_already_visited = false;
     private final String[] dimensions = {"15x15", "19x19"};
     private final JComboBox comboDimensions = new JComboBox(dimensions);
     int currentWindow; // finestra in cui mi trovo nel gioco
@@ -37,8 +38,8 @@ public class GUI implements ActionListener, MouseListener {
     private JTextField inputPlayer2 = new JTextField("Player 2");
     private JPanel gridPanel = new JPanel();
     private JButton[] buttons = new JButton[3];
-    private JLabel boardImg19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
-    private JLabel boardImg15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
+    private JLabel boardImg19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
+    private JLabel boardImg15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
     private BufferedImage blackStoneImg = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
     private BufferedImage whiteStoneImg = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
 
@@ -274,21 +275,23 @@ public class GUI implements ActionListener, MouseListener {
         this.currentWindow = 1;
         frame.add(settingsPanel);
 
-        JLabel insertSize = new JLabel("Choose the dimension of the Board:");
-        settingsPanel.add(insertSize);
-        insertSize.setBounds(250, 120, 300, 20);
+        if(!settings_panel_already_visited) {
+            JLabel insertSize = new JLabel("Choose the dimension of the Board:");
+            settingsPanel.add(insertSize);
+            insertSize.setBounds(250, 120, 300, 20);
 
-        // Bottone Back to Main Menu
-        JButton backToMainMenu = new JButton("Back to Main Menu");
-        settingsPanel.add(backToMainMenu);
-        buttons[2] = backToMainMenu;
-        backToMainMenu.setBounds(250, 190, 200, 20);
-        backToMainMenu.addActionListener(this);
+            // Bottone Back to Main Menu
+            JButton backToMainMenu = new JButton("Back to Main Menu");
+            settingsPanel.add(backToMainMenu);
+            buttons[2] = backToMainMenu;
+            backToMainMenu.setBounds(250, 190, 200, 20);
+            backToMainMenu.addActionListener(this);
 
-        comboDimensions.setSelectedIndex(1);
-        comboDimensions.addActionListener(this);
-        comboDimensions.setBounds(250, 150, 200, 20);
-        settingsPanel.add(comboDimensions);
+            comboDimensions.setSelectedIndex(1);
+            comboDimensions.addActionListener(this);
+            comboDimensions.setBounds(250, 150, 200, 20);
+            settingsPanel.add(comboDimensions);
+        }
 
 
         title.setText("Settings");
@@ -333,7 +336,7 @@ public class GUI implements ActionListener, MouseListener {
             }
         }
 
-        title.setText("Turno: " + game.getPlayer2().getUsername());
+        title.setText("Turn: " + game.getPlayer2().getUsername());
 
     }
 
@@ -368,10 +371,12 @@ public class GUI implements ActionListener, MouseListener {
             case 0 -> {
                 if (e.getSource() == buttons[0]) { // Ho cliccato Play
                     frame.remove(startPanel);
+                    frame.repaint();
                     showBoard();
                 }
                 if (e.getSource() == buttons[1]) { // Ho cliccato Settings
                     frame.remove(startPanel);
+                    frame.repaint();
                     showSettings();
                 }
             }
@@ -390,8 +395,18 @@ public class GUI implements ActionListener, MouseListener {
                     frame.add(startPanel);
                 }
             }
-            default -> {
+            case 2 -> {
+                if (e.getSource() == buttons[2]) { // Ho cliccato Back to Main Menu
+                    frame.remove(gridPanel);
+                    frame.repaint();
+                    this.currentWindow = 0;
+                    title.setText("Gomoku");
+                    frame.add(startPanel);
+                }
+
+                break;
             }
+
         }
 
     }
@@ -413,12 +428,11 @@ public class GUI implements ActionListener, MouseListener {
                 case 15 -> 84;
                 default -> 30;
             };
-            // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
+            // se la dimensione è 19 fa 30 pixels, se è 15 è 84 pixels
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - paddingBoard;
             int y = e.getY() - paddingBoard;
-            System.out.println("coordinate: " + x + " " + y);
-            int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
+            int cell_dimension = 26; // è il valore in pixel della dimensione cella rispetto all'immagine
 
             int resizeX = 0;
             int resizeY = 0; // resize x e y rispetto a dove posizionare la stone come immagine
@@ -432,12 +446,10 @@ public class GUI implements ActionListener, MouseListener {
                 resizeY = resizeY + cell_dimension;
                 newX++;
             }
-            System.out.println("coordinate Game: " + newY + " " + newX);
             // Provo a eseguire una mossa
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
                 game.makeMove(nextMovingPlayer, new Coordinates(newX, newY));
-                printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
                     showStone(whiteStoneImg, resizeX, resizeY);
@@ -445,14 +457,14 @@ public class GUI implements ActionListener, MouseListener {
                     showStone(blackStoneImg, resizeX, resizeY);
                 }
             } catch (Game.InvalidMoveThrowable ex) {
-                title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
+                title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
             }
             if (isGameTie()) {
-                title.setText("La partita finisce pari. Sono finite le pietre per il giocatore " + game.getLastMovingPlayer().getUsername());
+                title.setText("The match ends in a draw");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             } else if (thereIsAWinner()) {
-                title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
+                title.setText(game.getLastMovingPlayer().getUsername() + " wins!");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             }
@@ -478,37 +490,8 @@ public class GUI implements ActionListener, MouseListener {
 
     }
 
-    // Preso da CLI Controller:
 
-    public void printBoard() {
-        StringBuilder tmp = new StringBuilder();
-        String repeatedLine = "|\t".repeat(board.getBoardDimension());
-        List<List<String>> boardPartitionString = Utilities.partition(Arrays.stream(board.toString().split("")).toList(), board.getBoardDimension());
-        tmp.append(System.lineSeparator());
-        for (int row = 0; row < boardPartitionString.size(); row++) {
-            tmp.append(String.format("%1s", row)).append("\t");
-            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
-                if (stone == boardPartitionString.get(row).size() - 1) {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
-                            .append(System.lineSeparator());
-                } else {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
-                            .replace(" ", "-"));
-                }
-            }
-            if (!(row == boardPartitionString.size() - 1)) {
-                tmp.append("\t")
-                        .append(repeatedLine)
-                        .append(System.lineSeparator());
-            }
-        }
-        tmp.append("\t");
-        IntStream.range(0, board.getBoardDimension())
-                .forEach(value ->
-                        tmp.append(String.format("%1s", value)).append("\t"));
-        tmp.append(System.lineSeparator());
-        System.out.println(tmp);
-    }
+
 
 
 }

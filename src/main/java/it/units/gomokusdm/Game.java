@@ -123,16 +123,14 @@ public class Game {
 
         int i = colDirection * checkingStones;
         int j = rowDirection * checkingStones;
-        int iIncrement = i / checkingStones;
-        int jIncrement = j / checkingStones;
 
         while (areInRange(i, j, checkingStones)) {
             Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
             if (board.areValidCoordinates(possibleCoordinates)) {
                 coordinates.add(possibleCoordinates);
             }
-            i = i - iIncrement;
-            j = j - jIncrement;
+            i = i - colDirection;
+            j = j - rowDirection;
         }
     }
 
