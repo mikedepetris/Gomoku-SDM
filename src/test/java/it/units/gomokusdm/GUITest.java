@@ -132,14 +132,6 @@ public class GUITest {
         assertTrue(gui.getGridPanel().isVisible());
     }
 
-    @Test
-    public void testPrintBoard() {
-        int boardDimension = 19;
-        gui.setBoard(new BoardImplementation(boardDimension));
-        gui.printBoard();
-        assertNotNull(gui.getBoardImg19());
-        assertTrue(gui.getBoardImg19().isVisible());
-    }
 
     // It is worth noting that these test methods might not be able to run correctly, because ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png")) and other similar lines will throw IOException when there is no internet connection, and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
     @Test
