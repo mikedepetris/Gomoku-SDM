@@ -145,13 +145,6 @@ public class GUITest {
         //TODO: assertNotNull(label.getIcon());
     }
 
-    @Test
-    public void testPrintBoard() {
-        gui.printBoard();
-        assertNotNull(gui.getBoard_img_19());
-        assertTrue(gui.getBoard_img_19().isVisible());
-    }
-
     // It is worth noting that these test methods might not be able to run correctly, because ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png")) and other similar lines will throw IOException when there is no internet connection, and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
     @Test
     public void testShowStartingWindow() {

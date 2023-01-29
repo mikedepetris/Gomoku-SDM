@@ -31,6 +31,7 @@ public class GUI implements ActionListener, MouseListener {
     private JLabel title = new JLabel();
     private JPanel start_panel = new JPanel();
     private JPanel settings_panel = new JPanel();
+    private boolean settings_panel_already_visited = false;
     private JTextField input_player1 = new JTextField("Player 1");
     private JTextField input_player2 = new JTextField("Player 2");
     private JPanel grid_panel = new JPanel();
@@ -44,11 +45,9 @@ public class GUI implements ActionListener, MouseListener {
     public int getCurrentWindow() {
         return currentWindow;
     }
-
     public Board getBoard() {
         return board;
     }
-
     public Game getGame() {
         return game;
     }
@@ -220,6 +219,7 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showStartingWindow() {
+
         this.currentWindow = 0;
         title.setText("Gomoku");
         frame.add(start_panel);
@@ -276,22 +276,25 @@ public class GUI implements ActionListener, MouseListener {
         this.currentWindow = 1;
         frame.add(settings_panel);
 
-        JLabel insertSize = new JLabel("Choose the dimension of the Board:");
-        settings_panel.add(insertSize);
-        insertSize.setBounds(250, 120, 300, 20);
+        if(!settings_panel_already_visited) {
+            JLabel insertSize = new JLabel("Choose the dimension of the Board:");
+            settings_panel.add(insertSize);
+            insertSize.setBounds(250, 120, 300, 20);
 
-        // Bottone Back to Main Menu
-        JButton backToMainMenu = new JButton("Back to Main Menu");
-        settings_panel.add(backToMainMenu);
-        buttons[2] = backToMainMenu;
-        //play.setFont(new Font("", Font.BOLD, 12));
-        backToMainMenu.setBounds(250, 190, 200, 20);
-        backToMainMenu.addActionListener(this);
+            // Bottone Back to Main Menu
+            JButton backToMainMenu = new JButton("Back to Main Menu");
+            settings_panel.add(backToMainMenu);
+            buttons[2] = backToMainMenu;
+            //play.setFont(new Font("", Font.BOLD, 12));
+            backToMainMenu.setBounds(250, 190, 200, 20);
+            backToMainMenu.addActionListener(this);
 
-        comboDimensions.setSelectedIndex(1);
-        comboDimensions.addActionListener(this);
-        comboDimensions.setBounds(250, 150, 200, 20);
-        settings_panel.add(comboDimensions);
+            comboDimensions.setSelectedIndex(1);
+            comboDimensions.addActionListener(this);
+            comboDimensions.setBounds(250, 150, 200, 20);
+            settings_panel.add(comboDimensions);
+            settings_panel_already_visited = true;
+        }
 
 
 
@@ -336,8 +339,14 @@ public class GUI implements ActionListener, MouseListener {
                 board_img_15.add(blackstone);
                 break;
         }
+        JButton backToMainMenu = new JButton("Back to Main Menu");
+        buttons[2] = backToMainMenu;
+        buttons[2].setBounds(500, 500, 200, 20);
+        grid_panel.add(buttons[2]);
+        buttons[2].addActionListener(this);
 
-        title.setText("Turno: " + game.getPlayer2().getUsername());
+
+        title.setText("Turn: " + game.getPlayer2().getUsername());
 
     }
 
@@ -358,7 +367,7 @@ public class GUI implements ActionListener, MouseListener {
                 break;
         }
 
-        title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
+        title.setText("Turn: " + game.getNextMovingPlayer().getUsername());
     }
 
     // EVENTS
@@ -372,10 +381,12 @@ public class GUI implements ActionListener, MouseListener {
             case 0:
                 if (e.getSource() == buttons[0]) { // Ho cliccato Play
                     frame.remove(start_panel);
+                    frame.repaint();
                     showBoard();
                 }
                 if (e.getSource() == buttons[1]) { // Ho cliccato Settings
                     frame.remove(start_panel);
+                    frame.repaint();
                     showSettings();
                 }
                 break;
@@ -386,7 +397,7 @@ public class GUI implements ActionListener, MouseListener {
                     this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0,2));
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
-                if (e.getSource() == buttons[2]) { // Ho cliccato Settings
+                if (e.getSource() == buttons[2]) { // Ho cliccato Back to Main Menu
                     frame.remove(settings_panel);
                     frame.repaint();
                     this.currentWindow = 0;
@@ -395,6 +406,13 @@ public class GUI implements ActionListener, MouseListener {
                 }
                 break;
             case 2:
+                if (e.getSource() == buttons[2]) { // Ho cliccato Back to Main Menu
+                    frame.remove(grid_panel);
+                    frame.repaint();
+                    this.currentWindow = 0;
+                    title.setText("Gomoku");
+                    frame.add(start_panel);
+                }
 
                 break;
         }
@@ -413,7 +431,7 @@ public class GUI implements ActionListener, MouseListener {
     public void mousePressed(MouseEvent e) {
 
         if (!isGameFinished) {
-            int padding_board = 30;
+            int padding_board = 0;
             switch (board.getBoardDimension()) {
                 case 19:
                     padding_board = 30;
@@ -422,11 +440,11 @@ public class GUI implements ActionListener, MouseListener {
                     padding_board = 84;
                     break;
             }
-            // se la dimensione è 19 fa 30, se è 15 è circa 84. andrebbe associato
+            // se la dimensione è 19 fa 30 pixels, se è 15 è 84 pixels nell'immagine
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - padding_board;
             int y = e.getY() - padding_board;
-            int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
+            int cell_dimension = 26; // è il valore in pixel della dimensione cella rispetto all'immagine
 
             int resize_x = 0;
             int resize_y = 0; // resize x e y rispetto a dove posizionare la stone come immagine
@@ -452,14 +470,14 @@ public class GUI implements ActionListener, MouseListener {
                 }
             } catch (Game.InvalidMoveException ex) {
                 //System.out.println(ex);
-                title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
+                title.setText("Invalid move, " + nextMovingPlayer.getUsername() + " try again");
             }
             if (isGameTie()) {
-                title.setText("La partita finisce pari");
+                title.setText("It is a draw");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             } else if (thereIsAWinner()) {
-                title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
+                title.setText(game.getLastMovingPlayer().getUsername() + " wins!");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             }
