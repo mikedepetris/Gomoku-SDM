@@ -35,8 +35,8 @@ public class GUI implements ActionListener, MouseListener {
     private JTextField input_player2 = new JTextField("Player 2");
     private JPanel grid_panel = new JPanel();
     private JButton[] buttons = new JButton[3];
-    private JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
-    private JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
+    private JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
+    private JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
     private BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
     private BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
     private String[] dimensions = {"15x15", "19x19"};
@@ -348,12 +348,12 @@ public class GUI implements ActionListener, MouseListener {
         switch (board.getBoardDimension()) {
             case 19:
                 resize = 22;
-                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
+                stone.setBounds(resize_x + resize, resize_y + resize, 24, 24);
                 board_img_19.add(stone);
                 break;
             case 15:
                 resize = 22+54;
-                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
+                stone.setBounds(resize_x + resize, resize_y + resize, 24, 24);
                 board_img_15.add(stone);
                 break;
         }
@@ -422,11 +422,10 @@ public class GUI implements ActionListener, MouseListener {
                     padding_board = 84;
                     break;
             }
-            // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
+            // se la dimensione è 19 fa 30, se è 15 è circa 84. andrebbe associato
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - padding_board;
             int y = e.getY() - padding_board;
-            System.out.println("coordinate: "+x+" "+y);
             int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
 
             int resize_x = 0;
@@ -441,12 +440,10 @@ public class GUI implements ActionListener, MouseListener {
                 resize_y = resize_y + cell_dimension;
                 new_x++;
             }
-            System.out.println("coordinate Game: "+new_y+" "+new_x);
             // Provo a eseguire una mossa
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
                 game.makeMove(nextMovingPlayer, new Coordinates(new_x, new_y));
-                printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
                     showStone(white_stone_img, resize_x, resize_y);
@@ -458,7 +455,7 @@ public class GUI implements ActionListener, MouseListener {
                 title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
             }
             if (isGameTie()) {
-                title.setText("La partita finisce pari. Sono finite le pietre per il giocatore " + game.getLastMovingPlayer().getUsername());
+                title.setText("La partita finisce pari");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             } else if (thereIsAWinner()) {
@@ -486,38 +483,6 @@ public class GUI implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-
-    // Preso da CLI Controller:
-
-    public void printBoard() {
-        StringBuilder tmp = new StringBuilder();
-        String repeatedLine = "|\t".repeat(board.getBoardDimension());
-        List<List<String>> boardPartitionString = Utilities.partition(Arrays.stream(board.toString().split("")).toList(), board.getBoardDimension());
-        tmp.append(System.lineSeparator());
-        for (int row = 0; row < boardPartitionString.size(); row++) {
-            tmp.append(String.format("%1s", row)).append("\t");
-            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
-                if (stone == boardPartitionString.get(row).size() - 1) {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
-                            .append(System.lineSeparator());
-                } else {
-                    tmp.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
-                            .replace(" ", "-"));
-                }
-            }
-            if (!(row == boardPartitionString.size() - 1)) {
-                tmp.append("\t")
-                        .append(repeatedLine)
-                        .append(System.lineSeparator());
-            }
-        }
-        tmp.append("\t");
-        IntStream.range(0, board.getBoardDimension())
-                .forEach(value ->
-                        tmp.append(String.format("%1s", value)).append("\t"));
-        tmp.append(System.lineSeparator());
-        System.out.println(tmp);
     }
 
 

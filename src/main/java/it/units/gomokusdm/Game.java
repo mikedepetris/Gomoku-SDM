@@ -119,7 +119,7 @@ public class Game {
         int len = 0;
         List<Coordinates> coordinatesToCheck = new ArrayList<>();
         while (len < directions.length && !areStonesEqual) {
-            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx(), numberOfStones);
+            findStonesToCheck(coordinatesToCheck, directions[len].getRowIdx(), directions[len].getColIdx(), numberOfStones);
             areStonesEqual = checkNStonesEqual(coordinatesToCheck, stone, numberOfStones);
             len++;
             coordinatesToCheck.clear();
@@ -127,24 +127,22 @@ public class Game {
         return areStonesEqual;
     }
 
-    private void findStonesToCheck(List<Coordinates> coordinates, int colDirection, int rowDirection, int nStones) {
+    private void findStonesToCheck(List<Coordinates> coordinates, int rowDirection, int colDirection, int nStones) {
         int checkingStones = nStones - 1;
         Coordinates insertedStoneCoordinates = getLastMoveCoordinates();
         int insertedStoneRow = insertedStoneCoordinates.getRowIndex();
         int insertedStoneCol = insertedStoneCoordinates.getColIndex();
 
-        int i = colDirection * checkingStones;
-        int j = rowDirection * checkingStones;
-        int i_increment = i / checkingStones;
-        int j_increment = j / checkingStones;
+        int i = rowDirection * checkingStones;
+        int j = colDirection * checkingStones;
 
         while (areInRange(i, j, checkingStones)) {
             Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
             if (board.areValidCoordinates(possibleCoordinates)) {
                 coordinates.add(possibleCoordinates);
             }
-            i = i - i_increment;
-            j = j - j_increment;
+            i = i - rowDirection;
+            j = j - colDirection;
         }
     }
 
