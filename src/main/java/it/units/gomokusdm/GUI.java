@@ -344,12 +344,12 @@ public class GUI implements ActionListener, MouseListener {
         switch (board.getBoardDimension()) {
             case 19 -> {
                 resize = 22;
-                stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
+                stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
                 boardImg19.add(stone);
             }
             case 15 -> {
                 resize = 22 + 54;
-                stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
+                stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
                 boardImg15.add(stone);
             }
         }
