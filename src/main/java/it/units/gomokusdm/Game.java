@@ -122,6 +122,7 @@ public class Game {
             findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx(), numberOfStones);
             areStonesEqual = checkNStonesEqual(coordinatesToCheck, stone, numberOfStones);
             len++;
+            coordinatesToCheck.clear();
         }
         return areStonesEqual;
     }
@@ -140,12 +141,10 @@ public class Game {
         while (areInRange(i, j, checkingStones)) {
             Coordinates possibleCoordinates = new Coordinates(insertedStoneRow + j, insertedStoneCol + i);
             if (board.areValidCoordinates(possibleCoordinates)) {
-
                 coordinates.add(possibleCoordinates);
             }
             i = i - i_increment;
             j = j - j_increment;
-            //coordinates.clear();
         }
     }
 

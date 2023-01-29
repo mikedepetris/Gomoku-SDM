@@ -57,8 +57,8 @@ public class GUITest {
     @Test
     public void testShowStartingWindow1() {
         gui.showStartingWindow();
-        JButton play = gui.getInitial_buttons()[0];
-        JButton settings = gui.getInitial_buttons()[1];
+        JButton play = gui.getButtons()[0];
+        JButton settings = gui.getButtons()[1];
         assertEquals("Play", play.getText());
         assertEquals("Settings", settings.getText());
     }
@@ -67,8 +67,8 @@ public class GUITest {
     public void testShowStartingWindow2() {
         gui.showStartingWindow();
         assertEquals(gui.current_window, 0);
-        assertTrue(gui.getInitial_buttons()[0].isVisible());
-        assertTrue(gui.getInitial_buttons()[1].isVisible());
+        assertTrue(gui.getButtons()[0].isVisible());
+        assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
         assertTrue(gui.getInput_player2().isVisible());
     }
@@ -85,8 +85,8 @@ public class GUITest {
     public void testStartGame2() {
         gui.startGame();
         assertEquals(gui.current_window, 0); // 0
-        assertTrue(gui.getInitial_buttons()[0].isVisible());
-        assertTrue(gui.getInitial_buttons()[1].isVisible());
+        assertTrue(gui.getButtons()[0].isVisible());
+        assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
         assertTrue(gui.getInput_player2().isVisible());
         assertTrue(gui.getGrid_panel().isVisible());
@@ -95,10 +95,10 @@ public class GUITest {
     @Test
     public void testActionPerformed() {
         // Simulate clicking on the "Play" button
-        gui.getInitial_buttons()[0].doClick();
+        gui.getButtons()[0].doClick();
         assertEquals(gui.current_window, 2); // 1
-        assertTrue(gui.getInitial_buttons()[0].isVisible());
-        assertTrue(gui.getInitial_buttons()[1].isVisible());
+        assertTrue(gui.getButtons()[0].isVisible());
+        assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
         assertTrue(gui.getInput_player2().isVisible());
         assertTrue(gui.getGrid_panel().isVisible());
@@ -166,7 +166,7 @@ public class GUITest {
 //        verify(input_player2).setVisible(true);
 
         assertEquals(0, gui.current_window); // 1
-        assertEquals("Play", gui.getInitial_buttons()[0].getText());
-        assertEquals("Settings", gui.getInitial_buttons()[1].getText());
+        assertEquals("Play", gui.getButtons()[0].getText());
+        assertEquals("Settings", gui.getButtons()[1].getText());
     }
 }
