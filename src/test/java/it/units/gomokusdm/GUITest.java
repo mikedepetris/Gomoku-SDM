@@ -5,13 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIf;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -107,7 +104,8 @@ public class GUITest {
     @Test
     public void testMouseClicked() {
         // Simulate clicking on the board
-        gui.getGridPanel().dispatchEvent(new MouseEvent(gui.getGridPanel(), MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 0, 100, 100, 1, false));
+        gui.getGridPanel().dispatchEvent(new MouseEvent(gui.getGridPanel(), MouseEvent.MOUSE_CLICKED
+                , System.currentTimeMillis(), 0, 100, 100, 1, false));
         // Check that the board has been updated with a stone
         //assertTrue(gui.board.getStones().contains(new Point(100, 100)));
     }
@@ -133,7 +131,10 @@ public class GUITest {
     }
 
 
-    // It is worth noting that these test methods might not be able to run correctly, because ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png")) and other similar lines will throw IOException when there is no internet connection, and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
+    // It is worth noting that these test methods might not be able to run correctly,
+    // because ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png")) and other similar lines
+    // will throw IOException when there is no internet connection,
+    // and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
     @Test
     public void testShowStartingWindow() {
         gui.setMainElements();
