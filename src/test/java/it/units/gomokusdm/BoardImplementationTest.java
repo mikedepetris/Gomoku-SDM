@@ -61,8 +61,7 @@ public class BoardImplementationTest {
     }
 
     private static long countNonZeroes(int[][] intBoard) {
-        long nonZeroes = Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
-        return nonZeroes;
+        return Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
     }
 
     private static int[][] readBoardFromFile() {

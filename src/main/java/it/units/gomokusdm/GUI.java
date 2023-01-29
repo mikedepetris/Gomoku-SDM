@@ -317,20 +317,20 @@ public class GUI implements ActionListener, MouseListener {
         JLabel blackstone = new JLabel(new ImageIcon(blackStoneImg));
         //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
         switch (board.getBoardDimension()) {
-            case 19:
+            case 19 -> {
                 gridPanel.add(boardImg19);
                 boardImg19.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
                 blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
                 boardImg19.add(blackstone);
-                break;
-            case 15:
+            }
+            case 15 -> {
                 gridPanel.add(boardImg15);
                 boardImg15.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
                 blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
                 boardImg15.add(blackstone);
-                break;
+            }
         }
 
         title.setText("Turno: " + game.getPlayer2().getUsername());
@@ -342,16 +342,16 @@ public class GUI implements ActionListener, MouseListener {
         int resize = 0;
 
         switch (board.getBoardDimension()) {
-            case 19:
+            case 19 -> {
                 resize = 22;
                 stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
                 boardImg19.add(stone);
-                break;
-            case 15:
+            }
+            case 15 -> {
                 resize = 22 + 54;
                 stone.setBounds(resizeX + resize, resizeX + resize, 24, 24);
                 boardImg15.add(stone);
-                break;
+            }
         }
 
         title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
@@ -365,7 +365,7 @@ public class GUI implements ActionListener, MouseListener {
 
     public void actionPerformed(ActionEvent e) {
         switch (this.currentWindow) {
-            case 0:
+            case 0 -> {
                 if (e.getSource() == buttons[0]) { // Ho cliccato Play
                     frame.remove(startPanel);
                     showBoard();
@@ -374,8 +374,8 @@ public class GUI implements ActionListener, MouseListener {
                     frame.remove(startPanel);
                     showSettings();
                 }
-                break;
-            case 1:
+            }
+            case 1 -> {
                 if (e.getSource() == comboDimensions) {
                     JComboBox cb = (JComboBox) e.getSource();
                     String lineDimension = (String) cb.getSelectedItem();
@@ -389,9 +389,9 @@ public class GUI implements ActionListener, MouseListener {
                     title.setText("Gomoku");
                     frame.add(startPanel);
                 }
-                break;
-            default:
-                break;
+            }
+            default -> {
+            }
         }
 
     }
@@ -408,15 +408,11 @@ public class GUI implements ActionListener, MouseListener {
     public void mousePressed(MouseEvent e) {
 
         if (!isGameFinished) {
-            int paddingBoard = 30;
-            switch (board.getBoardDimension()) {
-                case 19:
-                    paddingBoard = 30;
-                    break;
-                case 15:
-                    paddingBoard = 84;
-                    break;
-            }
+            int paddingBoard = switch (board.getBoardDimension()) {
+                case 19 -> 30;
+                case 15 -> 84;
+                default -> 30;
+            };
             // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - paddingBoard;
