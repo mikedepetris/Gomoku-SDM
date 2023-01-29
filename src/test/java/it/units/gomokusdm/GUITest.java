@@ -66,7 +66,7 @@ public class GUITest {
     @Test
     public void testShowStartingWindow2() {
         gui.showStartingWindow();
-        assertEquals(gui.current_window, 0);
+        assertEquals(gui.currentWindow, 0);
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
@@ -77,14 +77,14 @@ public class GUITest {
     public void testStartGame1() {
         gui.setMainElements();
         gui.showStartingWindow();
-        gui.startGame();
-        assertEquals(0, gui.current_window); // 2
+        gui.startFrame();
+        assertEquals(0, gui.currentWindow); // 2
     }
 
     @Test
     public void testStartGame2() {
-        gui.startGame();
-        assertEquals(gui.current_window, 0); // 0
+        gui.startFrame();
+        assertEquals(gui.currentWindow, 0); // 0
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
@@ -96,7 +96,7 @@ public class GUITest {
     public void testActionPerformed() {
         // Simulate clicking on the "Play" button
         gui.getButtons()[0].doClick();
-        assertEquals(gui.current_window, 2); // 1
+        assertEquals(gui.currentWindow, 2); // 1
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInput_player1().isVisible());
@@ -122,7 +122,7 @@ public class GUITest {
         assertEquals("Gomoku", frame.getTitle());
         assertEquals(BorderLayout.class, frame.getLayout().getClass());
         assertEquals(BorderLayout.class, upper_panel.getLayout().getClass());
-        assertEquals(0, gui.current_window);
+        assertEquals(0, gui.currentWindow);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class GUITest {
 //        verify(input_player1).setVisible(true);
 //        verify(input_player2).setVisible(true);
 
-        assertEquals(0, gui.current_window); // 1
+        assertEquals(0, gui.currentWindow); // 1
         assertEquals("Play", gui.getButtons()[0].getText());
         assertEquals("Settings", gui.getButtons()[1].getText());
     }

@@ -18,7 +18,8 @@ import java.util.stream.IntStream;
 public class GUI implements ActionListener, MouseListener {
 
     private boolean isGameFinished = false;
-    int current_window; // finestra in cui mi trovo nel gioco
+    int currentWindow; // finestra in cui mi trovo nel gioco
+    int selectedBoardSize;
     private Board board;
     private Game game;
     private Player player1;
@@ -40,8 +41,8 @@ public class GUI implements ActionListener, MouseListener {
     private BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
     private String[] dimensions = {"15x15", "19x19"};
     private JComboBox comboDimensions = new JComboBox(dimensions);
-    public int getCurrent_window() {
-        return current_window;
+    public int getCurrentWindow() {
+        return currentWindow;
     }
 
     public Board getBoard() {
@@ -107,8 +108,8 @@ public class GUI implements ActionListener, MouseListener {
     public BufferedImage getWhite_stone_img() {
         return white_stone_img;
     }
-    public void setCurrent_window(int current_window) {
-        this.current_window = current_window;
+    public void setCurrentWindow(int currentWindow) {
+        this.currentWindow = currentWindow;
     }
 
     public void setBoard(Board board) {
@@ -176,22 +177,13 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public GUI() throws IOException {
-
-        // Base Settings
-        this.player1 = new Player("", Stone.BLACK);
-        this.player2 = new Player("", Stone.WHITE);
-        this.board = new BoardImplementation();
-        try {
-            this.game = new Game(board, player1, player2);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.selectedBoardSize = 19;
 
         setMainElements();
 
         showStartingWindow();
 
-        startGame();
+        startFrame();
     }
 
     public void setMainElements() {
@@ -228,7 +220,7 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showStartingWindow() {
-        this.current_window = 0;
+        this.currentWindow = 0;
         title.setText("Gomoku");
         frame.add(start_panel);
         int x_starting_components = 250; //allineare nella x gli elementi
@@ -269,7 +261,7 @@ public class GUI implements ActionListener, MouseListener {
 
     }
 
-    public void startGame() {
+    public void startFrame() {
         try {
             title.setText("Loading....");
             Thread.sleep(1000);
@@ -281,7 +273,7 @@ public class GUI implements ActionListener, MouseListener {
 
     public void showSettings() {
         // Settings
-        this.current_window = 1;
+        this.currentWindow = 1;
         frame.add(settings_panel);
 
         JLabel insertSize = new JLabel("Choose the dimension of the Board:");
@@ -307,13 +299,23 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showBoard() {
+        // Base Settings
+        this.player1 = new Player("", Stone.BLACK);
+        this.player2 = new Player("", Stone.WHITE);
+        this.board = new BoardImplementation(this.selectedBoardSize);
+        try {
+            this.game = new Game(board, player1, player2);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         // Settings della board
         String user1 = input_player1.getText();
         String user2 = input_player2.getText();
         player1.setUsername(user1);
         player2.setUsername(user2);
 
-        this.current_window = 2;
+        this.currentWindow = 2;
         frame.add(grid_panel);
 
         JLabel blackstone = new JLabel(new ImageIcon(black_stone_img));
@@ -335,16 +337,27 @@ public class GUI implements ActionListener, MouseListener {
                 break;
         }
 
-
         title.setText("Turno: " + game.getPlayer2().getUsername());
 
     }
 
     public void showStone(BufferedImage stone_img, int resize_x, int resize_y) {
         JLabel stone = new JLabel(new ImageIcon(stone_img));
-        // è +22 per size=19
-        stone.setBounds(resize_x + 22, resize_y + 22, 24, 24);
-        board_img_19.add(stone);
+        int resize = 0;
+
+        switch (board.getBoardDimension()) {
+            case 19:
+                resize = 22;
+                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
+                board_img_19.add(stone);
+                break;
+            case 15:
+                resize = 22+54;
+                stone.setBounds(resize_x + resize, resize_x + resize, 24, 24);
+                board_img_15.add(stone);
+                break;
+        }
+
         title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
     }
 
@@ -355,7 +368,7 @@ public class GUI implements ActionListener, MouseListener {
     @Override
 
     public void actionPerformed(ActionEvent e) {
-        switch (this.current_window) {
+        switch (this.currentWindow) {
             case 0:
                 if (e.getSource() == buttons[0]) { // Ho cliccato Play
                     frame.remove(start_panel);
@@ -370,13 +383,13 @@ public class GUI implements ActionListener, MouseListener {
                 if (e.getSource() == comboDimensions) {
                     JComboBox cb = (JComboBox)e.getSource();
                     String lineDimension = (String)cb.getSelectedItem();
-                    int selectedBoardSize = Integer.parseInt(lineDimension.substring(0,2));
-                    board = new BoardImplementation(selectedBoardSize);
+                    this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0,2));
+                    this.board = new BoardImplementation(selectedBoardSize);
                 }
                 if (e.getSource() == buttons[2]) { // Ho cliccato Settings
                     frame.remove(settings_panel);
                     frame.repaint();
-                    this.current_window = 0;
+                    this.currentWindow = 0;
                     title.setText("Gomoku");
                     frame.add(start_panel);
                 }
@@ -406,14 +419,14 @@ public class GUI implements ActionListener, MouseListener {
                     padding_board = 30;
                     break;
                 case 15:
-                    padding_board = 109;
+                    padding_board = 84;
                     break;
             }
-
             // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - padding_board;
             int y = e.getY() - padding_board;
+            System.out.println("coordinate: "+x+" "+y);
             int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
 
             int resize_x = 0;
@@ -428,7 +441,7 @@ public class GUI implements ActionListener, MouseListener {
                 resize_y = resize_y + cell_dimension;
                 new_x++;
             }
-            //System.out.println("coordinate Game: "+new_y+" "+new_x);
+            System.out.println("coordinate Game: "+new_y+" "+new_x);
             // Provo a eseguire una mossa
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
@@ -441,6 +454,7 @@ public class GUI implements ActionListener, MouseListener {
                     showStone(black_stone_img, resize_x, resize_y);
                 }
             } catch (Game.InvalidMoveException ex) {
+                //System.out.println(ex);
                 title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
             }
             if (isGameTie()) {
