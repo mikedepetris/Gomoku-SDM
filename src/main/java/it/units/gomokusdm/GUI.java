@@ -10,9 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
+import java.util.logging.Level;
 
 
 public class GUI implements ActionListener, MouseListener {
@@ -275,7 +273,7 @@ public class GUI implements ActionListener, MouseListener {
         this.currentWindow = 1;
         frame.add(settingsPanel);
 
-        if(!settings_panel_already_visited) {
+        if (!settings_panel_already_visited) {
             JLabel insertSize = new JLabel("Choose the dimension of the Board:");
             settingsPanel.add(insertSize);
             insertSize.setBounds(250, 120, 300, 20);
@@ -298,6 +296,8 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showBoard() {
+        Utilities.getLoggerOfClass(getClass())
+                .log(Level.INFO, "showBoard() invoked");
         // Base Settings
         this.player1 = new Player("", Stone.BLACK);
         this.player2 = new Player("", Stone.WHITE);
@@ -384,6 +384,7 @@ public class GUI implements ActionListener, MouseListener {
                 if (e.getSource() == comboDimensions) {
                     JComboBox cb = (JComboBox) e.getSource();
                     String lineDimension = (String) cb.getSelectedItem();
+                    assert lineDimension != null;
                     this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
@@ -404,7 +405,6 @@ public class GUI implements ActionListener, MouseListener {
                     frame.add(startPanel);
                 }
 
-                break;
             }
 
         }
@@ -489,9 +489,6 @@ public class GUI implements ActionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-
-
-
 
 
 }

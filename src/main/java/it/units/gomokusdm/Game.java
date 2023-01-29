@@ -4,6 +4,7 @@ package it.units.gomokusdm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 
 public class Game {
 
@@ -14,12 +15,22 @@ public class Game {
     private Player lastMovingPlayer;
 
     public Game(Board board, Player player1, Player player2) {
+        Utilities.getLoggerOfClass(getClass())
+                .log(Level.INFO, "Game constructor called with player1=%s, player2=%s"
+                        .formatted(player1.getUsername(), player2.getUsername()));
         this.board = board;
         this.player1 = player1;
         this.player2 = player2;
-        if (!checkPlayerNames(player1, player2))
+        if (!checkPlayerNames(player1, player2)) {
+            Utilities.getLoggerOfClass(getClass())
+                    .log(Level.ALL, "ERROR: Game constructor called with same player names: player1=%s, player2=%s"
+                            .formatted(player1.getUsername(), player2.getUsername()));
             throw new IllegalArgumentException("invalid player names");
+        }
         if (!checkPlayerColours(player1, player2)) {
+            Utilities.getLoggerOfClass(getClass())
+                    .log(Level.ALL, "ERROR: Game constructor called with invalid player colors: player1=%s, player2=%s"
+                            .formatted(player1.getColour().toString(), getPlayer2().getColour().toString()));
             throw new IllegalArgumentException("invalid player colors");
         }
         setupGame();
@@ -107,7 +118,8 @@ public class Game {
         int len = 0;
         List<Coordinates> coordinatesToCheck = new ArrayList<>();
         while (len < directions.length && !areStonesEqual) {
-            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx(), numberOfStones);
+            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx()
+                    , numberOfStones);
             areStonesEqual = checkNStonesEqual(coordinatesToCheck, stone, numberOfStones);
             len++;
             coordinatesToCheck.clear();

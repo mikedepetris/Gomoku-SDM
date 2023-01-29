@@ -1,10 +1,12 @@
 package it.units.gomokusdm;
 
+import com.sun.tools.javac.Main;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 
 import static it.units.gomokusdm.Utilities.checkInputAndGet;
@@ -17,9 +19,11 @@ public class GomokuSdmApplication {
     private static final String ARG_TO_START_CLI = "cli";
 
     public static void main(String[] args) throws IOException {
+        Utilities.getLoggerOfClass(Main.class).log(Level.INFO, "main invoked");
         System.out.printf("%s %n%S %n%s %n", "*".repeat(10), "gomoku", "*".repeat(10));
         try {
-            LogManager.getLogManager().readConfiguration(GomokuSdmApplication.class.getResourceAsStream(PATH_TO_LOGGING_PROPERTIES_LOADED_AS_RESOURCE));
+            LogManager.getLogManager().readConfiguration(
+                    GomokuSdmApplication.class.getResourceAsStream(PATH_TO_LOGGING_PROPERTIES_LOADED_AS_RESOURCE));
         } catch (IOException e) {
             System.out.println("IO exception");
             e.printStackTrace();

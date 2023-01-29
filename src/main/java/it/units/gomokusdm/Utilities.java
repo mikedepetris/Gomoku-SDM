@@ -6,12 +6,14 @@ import org.jetbrains.annotations.Nullable;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Utilities {
 
-    //Implementazione adottata presente su StackOverflow https://stackoverflow.com/questions/5824825/efficient-way-to-divide-a-list-into-lists-of-n-size
+    // Implementazione adottata presente su StackOverflow
+    // https://stackoverflow.com/questions/5824825/efficient-way-to-divide-a-list-into-lists-of-n-size
     public static <T> List<List<T>> partition(List<T> list, int sizePartition) {
         if (list.size() % sizePartition != 0) throw new RuntimeException("Partition Size is wrong");
         return new ArrayList<>(IntStream.range(0, list.size())
@@ -70,6 +72,10 @@ public class Utilities {
             return scannerSingleInstance;
         }
 
+    }
+
+    public static Logger getLoggerOfClass(@NotNull final Class<?> targetClass) {
+        return Logger.getLogger(Objects.requireNonNull(targetClass).getCanonicalName());
     }
 
 }
