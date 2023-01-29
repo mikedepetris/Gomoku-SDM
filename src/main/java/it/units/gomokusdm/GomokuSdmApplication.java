@@ -18,6 +18,8 @@ public class GomokuSdmApplication {
 
     public static void main(String[] args) throws IOException {
 
+        new GUI();
+        /*
         System.out.println("*************************" + System.lineSeparator()
                 + "GOMOKU" + System.lineSeparator()
                 + "*************************");
@@ -49,6 +51,8 @@ public class GomokuSdmApplication {
             case ARG_TO_START_CLI -> CLIMain();
             default -> throw new IllegalArgumentException();
         }
+
+         */
 
     }
 

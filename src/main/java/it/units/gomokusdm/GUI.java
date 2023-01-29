@@ -19,7 +19,27 @@ public class GUI implements ActionListener, MouseListener {
 
     private boolean isGameFinished = false;
     int current_window; // finestra in cui mi trovo nel gioco
+    private Board board;
+    private Game game;
+    private Player player1;
+    private Player player2;
+    //private Player winner; //come in CLI Controller
 
+    private JFrame frame = new JFrame(); // frame totale
+    private JPanel upper_panel = new JPanel(); // pannello soprastante con il titolo
+    private JLabel title = new JLabel();
+    private JPanel start_panel = new JPanel();
+    private JPanel settings_panel = new JPanel();
+    private JTextField input_player1 = new JTextField("Player 1");
+    private JTextField input_player2 = new JTextField("Player 2");
+    private JPanel grid_panel = new JPanel();
+    private JButton[] buttons = new JButton[3];
+    private JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
+    private JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
+    private BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
+    private BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
+    private String[] dimensions = {"15x15", "19x19"};
+    private JComboBox comboDimensions = new JComboBox(dimensions);
     public int getCurrent_window() {
         return current_window;
     }
@@ -68,8 +88,8 @@ public class GUI implements ActionListener, MouseListener {
         return grid_panel;
     }
 
-    public JButton[] getInitial_buttons() {
-        return initial_buttons;
+    public JButton[] getButtons() {
+        return buttons;
     }
 
     public JLabel getBoard_img_19() {
@@ -87,18 +107,6 @@ public class GUI implements ActionListener, MouseListener {
     public BufferedImage getWhite_stone_img() {
         return white_stone_img;
     }
-
-    private Board board;
-    private Game game;
-    private Player player1;
-    private Player player2;
-    //private Player winner; //come in CLI Controller
-
-    private JFrame frame = new JFrame(); // frame totale
-    private JPanel upper_panel = new JPanel(); // pannello soprastante con il titolo
-    private JLabel title = new JLabel();
-    private JPanel start_panel = new JPanel();
-
     public void setCurrent_window(int current_window) {
         this.current_window = current_window;
     }
@@ -139,8 +147,8 @@ public class GUI implements ActionListener, MouseListener {
         this.grid_panel = grid_panel;
     }
 
-    public void setInitial_buttons(JButton[] initial_buttons) {
-        this.initial_buttons = initial_buttons;
+    public void setButtons(JButton[] buttons) {
+        this.buttons = buttons;
     }
 
     public void setBoard_img_19(JLabel board_img_19) {
@@ -167,15 +175,6 @@ public class GUI implements ActionListener, MouseListener {
         this.player2 = player2;
     }
 
-    private JTextField input_player1 = new JTextField("Player 1");
-    private JTextField input_player2 = new JTextField("Player 2");
-    private JPanel grid_panel = new JPanel();
-    private JButton[] initial_buttons = new JButton[2];
-    private JLabel board_img_19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/7x0CxBV.png"))));
-    private JLabel board_img_15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/4pxgWya.png"))));
-    private BufferedImage black_stone_img = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
-    private BufferedImage white_stone_img = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
-
     public GUI() throws IOException {
 
         // Base Settings
@@ -197,7 +196,6 @@ public class GUI implements ActionListener, MouseListener {
 
     public void setMainElements() {
         // Settings of Main elements: frame, title, panels
-        current_window = 0;
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 700); // Size della finestra
@@ -216,8 +214,10 @@ public class GUI implements ActionListener, MouseListener {
 
         grid_panel.setBackground(new Color(234, 214, 84));
 
+        settings_panel.setLayout(null);
+        settings_panel.setBackground(new Color(234, 214, 84));
+
         frame.add(upper_panel, BorderLayout.NORTH);
-        frame.add(start_panel);
 
         title.setBackground(new Color(234, 214, 84)); // Colore testo
         title.setForeground(new Color(3, 3, 3)); // Colore testo
@@ -228,19 +228,22 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showStartingWindow() {
+        this.current_window = 0;
+        title.setText("Gomoku");
+        frame.add(start_panel);
         int x_starting_components = 250; //allineare nella x gli elementi
         // è un allineamento provvisorio perchè non va bene, bisogna decidere un layout!
 
         // Bottone Play
         JButton play = new JButton("Play");
-        initial_buttons[0] = play;
+        buttons[0] = play;
         //play.setFont(new Font("", Font.BOLD, 12));
         play.setBounds(x_starting_components, 150, 200, 20);
         play.addActionListener(this);
 
         // Bottone Settings
         JButton settings = new JButton("Settings");
-        initial_buttons[1] = settings;
+        buttons[1] = settings;
         //play.setFont(new Font("", Font.BOLD, 12));
         settings.setBounds(x_starting_components, 200, 200, 20);
         settings.addActionListener(this);
@@ -276,23 +279,62 @@ public class GUI implements ActionListener, MouseListener {
         }
     }
 
+    public void showSettings() {
+        // Settings
+        this.current_window = 1;
+        frame.add(settings_panel);
+
+        JLabel insertSize = new JLabel("Choose the dimension of the Board:");
+        settings_panel.add(insertSize);
+        insertSize.setBounds(250, 120, 300, 20);
+
+        // Bottone Back to Main Menu
+        JButton backToMainMenu = new JButton("Back to Main Menu");
+        settings_panel.add(backToMainMenu);
+        buttons[2] = backToMainMenu;
+        //play.setFont(new Font("", Font.BOLD, 12));
+        backToMainMenu.setBounds(250, 190, 200, 20);
+        backToMainMenu.addActionListener(this);
+
+        comboDimensions.setSelectedIndex(1);
+        comboDimensions.addActionListener(this);
+        comboDimensions.setBounds(250, 150, 200, 20);
+        settings_panel.add(comboDimensions);
+
+
+
+        title.setText("Settings");
+    }
+
     public void showBoard() {
         // Settings della board
         String user1 = input_player1.getText();
         String user2 = input_player2.getText();
         player1.setUsername(user1);
         player2.setUsername(user2);
+
         this.current_window = 2;
         frame.add(grid_panel);
-        //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
-        // if board dimension = 19...
-        grid_panel.add(board_img_19);
-        board_img_19.addMouseListener(this);
 
-        // Inserisco la pedina nera al centro:
         JLabel blackstone = new JLabel(new ImageIcon(black_stone_img));
-        blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
-        board_img_19.add(blackstone);
+        //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
+        switch (board.getBoardDimension()) {
+            case 19:
+                grid_panel.add(board_img_19);
+                board_img_19.addMouseListener(this);
+                // Inserisco la pedina nera al centro:
+                blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
+                board_img_19.add(blackstone);
+                break;
+            case 15:
+                grid_panel.add(board_img_15);
+                board_img_15.addMouseListener(this);
+                // Inserisco la pedina nera al centro:
+                blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
+                board_img_15.add(blackstone);
+                break;
+        }
+
 
         title.setText("Turno: " + game.getPlayer2().getUsername());
 
@@ -311,20 +353,33 @@ public class GUI implements ActionListener, MouseListener {
 
     // Gestione evento del click su un pulsante nelle finestre
     @Override
+
     public void actionPerformed(ActionEvent e) {
         switch (this.current_window) {
             case 0:
-                if (e.getSource() == initial_buttons[0]) { // Ho cliccato Play
+                if (e.getSource() == buttons[0]) { // Ho cliccato Play
                     frame.remove(start_panel);
                     showBoard();
                 }
-                if (e.getSource() == initial_buttons[1]) { // Ho cliccato Settings
-                    // da fare, dobbiamo decidere che impostazioni cambiare
-                    // si suppone che board_dimension possa cambiare..
+                if (e.getSource() == buttons[1]) { // Ho cliccato Settings
+                    frame.remove(start_panel);
+                    showSettings();
                 }
                 break;
             case 1:
-
+                if (e.getSource() == comboDimensions) {
+                    JComboBox cb = (JComboBox)e.getSource();
+                    String lineDimension = (String)cb.getSelectedItem();
+                    int selectedBoardSize = Integer.parseInt(lineDimension.substring(0,2));
+                    board = new BoardImplementation(selectedBoardSize);
+                }
+                if (e.getSource() == buttons[2]) { // Ho cliccato Settings
+                    frame.remove(settings_panel);
+                    frame.repaint();
+                    this.current_window = 0;
+                    title.setText("Gomoku");
+                    frame.add(start_panel);
+                }
                 break;
             case 2:
 
@@ -343,8 +398,19 @@ public class GUI implements ActionListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+
         if (!isGameFinished) {
-            int padding_board = 30; // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
+            int padding_board = 30;
+            switch (board.getBoardDimension()) {
+                case 19:
+                    padding_board = 30;
+                    break;
+                case 15:
+                    padding_board = 109;
+                    break;
+            }
+
+            // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
             // Rilevo le x,y del mouse dopo aver cliccato
             int x = e.getX() - padding_board;
             int y = e.getY() - padding_board;
