@@ -54,7 +54,6 @@ public class GameTest {
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         boolean result = game.isFeasibleMove(new Coordinates(8, 9));
         Assertions.assertTrue(result);
-
     }
 
     @Test
@@ -340,15 +339,25 @@ public class GameTest {
                 () -> game.makeMove(firstPlayer, new Coordinates(0, 0)),
                 "Is not First's turn"
         );
+    }
 
-        for (int i = 0; i < MAX_NUMBER_OF_STONES; i++) {
+    // If neither player can create a 5-stone lineup after placing all of their stones, the game is declared a tie and they must start over.
+    @Test
+    void testTie() {
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Game game = new Game(board, firstPlayer, secondPlayer);
+        game.setupGame();
+
+        for (int i = 0; i < MAX_NUMBER_OF_STONES - 1; i++) {
             secondPlayer.addMove(new Coordinates(0, 0));
         }
-        Assertions.assertThrowsExactly(
-                Game.InvalidMoveException.class,
-                () -> game.makeMove(secondPlayer, new Coordinates(9, 10)),
-                "Second has terminated the number of moves allowed"
-        );
+        Assertions.assertFalse(game.checkIfStonesOfAPlayerAreFinished());
+        secondPlayer.addMove(new Coordinates(0, 0));
+        Assertions.assertTrue(game.checkIfStonesOfAPlayerAreFinished());
+        Assertions.assertEquals(60, secondPlayer.getMovesList().size());
+        Assertions.assertFalse(secondPlayer.getMovesList().size()>60);
     }
 
 }

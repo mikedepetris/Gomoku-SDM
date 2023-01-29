@@ -67,7 +67,8 @@ public class Game {
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveException {
-        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && player.getMovesList().size() < MAX_NUMBER_OF_STONES) {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
+//                && player.getMovesList().size() < MAX_NUMBER_OF_STONES) {
             board.setCell(player.getColour(), coordinates);
             lastMovingPlayer = player;
             lastMovingPlayer.addMove(coordinates);
@@ -79,9 +80,9 @@ public class Game {
             if (!isTurnOfPlayer(player)) {
                 exceptionMessage += "Is not " + player.getUsername() + "'s turn ";
             }
-            if (!(player.getMovesList().size() < MAX_NUMBER_OF_STONES)) {
-                exceptionMessage += player.getUsername() + " has terminated the number of moves allowed ";
-            }
+//            if (!(player.getMovesList().size() < MAX_NUMBER_OF_STONES)) {
+//                exceptionMessage += player.getUsername() + " has terminated the number of moves allowed ";
+//            }
             throw new InvalidMoveException(exceptionMessage);
         }
     }
@@ -106,6 +107,10 @@ public class Game {
         return lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size() - 1);
     }
 
+    public boolean checkIfStonesOfAPlayerAreFinished() {
+        return player1.getMovesList().size() >= MAX_NUMBER_OF_STONES
+                || player2.getMovesList().size() >= MAX_NUMBER_OF_STONES;
+    }
 
     public boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
         int numberOfStones = 5;

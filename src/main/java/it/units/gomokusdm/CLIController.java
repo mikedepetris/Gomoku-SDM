@@ -57,7 +57,7 @@ public class CLIController {
     public void startGameClI() throws IOException {
         outputStream.printf("(%s) Black player's first move must be in the center of the board." + System.lineSeparator(),
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
-        while (!thereIsAWinner()) {
+        while (!isGameTie() && !thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
             outputStream.printf(System.lineSeparator() + "It's %s's turn. Insert \"STOP\" to end game." + System.lineSeparator(), nextMovingPlayer.getUsername());
@@ -73,10 +73,17 @@ public class CLIController {
                 outputStream.println("Invalid coordinates!" + System.lineSeparator() + "Try again."); //aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
-        if (thereIsAWinner()) {
+        if (isGameTie()) {
+            //winner = game.getLastMovingPlayer();
+            outputStream.printf(System.lineSeparator() + "Nobody won, the game is tie!");
+        } else if (thereIsAWinner()) {
             winner = game.getLastMovingPlayer();
             outputStream.printf(System.lineSeparator() + "%s won the game!", winner.getUsername());
         }
+    }
+
+    private boolean isGameTie() {
+        return game.checkIfStonesOfAPlayerAreFinished();
     }
 
     private boolean thereIsAWinner() {

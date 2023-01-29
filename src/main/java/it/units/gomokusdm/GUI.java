@@ -16,6 +16,8 @@ import java.util.stream.IntStream;
 
 
 public class GUI implements ActionListener, MouseListener {
+
+    private boolean isGameFinished = false;
     int current_window; // finestra in cui mi trovo nel gioco
 
     public int getCurrent_window() {
@@ -334,57 +336,67 @@ public class GUI implements ActionListener, MouseListener {
     // Gestione eventi riguardo al mouse
     @Override
     public void mouseReleased(MouseEvent e) {
-
-
     }
 
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int padding_board = 30; // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
-        // Rilevo le x,y del mouse dopo aver cliccato
-        int x = e.getX() - padding_board;
-        int y = e.getY() - padding_board;
-        int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
+        if (!isGameFinished) {
+            int padding_board = 30; // se la dimensione è 19 fa 30, se è 15 è circa 109,6. andrebbe associato
+            // Rilevo le x,y del mouse dopo aver cliccato
+            int x = e.getX() - padding_board;
+            int y = e.getY() - padding_board;
+            int cell_dimension = 26; // è il valore della dimensione cella rispetto all'immagine
 
-        int resize_x = 0;
-        int resize_y = 0; // resize x e y rispetto a dove posizionare la stone come immagine
-        int new_x = 0;
-        int new_y = 0; // le vere coordinate che vengono rilevate per makeMove
-        while (resize_x < ((x + 7) - cell_dimension)) {
-            resize_x = resize_x + cell_dimension;
-            new_y++;
-        }
-        while (resize_y < ((y + 7) - cell_dimension)) {
-            resize_y = resize_y + cell_dimension;
-            new_x++;
-        }
-        //System.out.println("coordinate Game: "+new_y+" "+new_x);
-        // Provo a eseguire una mossa
-        Player nextMovingPlayer = game.getNextMovingPlayer();
-        try {
-            game.makeMove(nextMovingPlayer, new Coordinates(new_x, new_y));
-            printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
-            // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
-            if (nextMovingPlayer.getColour() == Stone.WHITE) {
-                showStone(white_stone_img, resize_x, resize_y);
-            } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
-                showStone(black_stone_img, resize_x, resize_y);
+            int resize_x = 0;
+            int resize_y = 0; // resize x e y rispetto a dove posizionare la stone come immagine
+            int new_x = 0;
+            int new_y = 0; // le vere coordinate che vengono rilevate per makeMove
+            while (resize_x < ((x + 7) - cell_dimension)) {
+                resize_x = resize_x + cell_dimension;
+                new_y++;
             }
-        } catch (Game.InvalidMoveException ex) {
-            title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
+            while (resize_y < ((y + 7) - cell_dimension)) {
+                resize_y = resize_y + cell_dimension;
+                new_x++;
+            }
+            //System.out.println("coordinate Game: "+new_y+" "+new_x);
+            // Provo a eseguire una mossa
+            Player nextMovingPlayer = game.getNextMovingPlayer();
+            try {
+                game.makeMove(nextMovingPlayer, new Coordinates(new_x, new_y));
+                printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
+                // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
+                if (nextMovingPlayer.getColour() == Stone.WHITE) {
+                    showStone(white_stone_img, resize_x, resize_y);
+                } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
+                    showStone(black_stone_img, resize_x, resize_y);
+                }
+            } catch (Game.InvalidMoveException ex) {
+                title.setText("Mossa non valida, " + nextMovingPlayer.getUsername() + " riprova");
+            }
+            if (isGameTie()) {
+                title.setText("La partita finisce pari. Sono finite le pietre per il giocatore " + game.getLastMovingPlayer().getUsername());
+                // mi aspetto un metodo per uscire dal gioco / ricominciare
+                isGameFinished = true;
+            } else if (thereIsAWinner()) {
+                title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
+                // mi aspetto un metodo per uscire dal gioco / ricominciare
+                isGameFinished = true;
+            }
+            grid_panel.repaint();
         }
-
-        if (game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour())) {
-            title.setText(game.getLastMovingPlayer().getUsername() + " ha vinto!");
-            // mi aspetto un metodo per uscire dal gioco / ricominciare
-        }
-        grid_panel.repaint();
     }
 
+    private boolean isGameTie() {
+        return game.checkIfStonesOfAPlayerAreFinished();
+    }
+
+    private boolean thereIsAWinner() {
+        return game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour());
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) {
