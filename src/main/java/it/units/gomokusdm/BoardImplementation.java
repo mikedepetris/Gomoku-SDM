@@ -21,7 +21,6 @@ public class BoardImplementation implements Board {
         setupBoard(boardDimension);
     }
 
-    @Override
     public void setupBoard(int boardDimension) {
         IntStream.range(0, boardDimension)
                 .forEach(row -> IntStream.range(0, boardDimension)
@@ -33,7 +32,6 @@ public class BoardImplementation implements Board {
         return (int) Math.sqrt(this.board.size());
     }
 
-    @Override
     public int getNumberOfEmptyPositionInBoard() {
         return (int) this.board
                 .values()
@@ -42,7 +40,7 @@ public class BoardImplementation implements Board {
                 .count();
     }
 
-    @Override
+
     public int getNumberOfOccupiedPositionInBoard() {
         return (int) Math.pow(this.getBoardDimension(), 2) - getNumberOfEmptyPositionInBoard();
     }
@@ -79,17 +77,6 @@ public class BoardImplementation implements Board {
     public boolean areValidCoordinates(Coordinates coordinates) {
         return (coordinates.getRowIndex() >= 0 && coordinates.getRowIndex() < getBoardDimension()) &&
                 (coordinates.getColIndex() >= 0 && coordinates.getColIndex() < getBoardDimension());
-    }
-
-    @Override
-    public boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection) {
-        return getStoneAt(current) == getStoneAt(coordinateInDirection);
-    }
-
-    public String getBoardInLine() {
-        StringBuilder tmp = new StringBuilder();
-        board.values().forEach(tmp::append);
-        return tmp.toString();
     }
 
     @Override

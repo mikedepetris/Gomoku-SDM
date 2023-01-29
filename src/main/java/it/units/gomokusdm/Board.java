@@ -3,13 +3,8 @@ package it.units.gomokusdm;
 import java.util.List;
 
 public interface Board {
-    void setupBoard(int boardDimension);
 
     int getBoardDimension();
-
-    int getNumberOfEmptyPositionInBoard();
-
-    int getNumberOfOccupiedPositionInBoard();
 
     Stone getStoneAt(Coordinates coordinates);
 
@@ -21,5 +16,4 @@ public interface Board {
 
     boolean areValidCoordinates(Coordinates coordinates);
 
-    boolean areStonesOfSameColourAt(Coordinates current, Coordinates coordinateInDirection);
 }
