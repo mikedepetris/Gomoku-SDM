@@ -23,13 +23,13 @@ public class Game {
         this.player2 = player2;
         if (!checkPlayerNames(player1, player2)) {
             Utilities.getLoggerOfClass(getClass())
-                    .log(Level.ALL, "ERROR: Game constructor called with same player names: player1=%s, player2=%s"
+                    .log(Level.SEVERE, "ERROR: Game constructor called with same player names: player1=%s, player2=%s"
                             .formatted(player1.getUsername(), player2.getUsername()));
             throw new IllegalArgumentException("invalid player names");
         }
         if (!checkPlayerColours(player1, player2)) {
-            Utilities.getLoggerOfClass(getClass())
-                    .log(Level.ALL, "ERROR: Game constructor called with invalid player colors: player1=%s, player2=%s"
+            Utilities.getLoggerOfClass(getClass()).log(
+                    Level.SEVERE, "ERROR: Game constructor called with invalid player colors: player1=%s, player2=%s"
                             .formatted(player1.getColour().toString(), getPlayer2().getColour().toString()));
             throw new IllegalArgumentException("invalid player colors");
         }
@@ -180,10 +180,6 @@ public class Game {
     }
 
     public static class InvalidMoveThrowable extends Throwable {
-        public InvalidMoveThrowable() {
-            super();
-        }
-
         public InvalidMoveThrowable(String errorMessage) {
             super(errorMessage);
         }
