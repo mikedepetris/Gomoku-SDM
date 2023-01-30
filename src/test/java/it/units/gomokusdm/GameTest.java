@@ -343,9 +343,9 @@ public class GameTest {
         for (int i = 0; i < MAX_NUMBER_OF_STONES - 1; i++) {
             secondPlayer.addMove(new Coordinates(0, 0));
         }
-        Assertions.assertFalse(game.checkIfStonesOfAPlayerAreFinished());
+        Assertions.assertFalse(game.areTheStonesOfAPlayerFinished());
         secondPlayer.addMove(new Coordinates(0, 0));
-        Assertions.assertTrue(game.checkIfStonesOfAPlayerAreFinished());
+        Assertions.assertTrue(game.areTheStonesOfAPlayerFinished());
         Assertions.assertEquals(60, secondPlayer.getMovesList().size());
         Assertions.assertFalse(secondPlayer.getMovesList().size() > 60);
     }
@@ -366,7 +366,7 @@ public class GameTest {
 //        System.out.println("Calculations 1");
 //        System.out.println(game.getPlayer1().getMovesList().size());
 //        System.out.println(game.getPlayer2().getMovesList().size());
-        boolean isGameTie = game.checkIfStonesOfAPlayerAreFinished();
+        boolean isGameTie = game.areTheStonesOfAPlayerFinished();
         Assertions.assertFalse(isGameTie);
 
         long numberOfBlackStones = countBlackStones((BoardImplementation) game.getBoard());
@@ -379,7 +379,7 @@ public class GameTest {
 //        System.out.println("Calculations 2");
 //        System.out.println(game.getPlayer1().getMovesList().size());
 //        System.out.println(game.getPlayer2().getMovesList().size());
-        isGameTie = game.checkIfStonesOfAPlayerAreFinished();
+        isGameTie = game.areTheStonesOfAPlayerFinished();
         Assertions.assertTrue(isGameTie);
     }
 }
