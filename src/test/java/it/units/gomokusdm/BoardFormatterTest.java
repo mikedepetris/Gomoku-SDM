@@ -52,7 +52,6 @@ public class BoardFormatterTest {
     void testBoardFormattingWithAStone() {
         Board board = new BoardImplementation(BOARD_DIMENSION);
         Game game = new Game(board, new Player("one", Stone.BLACK), new Player("two", Stone.WHITE));
-        game.setupGame();
         String formattedBoard = BoardFormatter.formatBoard(board);
 
         String expectedOutputString = System.lineSeparator() +
