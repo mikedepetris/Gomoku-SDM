@@ -207,7 +207,7 @@ public class GUI implements ActionListener, MouseListener {
         upperPanel.setBounds(0, 0, 800, 100);
         upperPanel.add(title);
 
-        // non va bene, è senza layout, è provvisorio
+        // TODO: non va bene, è senza layout, è provvisorio
         startPanel.setLayout(null);
         startPanel.setBackground(new Color(234, 214, 84));
 
