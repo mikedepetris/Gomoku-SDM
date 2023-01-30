@@ -27,9 +27,7 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new BoardImplementation();
-        Assertions.assertThrows(Exception.class, () -> {
-            Game game = new Game(board, firstPlayer, secondPlayer);
-        });
+        Assertions.assertThrows(Exception.class, () -> new Game(board, firstPlayer, secondPlayer));
     }
 
     @Test
@@ -37,9 +35,7 @@ public class GameTest {
         Player firstPlayer = new Player("SameName", Stone.BLACK);
         Player secondPlayer = new Player("SameName", Stone.WHITE);
         Board board = new BoardImplementation();
-        Assertions.assertThrows(Exception.class, () -> {
-            Game game = new Game(board, firstPlayer, secondPlayer);
-        });
+        Assertions.assertThrows(Exception.class, () -> new Game(board, firstPlayer, secondPlayer));
         //Assertions.assertNotEquals(player1.getUsername(), player2.getUsername());
     }
 
@@ -165,7 +161,8 @@ public class GameTest {
                     };
             for (int i = 0; i < board.getBoardDimension(); i++) {
                 for (int j = 0; j < board.getBoardDimension(); j++) {
-                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)), Stone.castIntToStone(expectedBoard[i][j]));
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)),
+                            Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -218,7 +215,8 @@ public class GameTest {
                     };
             for (int i = 0; i < board.getBoardDimension(); i++) {
                 for (int j = 0; j < board.getBoardDimension(); j++) {
-                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)), Stone.castIntToStone(expectedBoard[i][j]));
+                    Assertions.assertEquals(board.getStoneAt(new Coordinates(i, j)),
+                            Stone.castIntToStone(expectedBoard[i][j]));
                 }
             }
         }
@@ -306,7 +304,8 @@ public class GameTest {
         Player player1 = new Player("player", Stone.BLACK);
         Player player2 = new Player("player", Stone.WHITE);
 
-        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+        Assertions.assertThrowsExactly(
+                IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
                 "invalid player names");
     }
 
@@ -315,7 +314,8 @@ public class GameTest {
         Player player1 = new Player("player1", Stone.BLACK);
         Player player2 = new Player("player2", Stone.BLACK);
 
-        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+        Assertions.assertThrowsExactly(
+                IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
                 "invalid player colours");
     }
 
@@ -341,7 +341,8 @@ public class GameTest {
         );
     }
 
-    // If neither player can create a 5-stone lineup after placing all of their stones, the game is declared a tie and they must start over.
+    // If neither player can create a 5-stone lineup after placing all of their stones,
+    // the game is declared a tie, and they must start over.
     @Test
     void testTie() {
         Player firstPlayer = new Player("First", Stone.BLACK);
