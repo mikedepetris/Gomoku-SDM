@@ -90,10 +90,27 @@ public class GUITest {
     }
 
     @Test
-    public void testActionPerformed() {
+    public void testGameStart() {
         // Simulate clicking on the "Play" button
         gui.getButtons()[0].doClick();
         assertEquals(gui.currentWindow, 2); // 1
+        assertTrue(gui.getButtons()[0].isVisible());
+        assertTrue(gui.getButtons()[1].isVisible());
+        assertTrue(gui.getInputPlayer1().isVisible());
+        assertTrue(gui.getInputPlayer2().isVisible());
+        assertTrue(gui.getGridPanel().isVisible());
+    }
+
+    @Test
+    public void testGameStartWithSameNamePlayers() {
+        gui.getInputPlayer1().setText("Same name");
+        gui.getInputPlayer2().setText("Same name");
+        // Simulate clicking on the "Play" button
+        // and check it throws exception
+        assertThrowsExactly(RuntimeException.class, () ->
+                        gui.getButtons()[0].doClick(),
+                "invalid player names");
+        assertEquals(gui.currentWindow, 0);
         assertTrue(gui.getButtons()[0].isVisible());
         assertTrue(gui.getButtons()[1].isVisible());
         assertTrue(gui.getInputPlayer1().isVisible());

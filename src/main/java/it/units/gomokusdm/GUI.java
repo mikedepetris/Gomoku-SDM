@@ -308,20 +308,18 @@ public class GUI implements ActionListener, MouseListener {
         Utilities.getLoggerOfClass(getClass())
                 .log(Level.INFO, "showBoard() invoked");
         // Base Settings
-        this.player1 = new Player("", Stone.BLACK);
-        this.player2 = new Player("", Stone.WHITE);
+        this.player1 = new Player(inputPlayer1.getText(), Stone.BLACK);
+        this.player2 = new Player(inputPlayer2.getText(), Stone.WHITE);
+//        String user1 = inputPlayer1.getText();
+//        String user2 = inputPlayer2.getText();
+//        player1.setUsername(user1);
+//        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
             this.game = new Game(board, player1, player2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        // Settings della board
-        String user1 = inputPlayer1.getText();
-        String user2 = inputPlayer2.getText();
-        player1.setUsername(user1);
-        player2.setUsername(user2);
 
         this.currentWindow = 2;
         frame.add(gridPanel);
@@ -383,27 +381,27 @@ public class GUI implements ActionListener, MouseListener {
 
     public void actionPerformed(ActionEvent e) {
         switch (this.currentWindow) {
-            case 0 -> {
-                if (e.getSource() == buttons[0]) { // Ho cliccato Play
+            case 0 -> { // Window: main
+                if (e.getSource() == buttons[0]) { // Click: Play
                     frame.remove(startPanel);
                     frame.repaint();
                     showBoard();
                 }
-                if (e.getSource() == buttons[1]) { // Ho cliccato Settings
+                if (e.getSource() == buttons[1]) { // Click: Settings
                     frame.remove(startPanel);
                     frame.repaint();
                     showSettings();
                 }
             }
-            case 1 -> {
-                if (e.getSource() == comboDimensions) {
+            case 1 -> { // Window: Settings
+                if (e.getSource() == comboDimensions) { // Click: "15x15", "19x19"
                     JComboBox cb = (JComboBox) e.getSource();
                     String lineDimension = (String) cb.getSelectedItem();
                     assert lineDimension != null;
                     this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
-                if (e.getSource() == buttons[2]) { // Ho cliccato Back to Main Menu in Settings
+                if (e.getSource() == buttons[2]) { // Click: Back to Main Menu
                     frame.remove(settingsPanel);
                     frame.repaint();
                     this.currentWindow = 0;
@@ -411,10 +409,12 @@ public class GUI implements ActionListener, MouseListener {
                     frame.add(startPanel);
                 }
             }
-            case 2 -> {
-                if (e.getSource() == buttons[3]) { // Ho cliccato Back to Main Menu nel Game
-                    boardImg19.removeAll(); boardImg19.repaint();
-                    boardImg15.removeAll(); boardImg15.repaint();
+            case 2 -> { // Window: Game
+                if (e.getSource() == buttons[3]) { // Click: Back to Main Menu
+                    boardImg19.removeAll();
+                    boardImg19.repaint();
+                    boardImg15.removeAll();
+                    boardImg15.repaint();
                     gridPanel.removeAll();
                     gridPanel.revalidate();
                     gridPanel.repaint();
@@ -467,7 +467,7 @@ public class GUI implements ActionListener, MouseListener {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
                 game.makeMove(nextMovingPlayer, new Coordinates(newX, newY));
-                System.out.println(game.getBoard().getStoneAt(new Coordinates(9,9)));
+                System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
                     showStone(whiteStoneImg, resizeX, resizeY);
@@ -507,8 +507,6 @@ public class GUI implements ActionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-
-
 
 
 }
