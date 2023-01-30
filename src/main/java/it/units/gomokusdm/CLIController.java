@@ -1,6 +1,7 @@
 package it.units.gomokusdm;
 
 import java.io.*;
+import java.util.logging.Level;
 
 public class CLIController {
 
@@ -57,6 +58,7 @@ public class CLIController {
     public void startGameClI() throws IOException {
         outputStream.printf("(%s) Black player's first move must be in the center of the board. %n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
+        Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
         while (!isGameTie() && !thereIsAWinner()) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
@@ -70,7 +72,8 @@ public class CLIController {
                 Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
             } catch (Game.InvalidMoveThrowable | WrongStringFormatException e) {
-                outputStream.printf("Invalid coordinates! %s %nTry again.", e.getMessage()); //aggiungere il motivo dell'errore (con e.getMessage())
+                outputStream.printf("Invalid coordinates! %s %nTry again.", e.getMessage());
+                //TODO: aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
         if (isGameTie()) {
@@ -135,6 +138,10 @@ public class CLIController {
 
     public void printBoard() {
         outputStream.print(BoardFormatter.formatBoard(board));
+    }
+
+    public void printBoardCompact() {
+        outputStream.print(BoardFormatter.formatBoardCompact(board));
     }
 
     public static class WrongStringFormatException extends Exception {
