@@ -20,19 +20,32 @@ public class BoardImplementationTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
     private static Stream<Arguments> generateSomeValidCoordinates() {
-        return Stream.of(Arguments.of(new Coordinates(10, 10)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(0, 0)), Arguments.of(new Coordinates(8, 1)), Arguments.of(new Coordinates(0, 15)), Arguments.of(new Coordinates(18, 17)));
+        return Stream.of(
+                Arguments.of(new Coordinates(10, 10)),
+                Arguments.of(new Coordinates(0, 0)),
+                Arguments.of(new Coordinates(0, 0)),
+                Arguments.of(new Coordinates(8, 1)),
+                Arguments.of(new Coordinates(0, 15)),
+                Arguments.of(new Coordinates(18, 17)));
     }
 
     private static Stream<Arguments> generateSomeInvalidCoordinates() {
-        return Stream.of(Arguments.of(new Coordinates(-2, 3)), Arguments.of(new Coordinates(28, 21)), Arguments.of(new Coordinates(41, 0)), Arguments.of(new Coordinates(20, 4)));
+        return Stream.of(Arguments.of(new Coordinates(-2, 3)),
+                Arguments.of(new Coordinates(28, 21)),
+                Arguments.of(new Coordinates(41, 0)),
+                Arguments.of(new Coordinates(20, 4)));
     }
 
     private static void fillBoardFromIntBoard(Board board, int[][] intBoard) {
         int boardDimension = intBoard.length;
-//      This version of the code uses nested IntStreams to iterate over the intBoard array and set the cells on the Board object based on the values in the array.
-//      The forEach method is used to perform the operations on each coordinate in the array.
-//      The method insertLineSeparatorFunctional is used to format the output string.
-//      Note that this code still using a nested loops and it could be refactored further to use flatMap, but I think this is the most simple and readable way to refactor it.
+/*
+      This version of the code uses nested IntStreams to iterate over the intBoard array
+      and set the cells on the Board object based on the values in the array.
+      The forEach method is used to perform the operations on each coordinate in the array.
+      The method insertLineSeparatorFunctional is used to format the output string.
+      Note that this code still using a nested loops, and it could be refactored further to use flatMap,
+      but I think this is the most simple and readable way to refactor it.
+*/
         IntStream.range(0, boardDimension).forEach(x ->
                 IntStream.range(0, boardDimension).forEach(y -> {
                     if (intBoard[x][y] == 1)
@@ -155,9 +168,17 @@ public class BoardImplementationTest {
     void testGetAdjacentCoordinates() {
         BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Coordinates coordinateUsedToGetAdjCoordinates = new Coordinates(1, 1);
-        List<Coordinates> expectedAdjacentCoordinates = List.of(new Coordinates(0, 0), new Coordinates(0, 1), new Coordinates(0, 2), new Coordinates(1, 0), new Coordinates(1, 2), new Coordinates(2, 0), new Coordinates(2, 1), new Coordinates(2, 2));
+        List<Coordinates> expectedAdjacentCoordinates = List.of(new Coordinates(0, 0),
+                new Coordinates(0, 1),
+                new Coordinates(0, 2),
+                new Coordinates(1, 0),
+                new Coordinates(1, 2),
+                new Coordinates(2, 0),
+                new Coordinates(2, 1),
+                new Coordinates(2, 2));
         List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinateUsedToGetAdjCoordinates);
-        expectedAdjacentCoordinates.forEach(expctedAdjCoord -> Assertions.assertTrue(adjacentCoordinates.contains(expctedAdjCoord)));
+        expectedAdjacentCoordinates.forEach(
+                expctedAdjCoord -> Assertions.assertTrue(adjacentCoordinates.contains(expctedAdjCoord)));
     }
 
     @Test

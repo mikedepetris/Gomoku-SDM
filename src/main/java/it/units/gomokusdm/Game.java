@@ -162,8 +162,8 @@ public class Game {
     }
 
 
-    // controlla se esiste una stone adiacente intorno a quella che sto inserendo. se ne esiste almeno una,
-    // posso inserire la stone
+    // Controlla se esiste una stone adiacente intorno a quella che sto inserendo.
+    // Se ne esiste almeno una, posso inserire la stone
     public boolean isThereAnAdjacentStone(Coordinates coordinates) {
         List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinates);
         for (Coordinates el : adjacentCoordinates) {
