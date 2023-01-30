@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class Game {
+public class Game implements BoardGame {
 
     public static final int MAX_NUMBER_OF_STONES = 60;
     private final Board board;
+    private BoardGameStatus gameStatus;
     private final Player player1;
     private final Player player2;
-    private Player previousMovingPlayer;
+    private Player currentMovingPlayer;
+    private Player winner;
 
     public Game(Board board, Player player1, Player player2) {
         Utilities.getLoggerOfClass(getClass())
@@ -36,83 +38,95 @@ public class Game {
         setupGame();
     }
 
-    private static boolean checkPlayerNames(Player player1, Player player2) {
-        return !Objects.equals(player1.getUsername(), player2.getUsername());
-    }
-
-    private static boolean checkPlayerColours(Player player1, Player player2) {
-        return player1.getColour() != player2.getColour();
-    }
-
-    // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
-    private static boolean areInRange(int i, int j, int checkingStones) {
-        return (i <= checkingStones && i >= -checkingStones && j <= checkingStones && j >= -checkingStones);
-    }
-
+    @Override
     public Board getBoard() {
         return board;
     }
 
-    private void setupGame() {
-        makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
-    }
-
+    @Override
     public Player getPlayer1() {
         return player1;
     }
 
+    @Override
     public Player getPlayer2() {
         return player2;
     }
 
-    public Player getPreviousMovingPlayer() {
-        return previousMovingPlayer;
+    @Override
+    public Player getCurrentMovingPlayer() {
+        return currentMovingPlayer;
     }
 
+    @Override
     public Player getNextMovingPlayer() {
-        return player1 == previousMovingPlayer ? player2 : player1;
+        return player1 == currentMovingPlayer ? player2 : player1;
     }
 
-    private void makeMandatoryFirstMove(Player player) {
-        Coordinates boardCenter =
-                new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2);
-        board.setCell(player.getColour(), boardCenter);
-        this.previousMovingPlayer = player;
-        previousMovingPlayer.addMove(boardCenter);
+    @Override
+    public BoardGameStatus getGameStatus() {
+        return gameStatus;
     }
 
+    @Override
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
-        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
+        if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && !isGameFinished()) {
             board.setCell(player.getColour(), coordinates);
             Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
-            previousMovingPlayer = player;
-            previousMovingPlayer.addMove(coordinates);
+            currentMovingPlayer = player;
+            currentMovingPlayer.addMove(coordinates);
+            updateGameStatus();
         } else {
             String exceptionMessage = "";
             if (!isFeasibleMove(coordinates)) {
-                exceptionMessage += "Move not feasible ";
+                exceptionMessage += "Move not feasible  ";
             }
             if (!isTurnOfPlayer(player)) {
-                exceptionMessage += "Is not " + player.getUsername() + "'s turn ";
+                exceptionMessage += "Is not " + player.getUsername() + "'s turn  ";
+            }
+            if (isGameFinished()) {
+                exceptionMessage += "Game already finished  ";
             }
             throw new InvalidMoveThrowable(exceptionMessage);
         }
     }
 
+    @Override
+    public Player getWinner() {
+        return winner;
+    }
+
+    private void updateGameStatus() {
+        if (thereIsAWinner()) {
+            gameStatus = BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER;
+            winner = currentMovingPlayer;
+        } else if (areTheStonesOfAPlayerFinished()) {
+            gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_DRAW;
+        }
+    }
+
+    private boolean isGameFinished() {
+        return !gameStatus.equals(BoardGameStatus.GAME_IN_PROGRESS);
+    }
+
+    private boolean thereIsAWinner() {
+        return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
+    }
+
     private boolean isTurnOfPlayer(Player player) {
-        return player != previousMovingPlayer;
+        return player != currentMovingPlayer;
     }
 
     private Coordinates getLastMoveCoordinates() {
-        return previousMovingPlayer.getMovesList().get(previousMovingPlayer.getMovesList().size() - 1);
+        return currentMovingPlayer.getMovesList().get(currentMovingPlayer.getMovesList().size() - 1);
     }
 
-    public boolean checkIfStonesOfAPlayerAreFinished() {
+    private boolean areTheStonesOfAPlayerFinished() {
         return player1.getMovesList().size() >= MAX_NUMBER_OF_STONES
                 || player2.getMovesList().size() >= MAX_NUMBER_OF_STONES;
     }
 
-    public boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
+    private boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
         int numberOfStones = 5;
         boolean areStonesEqual = false;
         Direction[] directions = {Direction.LEFT, Direction.UP, Direction.UP_MAIN_DIAGONAL, Direction.UP_ANTI_DIAGONAL};
@@ -180,11 +194,32 @@ public class Game {
                 && isThereAnAdjacentStone(coordinates);
     }
 
-    public static class InvalidMoveThrowable extends Throwable {
-        public InvalidMoveThrowable(String errorMessage) {
-            super(errorMessage);
-        }
+    private static boolean checkPlayerNames(Player player1, Player player2) {
+        return !Objects.equals(player1.getUsername(), player2.getUsername());
     }
+
+    // ATTENZIONE: duplicato di areValidCoordinates in Board, si può generalizzare
+    private static boolean areInRange(int i, int j, int checkingStones) {
+        return (i <= checkingStones && i >= -checkingStones && j <= checkingStones && j >= -checkingStones);
+    }
+
+    private static boolean checkPlayerColours(Player player1, Player player2) {
+        return player1.getColour() != player2.getColour();
+    }
+
+    private void setupGame() {
+        gameStatus = BoardGameStatus.GAME_IN_PROGRESS;
+        makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
+    }
+
+    private void makeMandatoryFirstMove(Player player) {
+        Coordinates boardCenter =
+                new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2);
+        board.setCell(player.getColour(), boardCenter);
+        this.currentMovingPlayer = player;
+        currentMovingPlayer.addMove(boardCenter);
+    }
+
 
 
 }

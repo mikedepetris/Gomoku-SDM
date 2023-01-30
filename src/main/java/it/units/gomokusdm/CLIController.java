@@ -59,13 +59,13 @@ public class CLIController {
         outputStream.printf("(%s) Black player's first move must be in the center of the board. %n",
                 player1.getColour() == Stone.BLACK ? player1.getUsername() : player2.getUsername());
         Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
-        while (!isGameTie() && !thereIsAWinner()) {
+        while (game.getGameStatus().equals(BoardGameStatus.GAME_IN_PROGRESS)) {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             printBoard();
             outputStream.printf("It's %s's turn. Insert \"STOP\" to end game. %n", nextMovingPlayer.getUsername());
             String playerInput = getPlayerInput(nextMovingPlayer);
             if (playerInput.equalsIgnoreCase("STOP")) {
-                outputStream.printf("Game has been stopped by %s %n", game.getNextMovingPlayer().getUsername());
+                outputStream.printf("Game has been stopped by %s %n", nextMovingPlayer.getUsername());
                 break;
             }
             try {
@@ -76,20 +76,12 @@ public class CLIController {
                 //TODO: aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
-        if (isGameTie()) {
+        if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {
             outputStream.printf("Nobody won, the game is tie! %n");
-        } else if (thereIsAWinner()) {
-            winner = game.getPreviousMovingPlayer();
+        } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
+            winner = game.getWinner();
             outputStream.printf("%s won the game! %n", winner.getUsername());
         }
-    }
-
-    private boolean isGameTie() {
-        return game.checkIfStonesOfAPlayerAreFinished();
-    }
-
-    private boolean thereIsAWinner() {
-        return game.checkIfThereAreFiveConsecutiveStones(game.getPreviousMovingPlayer().getColour());
     }
 
     private void setPlayerName(Player player) throws IOException {
@@ -138,10 +130,6 @@ public class CLIController {
 
     public void printBoard() {
         outputStream.print(BoardFormatter.formatBoard(board));
-    }
-
-    public void printBoardCompact() {
-        outputStream.print(BoardFormatter.formatBoardCompact(board));
     }
 
     public static class WrongStringFormatException extends Exception {

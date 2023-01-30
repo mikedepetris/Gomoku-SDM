@@ -475,25 +475,17 @@ public class GUI implements ActionListener, MouseListener {
             } catch (Game.InvalidMoveThrowable ex) {
                 title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
             }
-            if (isGameTie()) {
+            if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {
                 title.setText("The match ends in a draw");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
-            } else if (thereIsAWinner()) {
-                title.setText(game.getPreviousMovingPlayer().getUsername() + " wins!");
+            } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
+                title.setText(game.getCurrentMovingPlayer().getUsername() + " wins!");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             }
             gridPanel.repaint();
         }
-    }
-
-    private boolean isGameTie() {
-        return game.checkIfStonesOfAPlayerAreFinished();
-    }
-
-    private boolean thereIsAWinner() {
-        return game.checkIfThereAreFiveConsecutiveStones(game.getPreviousMovingPlayer().getColour());
     }
 
     @Override
