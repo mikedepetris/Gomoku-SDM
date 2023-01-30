@@ -21,7 +21,8 @@ public class CLIControllerTest {
 
     @Test
     void testPlayersInitialization() throws IOException {
-        String inputString = "1" + System.lineSeparator() + "Player One" + System.lineSeparator() + "Player Two" + System.lineSeparator();
+        String inputString = "1%sPlayer One%sPlayer Two%s".formatted(System.lineSeparator()
+                , System.lineSeparator(), System.lineSeparator());
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
         CLIController cli = CLIController.createInstance(System.out, inputStream);

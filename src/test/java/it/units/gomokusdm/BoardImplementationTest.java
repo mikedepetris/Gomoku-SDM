@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -77,10 +78,13 @@ public class BoardImplementationTest {
         return Arrays.stream(intBoard).flatMapToInt(Arrays::stream).filter(i -> i != 0).count();
     }
 
+    // Leggi la board da file di testo come in printCompact ***BWB***
     private static int[][] readBoardFromFile() {
         List<String> lines;
         try {
-            lines = Files.readAllLines(Paths.get("path/to/file.txt"));
+            Path path = Paths.get("src/test/resources/board_06.txt");
+            lines = Files.readAllLines(path);
+            //lines = Files.readAllLines(Paths.get("board_06.txt"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -280,5 +284,22 @@ public class BoardImplementationTest {
         System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
         int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
         Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
+    }
+
+    @Test
+    public void testLoadBoardFromFile() {
+        int[][] intBoard = readBoardFromFile();
+        final int boardDimension = intBoard.length;
+        BoardImplementation board = new BoardImplementation(boardDimension);
+        for (int xcoord = 0; xcoord < boardDimension; xcoord++) {
+            for (int ycoord = 0; ycoord < boardDimension; ycoord++) {
+                if (intBoard[xcoord][ycoord] == 1) board.setCell(Stone.BLACK, new Coordinates(xcoord, ycoord));
+                else if (intBoard[xcoord][ycoord] == 2) board.setCell(Stone.WHITE, new Coordinates(xcoord, ycoord));
+            }
+        }
+        System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
+        Assertions.assertEquals((long) boardDimension * boardDimension - 9, numberOfEmptyCell);
     }
 }

@@ -84,6 +84,7 @@ public class Game {
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
             board.setCell(player.getColour(), coordinates);
+            Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
             lastMovingPlayer = player;
             lastMovingPlayer.addMove(coordinates);
         } else {

@@ -304,9 +304,7 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     public void showBoard() {
-
-        Utilities.getLoggerOfClass(getClass())
-                .log(Level.INFO, "showBoard() invoked");
+        Utilities.getLoggerOfClass(getClass()).log(Level.INFO, "showBoard() invoked");
         // Base Settings
         this.player1 = new Player(inputPlayer1.getText(), Stone.BLACK);
         this.player2 = new Player(inputPlayer2.getText(), Stone.WHITE);
@@ -325,7 +323,7 @@ public class GUI implements ActionListener, MouseListener {
         frame.add(gridPanel);
 
         JLabel blackstone = new JLabel(new ImageIcon(blackStoneImg));
-        //printBoard(); // serve per controllare se la board è giusta rispetto alla classe principale Game
+        Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
         switch (board.getBoardDimension()) {
             case 19 -> {
                 gridPanel.add(boardImg19);
@@ -467,7 +465,7 @@ public class GUI implements ActionListener, MouseListener {
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
                 game.makeMove(nextMovingPlayer, new Coordinates(newX, newY));
-                System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
+//                System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
                     showStone(whiteStoneImg, resizeX, resizeY);
