@@ -80,7 +80,7 @@ public class BoardImplementation implements Board {
     public List<Coordinates> getAdjacentCoordinatesAt(Coordinates coordinates) {
         return Arrays.stream(Direction.values())
                 .map(direction -> coordinates.getCoordinateMovedInDirectionWithStep(direction, 1))
-                .filter(adjcoord -> !adjcoord.equals(coordinates))
+                .filter(adjacentCoordinates -> !adjacentCoordinates.equals(coordinates))
                 .toList();
     }
 
