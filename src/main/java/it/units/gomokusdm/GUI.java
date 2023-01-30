@@ -384,6 +384,7 @@ public class GUI implements ActionListener, MouseListener {
                     frame.remove(startPanel);
                     frame.repaint();
                     showBoard();
+                    isGameFinished = false;
                 }
                 if (e.getSource() == buttons[1]) { // Click: Settings
                     frame.remove(startPanel);
@@ -475,16 +476,34 @@ public class GUI implements ActionListener, MouseListener {
             } catch (Game.InvalidMoveThrowable ex) {
                 title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
             }
+            gridPanel.repaint();
             if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {
                 title.setText("The match ends in a draw");
-                // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
+                JOptionPane.showMessageDialog(frame,
+                        "The match ends in a draw!%s%s number of stones:%d%s%s number of stones:%d"
+                                .formatted(System.lineSeparator(),
+                                        game.getPlayer1().getUsername(),
+                                        game.getPlayer1().getMovesList().size(),
+                                        System.lineSeparator(),
+                                        game.getPlayer2().getUsername(),
+                                        game.getPlayer2().getMovesList().size())
+                );
             } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
                 title.setText(game.getCurrentMovingPlayer().getUsername() + " wins!");
-                // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
+                JOptionPane.showMessageDialog(frame,
+                        "%s wins!!%s%s number of stones:%d%s%s number of stones:%d"
+                                .formatted(
+                                        game.getCurrentMovingPlayer().getUsername(),
+                                        System.lineSeparator(),
+                                        game.getPlayer1().getUsername(),
+                                        game.getPlayer1().getMovesList().size(),
+                                        System.lineSeparator(),
+                                        game.getPlayer2().getUsername(),
+                                        game.getPlayer2().getMovesList().size())
+                );
             }
-            gridPanel.repaint();
         }
     }
 
