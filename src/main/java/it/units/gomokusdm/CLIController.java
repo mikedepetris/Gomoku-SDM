@@ -79,7 +79,7 @@ public class CLIController {
         if (isGameTie()) {
             outputStream.printf("Nobody won, the game is tie! %n");
         } else if (thereIsAWinner()) {
-            winner = game.getLastMovingPlayer();
+            winner = game.getPreviousMovingPlayer();
             outputStream.printf("%s won the game! %n", winner.getUsername());
         }
     }
@@ -89,7 +89,7 @@ public class CLIController {
     }
 
     private boolean thereIsAWinner() {
-        return game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour());
+        return game.checkIfThereAreFiveConsecutiveStones(game.getPreviousMovingPlayer().getColour());
     }
 
     private void setPlayerName(Player player) throws IOException {

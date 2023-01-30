@@ -12,7 +12,7 @@ public class Game {
     private final Board board;
     private final Player player1;
     private final Player player2;
-    private Player lastMovingPlayer;
+    private Player previousMovingPlayer;
 
     public Game(Board board, Player player1, Player player2) {
         Utilities.getLoggerOfClass(getClass())
@@ -53,7 +53,7 @@ public class Game {
         return board;
     }
 
-    public void setupGame() {
+    private void setupGame() {
         makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
     }
 
@@ -65,28 +65,28 @@ public class Game {
         return player2;
     }
 
-    public Player getLastMovingPlayer() {
-        return lastMovingPlayer;
+    public Player getPreviousMovingPlayer() {
+        return previousMovingPlayer;
     }
 
     public Player getNextMovingPlayer() {
-        return player1 == lastMovingPlayer ? player2 : player1;
+        return player1 == previousMovingPlayer ? player2 : player1;
     }
 
     private void makeMandatoryFirstMove(Player player) {
         Coordinates boardCenter =
                 new Coordinates(board.getBoardDimension() / 2, board.getBoardDimension() / 2);
         board.setCell(player.getColour(), boardCenter);
-        this.lastMovingPlayer = player;
-        lastMovingPlayer.addMove(boardCenter);
+        this.previousMovingPlayer = player;
+        previousMovingPlayer.addMove(boardCenter);
     }
 
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player)) {
             board.setCell(player.getColour(), coordinates);
             Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
-            lastMovingPlayer = player;
-            lastMovingPlayer.addMove(coordinates);
+            previousMovingPlayer = player;
+            previousMovingPlayer.addMove(coordinates);
         } else {
             String exceptionMessage = "";
             if (!isFeasibleMove(coordinates)) {
@@ -100,11 +100,11 @@ public class Game {
     }
 
     private boolean isTurnOfPlayer(Player player) {
-        return player != lastMovingPlayer;
+        return player != previousMovingPlayer;
     }
 
     private Coordinates getLastMoveCoordinates() {
-        return lastMovingPlayer.getMovesList().get(lastMovingPlayer.getMovesList().size() - 1);
+        return previousMovingPlayer.getMovesList().get(previousMovingPlayer.getMovesList().size() - 1);
     }
 
     public boolean checkIfStonesOfAPlayerAreFinished() {

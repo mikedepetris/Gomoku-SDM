@@ -480,7 +480,7 @@ public class GUI implements ActionListener, MouseListener {
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             } else if (thereIsAWinner()) {
-                title.setText(game.getLastMovingPlayer().getUsername() + " wins!");
+                title.setText(game.getPreviousMovingPlayer().getUsername() + " wins!");
                 // mi aspetto un metodo per uscire dal gioco / ricominciare
                 isGameFinished = true;
             }
@@ -493,7 +493,7 @@ public class GUI implements ActionListener, MouseListener {
     }
 
     private boolean thereIsAWinner() {
-        return game.checkIfThereAreFiveConsecutiveStones(game.getLastMovingPlayer().getColour());
+        return game.checkIfThereAreFiveConsecutiveStones(game.getPreviousMovingPlayer().getColour());
     }
 
     @Override
