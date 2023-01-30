@@ -352,7 +352,7 @@ public class GUI implements ActionListener, MouseListener {
 
     }
 
-    public void showStone(BufferedImage stoneImg, int resizeX, int resizeY) {
+    public void showStone(BufferedImage stoneImg, int resizeX, int resizeY, Stone stoneColor, int num) {
         JLabel stone = new JLabel(new ImageIcon(stoneImg));
         int resize = 0;
         // resize computato in base all'immagine della board utilizzata (sia 19 che 15)
@@ -360,6 +360,16 @@ public class GUI implements ActionListener, MouseListener {
             case 19 -> {
                 resize = 22;
                 stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
+                //stone.setIcon(new ImageIcon(stoneImg));
+                if (num > 0) {
+                    if (stoneColor == Stone.BLACK)
+                        stone.setForeground(Color.white);
+                    else
+                        stone.setForeground(Color.black);
+                    stone.setText(String.valueOf(num));
+                    stone.setHorizontalTextPosition(JLabel.CENTER);
+                    stone.setVerticalTextPosition(JLabel.CENTER);
+                }
                 boardImg19.add(stone);
             }
             case 15 -> {
@@ -469,9 +479,12 @@ public class GUI implements ActionListener, MouseListener {
 //                System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
-                    showStone(whiteStoneImg, resizeX, resizeY);
+                    //showStone(whiteStoneImg, resizeX, resizeY, nextMovingPlayer.getMovesList().size());
+                    showStone(whiteStoneImg, resizeX, resizeY, Stone.WHITE
+                            , ((BoardImplementation)game.getBoard()).getNumberOfOccupiedPositionInBoard());
                 } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
-                    showStone(blackStoneImg, resizeX, resizeY);
+                    showStone(blackStoneImg, resizeX, resizeY, Stone.BLACK
+                            , ((BoardImplementation)game.getBoard()).getNumberOfOccupiedPositionInBoard());
                 }
             } catch (Game.InvalidMoveThrowable ex) {
                 title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
