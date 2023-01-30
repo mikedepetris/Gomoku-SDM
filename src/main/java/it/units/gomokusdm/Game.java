@@ -1,6 +1,5 @@
 package it.units.gomokusdm;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -121,7 +120,7 @@ public class Game implements BoardGame {
         return currentMovingPlayer.getMovesList().get(currentMovingPlayer.getMovesList().size() - 1);
     }
 
-    private boolean areTheStonesOfAPlayerFinished() {
+    boolean areTheStonesOfAPlayerFinished() {
         return player1.getMovesList().size() >= MAX_NUMBER_OF_STONES
                 || player2.getMovesList().size() >= MAX_NUMBER_OF_STONES;
     }

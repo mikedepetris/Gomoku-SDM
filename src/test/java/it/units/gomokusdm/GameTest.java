@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.units.gomokusdm.BoardImplementationTest.*;
 import static it.units.gomokusdm.Game.MAX_NUMBER_OF_STONES;
 
 public class GameTest {
@@ -108,7 +109,7 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        new Game(board, firstPlayer, secondPlayer);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
                 board.getBoardDimension() / 2);
         Assertions.assertEquals(Stone.BLACK, board.getStoneAt(coordinates));
@@ -334,7 +335,51 @@ public class GameTest {
     // the game is declared a tie, and they must start over.
     @Test
     void testTie() {
-        //TODO: da implementare con delle mosse valide (la classe Game è cambiata)
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Game game = new Game(board, firstPlayer, secondPlayer);
+
+        for (int i = 0; i < MAX_NUMBER_OF_STONES - 1; i++) {
+            secondPlayer.addMove(new Coordinates(0, 0));
+        }
+        Assertions.assertFalse(game.areTheStonesOfAPlayerFinished());
+        secondPlayer.addMove(new Coordinates(0, 0));
+        Assertions.assertTrue(game.areTheStonesOfAPlayerFinished());
+        Assertions.assertEquals(60, secondPlayer.getMovesList().size());
+        Assertions.assertFalse(secondPlayer.getMovesList().size() > 60);
     }
 
+    @Test
+    public void testBoardGameDraw60Stones() {
+        BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
+        final int boardDimension = board.getBoardDimension();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        // 19*19=361 59+60=119 361-119=242
+        Assertions.assertEquals(361, boardDimension * boardDimension);
+        Assertions.assertEquals(countNonZeroes(board), (long) boardDimension * boardDimension - numberOfEmptyCell);
+        Assertions.assertEquals(119, boardDimension * boardDimension - numberOfEmptyCell);
+
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Game game = new Game(board, firstPlayer, secondPlayer);
+//        System.out.println("Calculations 1");
+//        System.out.println(game.getPlayer1().getMovesList().size());
+//        System.out.println(game.getPlayer2().getMovesList().size());
+        boolean isGameTie = game.areTheStonesOfAPlayerFinished();
+        Assertions.assertFalse(isGameTie);
+
+        long numberOfBlackStones = countBlackStones((BoardImplementation) game.getBoard());
+        long numberOfWhiteStones = countWhiteStones((BoardImplementation) game.getBoard());
+        Coordinates fakeCoordinates = new Coordinates(0, 0);
+        for (int i = 0; i < numberOfBlackStones - 1; i++) // -1 perché c'è la prima mossa obbligata
+            game.getPlayer1().addMove(fakeCoordinates);
+        for (int i = 0; i < numberOfWhiteStones; i++)
+            game.getPlayer2().addMove(fakeCoordinates);
+//        System.out.println("Calculations 2");
+//        System.out.println(game.getPlayer1().getMovesList().size());
+//        System.out.println(game.getPlayer2().getMovesList().size());
+        isGameTie = game.areTheStonesOfAPlayerFinished();
+        Assertions.assertTrue(isGameTie);
+    }
 }
