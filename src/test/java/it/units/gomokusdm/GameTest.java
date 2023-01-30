@@ -227,28 +227,28 @@ public class GameTest {
         boolean[] result = new boolean[8];
         int i = 0;
         game.makeMove(secondPlayer, new Coordinates(9, 10));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(firstPlayer, new Coordinates(8, 8));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(secondPlayer, new Coordinates(9, 11));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(firstPlayer, new Coordinates(7, 7));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(secondPlayer, new Coordinates(9, 12));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(firstPlayer, new Coordinates(6, 6));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(secondPlayer, new Coordinates(9, 13));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
         game.makeMove(firstPlayer, new Coordinates(5, 5));
-        result[i] = game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour());
+        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
 
         boolean[] expected_result = {false, false, false, false, false, false, false, true};
         for (int j = 0; j < result.length; j++) {
@@ -267,21 +267,21 @@ public class GameTest {
         try {
             game = new Game(board, firstPlayer, secondPlayer);
             game.makeMove(secondPlayer, new Coordinates(9, 10));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(firstPlayer, new Coordinates(8, 8));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(secondPlayer, new Coordinates(9, 11));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(firstPlayer, new Coordinates(7, 7));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(secondPlayer, new Coordinates(9, 12));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(firstPlayer, new Coordinates(6, 6));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(secondPlayer, new Coordinates(9, 13));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
             game.makeMove(firstPlayer, new Coordinates(5, 5));
-            result.add(game.checkIfThereAreFiveConsecutiveStones(firstPlayer.getColour()));
+            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
         } catch (Game.InvalidMoveThrowable e) {
             throw new RuntimeException(e);
         }
