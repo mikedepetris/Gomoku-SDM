@@ -53,7 +53,7 @@ public class Game {
         return board;
     }
 
-    public void setupGame() {
+    private void setupGame() {
         makeMandatoryFirstMove(player1.getColour() == Stone.BLACK ? player1 : player2);
     }
 

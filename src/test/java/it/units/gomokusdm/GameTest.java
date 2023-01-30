@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static it.units.gomokusdm.BoardImplementationTest.*;
 import static it.units.gomokusdm.Game.MAX_NUMBER_OF_STONES;
 
 public class GameTest {
@@ -46,7 +47,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         boolean result = game.isFeasibleMove(new Coordinates(8, 9));
         Assertions.assertTrue(result);
@@ -58,7 +58,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
         Assertions.assertFalse(game.isFeasibleMove(new Coordinates(1, 1)));
         Assertions.assertFalse(game.isFeasibleMove(new Coordinates(19, 19)));
@@ -75,7 +74,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         //
         try {
             game.makeMove(secondPlayer, new Coordinates(8, 9));
@@ -96,7 +94,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 1));
         } catch (Game.InvalidMoveThrowable e) {
@@ -112,8 +109,7 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
+        new Game(board, firstPlayer, secondPlayer);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
                 board.getBoardDimension() / 2);
         Assertions.assertEquals(Stone.BLACK, board.getStoneAt(coordinates));
@@ -126,7 +122,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         // pedina non adiacente, mi aspetto che non faccia nulla
         try {
             game.makeMove(secondPlayer, new Coordinates(1, 2));
@@ -175,7 +170,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         try {
             game.makeMove(secondPlayer, new Coordinates(9, 10));
             game.makeMove(firstPlayer, new Coordinates(9, 11));
@@ -230,7 +224,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
         boolean[] result = new boolean[8];
         int i = 0;
         game.makeMove(secondPlayer, new Coordinates(9, 10));
@@ -273,7 +266,6 @@ public class GameTest {
         Game game;
         try {
             game = new Game(board, firstPlayer, secondPlayer);
-            game.setupGame();
             game.makeMove(secondPlayer, new Coordinates(9, 10));
             result.add(game.checkIfThereAreFiveConsecutiveStones(secondPlayer.getColour()));
             game.makeMove(firstPlayer, new Coordinates(8, 8));
@@ -325,8 +317,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
-
 
         Assertions.assertThrowsExactly(
                 Game.InvalidMoveThrowable.class,
@@ -349,7 +339,6 @@ public class GameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         Game game = new Game(board, firstPlayer, secondPlayer);
-        game.setupGame();
 
         for (int i = 0; i < MAX_NUMBER_OF_STONES - 1; i++) {
             secondPlayer.addMove(new Coordinates(0, 0));
@@ -361,4 +350,36 @@ public class GameTest {
         Assertions.assertFalse(secondPlayer.getMovesList().size() > 60);
     }
 
+    @Test
+    public void testBoardGameDraw60Stones() {
+        BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
+        final int boardDimension = board.getBoardDimension();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        // 19*19=361 59+60=119 361-119=242
+        Assertions.assertEquals(361, boardDimension * boardDimension);
+        Assertions.assertEquals(countNonZeroes(board), (long) boardDimension * boardDimension - numberOfEmptyCell);
+        Assertions.assertEquals(119, boardDimension * boardDimension - numberOfEmptyCell);
+
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Game game = new Game(board, firstPlayer, secondPlayer);
+//        System.out.println("Calculations 1");
+//        System.out.println(game.getPlayer1().getMovesList().size());
+//        System.out.println(game.getPlayer2().getMovesList().size());
+        boolean isGameTie = game.checkIfStonesOfAPlayerAreFinished();
+        Assertions.assertFalse(isGameTie);
+
+        long numberOfBlackStones = countBlackStones((BoardImplementation) game.getBoard());
+        long numberOfWhiteStones = countWhiteStones((BoardImplementation) game.getBoard());
+        Coordinates fakeCoordinates = new Coordinates(0, 0);
+        for (int i = 0; i < numberOfBlackStones - 1; i++) // -1 perché c'è la prima mossa obbligata
+            game.getPlayer1().addMove(fakeCoordinates);
+        for (int i = 0; i < numberOfWhiteStones; i++)
+            game.getPlayer2().addMove(fakeCoordinates);
+//        System.out.println("Calculations 2");
+//        System.out.println(game.getPlayer1().getMovesList().size());
+//        System.out.println(game.getPlayer2().getMovesList().size());
+        isGameTie = game.checkIfStonesOfAPlayerAreFinished();
+        Assertions.assertTrue(isGameTie);
+    }
 }

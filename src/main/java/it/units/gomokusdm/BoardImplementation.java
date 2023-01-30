@@ -1,9 +1,6 @@
 package it.units.gomokusdm;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class BoardImplementation implements Board {
@@ -31,6 +28,23 @@ public class BoardImplementation implements Board {
         return (int) Math.sqrt(this.board.size());
     }
 
+    public List<String> getBoardAsLines() {
+        List<String> lines = new ArrayList<>();
+        StringBuilder line = new StringBuilder();
+        int dimension = getBoardDimension();
+        int pos = 0;
+        for (Stone v : board.values()) {
+            line.append(v);
+            if (pos > dimension) {
+                lines.add(line.toString());
+                line.setLength(0);
+                pos = 0;
+            }
+            pos++;
+        }
+        return lines;
+    }
+
     public int getNumberOfEmptyPositionInBoard() {
         return (int) this.board
                 .values()
@@ -38,7 +52,6 @@ public class BoardImplementation implements Board {
                 .filter(stone -> stone.equals(Stone.EMPTY))
                 .count();
     }
-
 
     public int getNumberOfOccupiedPositionInBoard() {
         return (int) Math.pow(this.getBoardDimension(), 2) - getNumberOfEmptyPositionInBoard();
