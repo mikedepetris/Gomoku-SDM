@@ -15,41 +15,56 @@ import java.util.logging.Level;
 
 public class GUI implements ActionListener, MouseListener {
 
-    public JPanel getSettingsPanel() {
-        return settingsPanel;
-    }
+//    public JPanel getSettingsPanel() {
+//        return settingsPanel;
+//    }
 
     public static final String GAME_TITLE = "Gomoku";
     private final JPanel settingsPanel = new JPanel();
     private boolean settingsPanelAlreadyVisited = false;
+
+    public JPanel getSettingsPanel() {
+        return settingsPanel;
+    }
+
+    public JComboBox<String> getComboDimensions() {
+        return comboDimensions;
+    }
+
+    public JCheckBox getCheckBoxMoveCounter() {
+        return checkBoxMoveCounter;
+    }
+
     private final JComboBox<String> comboDimensions;
+    private JCheckBox checkBoxMoveCounter;
     int currentWindow; // finestra in cui mi trovo nel gioco
     int selectedBoardSize;
     private boolean isGameFinished = false;
     private Board board;
     //private Player winner; //come in CLI Controller
     private BoardGame game;
-    private Player player1;
-    private Player player2;
-    private JFrame frame = new JFrame(); // frame totale
-    private JPanel upperPanel = new JPanel(); // pannello soprastante con il titolo
-    private JLabel title = new JLabel();
-    private JPanel startPanel = new JPanel();
-    private JTextField inputPlayer1 = new JTextField("Player 1");
-    private JTextField inputPlayer2 = new JTextField("Player 2");
-    private JPanel gridPanel = new JPanel();
-    private final boolean gridPanelAlreadyVisited = false;
-    private JButton[] buttons = new JButton[4];
-    private JLabel boardImg19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
-    private JLabel boardImg15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
-    private BufferedImage blackStoneImg = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
-    private BufferedImage whiteStoneImg = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
+    private final JFrame frame = new JFrame(); // frame totale
+    private final JPanel upperPanel = new JPanel(); // pannello soprastante con il titolo
+    private final JLabel title = new JLabel();
+    private final JPanel startPanel = new JPanel();
+    private final JTextField inputPlayer1 = new JTextField("Player 1");
+    private final JTextField inputPlayer2 = new JTextField("Player 2");
+    private final JPanel gridPanel = new JPanel();
+    //    private final boolean gridPanelAlreadyVisited = false;
+    private final JButton[] buttons = new JButton[4];
+    private final JLabel boardImg19 =
+            new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
+    private final JLabel boardImg15 =
+            new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
+    private final BufferedImage blackStoneImg = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
+    private final BufferedImage whiteStoneImg = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
 
     public GUI() throws IOException {
 
         this.selectedBoardSize = 19; //default
         String[] dimensions = {"15x15", "19x19"};
         comboDimensions = new JComboBox<>(dimensions);
+        checkBoxMoveCounter = new JCheckBox("Show move counter on stones");
 
         setMainElements();
 
@@ -58,13 +73,13 @@ public class GUI implements ActionListener, MouseListener {
         startFrame();
     }
 
-    public int getCurrentWindow() {
-        return currentWindow;
-    }
+//    public int getCurrentWindow() {
+//        return currentWindow;
+//    }
 
-    public void setCurrentWindow(int currentWindow) {
-        this.currentWindow = currentWindow;
-    }
+//    public void setCurrentWindow(int currentWindow) {
+//        this.currentWindow = currentWindow;
+//    }
 
     public Board getBoard() {
         return board;
@@ -74,125 +89,125 @@ public class GUI implements ActionListener, MouseListener {
         this.board = board;
     }
 
-    public BoardGame getGame() {
-        return game;
-    }
+//    public BoardGame getGame() {
+//        return game;
+//    }
 
-    public void setGame(GomokuGame game) {
-        this.game = game;
-    }
+//    public void setGame(GomokuGame game) {
+//        this.game = game;
+//    }
 
-    public Player getPlayer1() {
-        return player1;
-    }
+//    public Player getPlayer1() {
+//        return player1;
+//    }
 
-    public void setPlayer1(Player player1) {
-        this.player1 = player1;
-    }
+//    public void setPlayer1(Player player1) {
+//        this.player1 = player1;
+//    }
 
-    public Player getPlayer2() {
-        return player2;
-    }
+//    public Player getPlayer2() {
+//        return player2;
+//    }
 
-    public void setPlayer2(Player player2) {
-        this.player2 = player2;
-    }
+//    public void setPlayer2(Player player2) {
+//        this.player2 = player2;
+//    }
 
     public JFrame getFrame() {
         return frame;
     }
 
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
-    }
+//    public void setFrame(JFrame frame) {
+//        this.frame = frame;
+//    }
 
     public JPanel getUpperPanel() {
         return upperPanel;
     }
 
-    public void setUpperPanel(JPanel upperPanel) {
-        this.upperPanel = upperPanel;
-    }
+//    public void setUpperPanel(JPanel upperPanel) {
+//        this.upperPanel = upperPanel;
+//    }
 
-    public JLabel getTitle() {
-        return title;
-    }
+//    public JLabel getTitle() {
+//        return title;
+//    }
 
-    public void setTitle(JLabel title) {
-        this.title = title;
-    }
+//    public void setTitle(JLabel title) {
+//        this.title = title;
+//    }
 
-    public JPanel getStartPanel() {
-        return startPanel;
-    }
+//    public JPanel getStartPanel() {
+//        return startPanel;
+//    }
 
-    public void setStartPanel(JPanel startPanel) {
-        this.startPanel = startPanel;
-    }
+//    public void setStartPanel(JPanel startPanel) {
+//        this.startPanel = startPanel;
+//    }
 
     public JTextField getInputPlayer1() {
         return inputPlayer1;
     }
 
-    public void setInputPlayer1(JTextField inputPlayer1) {
-        this.inputPlayer1 = inputPlayer1;
-    }
+//    public void setInputPlayer1(JTextField inputPlayer1) {
+//        this.inputPlayer1 = inputPlayer1;
+//    }
 
     public JTextField getInputPlayer2() {
         return inputPlayer2;
     }
 
-    public void setInputPlayer2(JTextField inputPlayer2) {
-        this.inputPlayer2 = inputPlayer2;
-    }
+//    public void setInputPlayer2(JTextField inputPlayer2) {
+//        this.inputPlayer2 = inputPlayer2;
+//    }
 
     public JPanel getGridPanel() {
         return gridPanel;
     }
 
-    public void setGridPanel(JPanel gridPanel) {
-        this.gridPanel = gridPanel;
-    }
+//    public void setGridPanel(JPanel gridPanel) {
+//        this.gridPanel = gridPanel;
+//    }
 
     public JButton[] getButtons() {
         return buttons;
     }
 
-    public void setButtons(JButton[] buttons) {
-        this.buttons = buttons;
-    }
+//    public void setButtons(JButton[] buttons) {
+//        this.buttons = buttons;
+//    }
 
-    public JLabel getBoardImg19() {
-        return boardImg19;
-    }
+//    public JLabel getBoardImg19() {
+//        return boardImg19;
+//    }
 
-    public void setBoardImg19(JLabel boardImg19) {
-        this.boardImg19 = boardImg19;
-    }
+//    public void setBoardImg19(JLabel boardImg19) {
+//        this.boardImg19 = boardImg19;
+//    }
 
-    public JLabel getBoardImg15() {
-        return boardImg15;
-    }
+//    public JLabel getBoardImg15() {
+//        return boardImg15;
+//    }
 
-    public void setBoardImg15(JLabel boardImg15) {
-        this.boardImg15 = boardImg15;
-    }
+//    public void setBoardImg15(JLabel boardImg15) {
+//        this.boardImg15 = boardImg15;
+//    }
 
-    public BufferedImage getBlackStoneImg() {
-        return blackStoneImg;
-    }
+//    public BufferedImage getBlackStoneImg() {
+//        return blackStoneImg;
+//    }
 
-    public void setBlackStoneImg(BufferedImage blackStoneImg) {
-        this.blackStoneImg = blackStoneImg;
-    }
+//    public void setBlackStoneImg(BufferedImage blackStoneImg) {
+//        this.blackStoneImg = blackStoneImg;
+//    }
 
-    public BufferedImage getWhiteStoneImg() {
-        return whiteStoneImg;
-    }
+//    public BufferedImage getWhiteStoneImg() {
+//        return whiteStoneImg;
+//    }
 
-    public void setWhiteStoneImg(BufferedImage whiteStoneImg) {
-        this.whiteStoneImg = whiteStoneImg;
-    }
+//    public void setWhiteStoneImg(BufferedImage whiteStoneImg) {
+//        this.whiteStoneImg = whiteStoneImg;
+//    }
 
     public void setMainElements() {
         // Settings of Main elements: frame, title, panels
@@ -231,7 +246,7 @@ public class GUI implements ActionListener, MouseListener {
         title.setText(GAME_TITLE);
         frame.add(startPanel);
         int xStartingComponents = 250; //allineare nella x gli elementi
-        // è un allineamento provvisorio perchè non va bene, bisogna decidere un layout!
+        // è un allineamento provvisorio perché non va bene, bisogna decidere un layout!
 
         // Bottone Play
         JButton play = new JButton("Play");
@@ -281,22 +296,27 @@ public class GUI implements ActionListener, MouseListener {
         frame.add(settingsPanel);
 
         if (!settingsPanelAlreadyVisited) {
-            JLabel insertSize = new JLabel("Choose the dimension of the Board:");
-            settingsPanel.add(insertSize);
-            insertSize.setBounds(250, 120, 300, 20);
+            settingsPanelAlreadyVisited = true;
 
-            // Bottone Back to Main Menu
-            JButton backToMainMenuStart = new JButton("Back to Main Menu");
-            settingsPanel.add(backToMainMenuStart);
-            buttons[2] = backToMainMenuStart;
-            backToMainMenuStart.setBounds(250, 190, 200, 20);
-            backToMainMenuStart.addActionListener(this);
+            JLabel insertSize = new JLabel("Choose the dimension of the Board:");
+            insertSize.setBounds(250, 120, 300, 20);
+            settingsPanel.add(insertSize);
 
             comboDimensions.setSelectedIndex(1);
             comboDimensions.addActionListener(this);
             comboDimensions.setBounds(250, 150, 200, 20);
             settingsPanel.add(comboDimensions);
-            settingsPanelAlreadyVisited = true;
+
+            checkBoxMoveCounter = new JCheckBox("Show move counter on stones");
+            checkBoxMoveCounter.setBackground(new Color(234, 214, 84));
+            checkBoxMoveCounter.setBounds(250, 230, 200, 20);
+            settingsPanel.add(checkBoxMoveCounter);
+
+            JButton backToMainMenuStart = new JButton("Back to Main Menu");
+            settingsPanel.add(backToMainMenuStart);
+            buttons[2] = backToMainMenuStart;
+            backToMainMenuStart.setBounds(250, 300, 200, 20);
+            backToMainMenuStart.addActionListener(this);
         }
 
 
@@ -306,8 +326,8 @@ public class GUI implements ActionListener, MouseListener {
     public void showBoard() {
         Utilities.getLoggerOfClass(getClass()).log(Level.INFO, "showBoard() invoked");
         // Base Settings
-        this.player1 = new Player(inputPlayer1.getText(), Stone.BLACK);
-        this.player2 = new Player(inputPlayer2.getText(), Stone.WHITE);
+        Player player1 = new Player(inputPlayer1.getText(), Stone.BLACK);
+        Player player2 = new Player(inputPlayer2.getText(), Stone.WHITE);
 //        String user1 = inputPlayer1.getText();
 //        String user2 = inputPlayer2.getText();
 //        player1.setUsername(user1);
@@ -359,35 +379,29 @@ public class GUI implements ActionListener, MouseListener {
         switch (board.getBoardDimension()) {
             case 19 -> {
                 resize = 22;
-                stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
-                //stone.setIcon(new ImageIcon(stoneImg));
-                if (num > 0) {
-                    if (stoneColor == Stone.BLACK)
-                        stone.setForeground(Color.white);
-                    else
-                        stone.setForeground(Color.black);
-                    stone.setText(String.valueOf(num));
-                    stone.setHorizontalTextPosition(JLabel.CENTER);
-                    stone.setVerticalTextPosition(JLabel.CENTER);
-                }
+                setStoneLabel(resizeX, resizeY, stoneColor, num, stone, resize);
                 boardImg19.add(stone);
             }
             case 15 -> {
                 resize = 22 + 54;
-                stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
-                if (num > 0) {
-                    if (stoneColor == Stone.BLACK)
-                        stone.setForeground(Color.white);
-                    else
-                        stone.setForeground(Color.black);
-                    stone.setText(String.valueOf(num));
-                    stone.setHorizontalTextPosition(JLabel.CENTER);
-                    stone.setVerticalTextPosition(JLabel.CENTER);
-                }
+                setStoneLabel(resizeX, resizeY, stoneColor, num, stone, resize);
                 boardImg15.add(stone);
             }
         }
         title.setText("Turno: " + game.getNextMovingPlayer().getUsername());
+    }
+
+    private void setStoneLabel(int resizeX, int resizeY, Stone stoneColor, int num, JLabel stone, int resize) {
+        stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
+        if (num > 0 && checkBoxMoveCounter.isSelected()) {
+            if (stoneColor == Stone.BLACK)
+                stone.setForeground(Color.white);
+            else
+                stone.setForeground(Color.black);
+            stone.setText(String.valueOf(num));
+            stone.setHorizontalTextPosition(JLabel.CENTER);
+            stone.setVerticalTextPosition(JLabel.CENTER);
+        }
     }
 
     // EVENTS
@@ -419,11 +433,12 @@ public class GUI implements ActionListener, MouseListener {
                         cb = (JComboBox<?>) source;
                     }
                     String lineDimension = (String) (cb != null ? cb.getSelectedItem() : null);
-                    this.selectedBoardSize = Integer.parseInt(lineDimension != null ?
-                            lineDimension.substring(0, 2) : null);
+                    if (lineDimension != null)
+                        this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
                     this.board = new BoardImplementation(selectedBoardSize);
-                }
-                if (e.getSource() == buttons[2]) { // Click: Back to Main Menu
+                    //} else if (e.getSource() == checkBoxMoveCounter) { // Click: check counter
+                    //checkBoxMoveCounter.isSelected()
+                } else if (e.getSource() == buttons[2]) { // Click: Back to Main Menu
                     frame.remove(settingsPanel);
                     frame.repaint();
                     this.currentWindow = 0;
@@ -468,7 +483,7 @@ public class GUI implements ActionListener, MouseListener {
                 default -> 30;
             };
             // se la dimensione è 19 fa 30 pixels, se è 15 è 84 pixels
-            // Rilevo le x,y del mouse dopo aver cliccato
+            // Rilevo le x, y del mouse dopo aver cliccato
             int x = e.getX() - paddingBoard;
             int y = e.getY() - paddingBoard;
             int cell_dimension = 26; // è il valore in pixel della dimensione cella rispetto all'immagine
