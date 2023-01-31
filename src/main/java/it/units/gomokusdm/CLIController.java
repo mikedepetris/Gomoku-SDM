@@ -52,7 +52,7 @@ public class CLIController {
         setBoardDimension();
         setPlayerName(player1);
         setPlayerName(player2);
-        game = new Game(board, player1, player2);
+        game = new GomokuGame(board, player1, player2);
     }
 
     public void startGameClI() throws IOException {
@@ -71,7 +71,7 @@ public class CLIController {
             try {
                 Coordinates coordinates = getCoordinatesFromString(playerInput);
                 game.makeMove(nextMovingPlayer, coordinates);
-            } catch (Game.InvalidMoveThrowable | WrongStringFormatException e) {
+            } catch (GomokuGame.InvalidMoveThrowable | WrongStringFormatException e) {
                 outputStream.printf("Invalid coordinates! %s %nTry again.", e.getMessage());
                 //TODO: aggiungere il motivo dell'errore (con e.getMessage())
             }

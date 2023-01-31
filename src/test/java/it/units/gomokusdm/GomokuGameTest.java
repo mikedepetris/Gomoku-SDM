@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static it.units.gomokusdm.BoardImplementationTest.*;
-import static it.units.gomokusdm.Game.MAX_NUMBER_OF_STONES;
+import static it.units.gomokusdm.GomokuGame.MAX_NUMBER_OF_STONES;
 
-public class GameTest {
+public class GomokuGameTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
     @Test
@@ -17,10 +17,10 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
-        Game game = new Game(board, firstPlayer, secondPlayer);
-        Assertions.assertEquals(game.getBoard(), board);
-        Assertions.assertEquals(game.getPlayer1(), firstPlayer);
-        Assertions.assertEquals(game.getPlayer2(), secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
+        Assertions.assertEquals(gomokuGame.getBoard(), board);
+        Assertions.assertEquals(gomokuGame.getPlayer1(), firstPlayer);
+        Assertions.assertEquals(gomokuGame.getPlayer2(), secondPlayer);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new BoardImplementation();
-        Assertions.assertThrows(Exception.class, () -> new Game(board, firstPlayer, secondPlayer));
+        Assertions.assertThrows(Exception.class, () -> new GomokuGame(board, firstPlayer, secondPlayer));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class GameTest {
         Player firstPlayer = new Player("SameName", Stone.BLACK);
         Player secondPlayer = new Player("SameName", Stone.WHITE);
         Board board = new BoardImplementation();
-        Assertions.assertThrows(Exception.class, () -> new Game(board, firstPlayer, secondPlayer));
+        Assertions.assertThrows(Exception.class, () -> new GomokuGame(board, firstPlayer, secondPlayer));
         //Assertions.assertNotEquals(player1.getUsername(), player2.getUsername());
     }
 
@@ -46,9 +46,9 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
-        boolean result = game.isFeasibleMove(new Coordinates(8, 9));
+        boolean result = gomokuGame.isFeasibleMove(new Coordinates(8, 9));
         Assertions.assertTrue(result);
     }
 
@@ -57,10 +57,10 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         // ho messo public isFeasibleMove() provvisoriamente per testare poi rimettiamo private se c'è esigenza
-        Assertions.assertFalse(game.isFeasibleMove(new Coordinates(1, 1)));
-        Assertions.assertFalse(game.isFeasibleMove(new Coordinates(19, 19)));
+        Assertions.assertFalse(gomokuGame.isFeasibleMove(new Coordinates(1, 1)));
+        Assertions.assertFalse(gomokuGame.isFeasibleMove(new Coordinates(19, 19)));
     }
 
 
@@ -73,11 +73,11 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         //
         try {
-            game.makeMove(secondPlayer, new Coordinates(8, 9));
-        } catch (Game.InvalidMoveThrowable e) {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(8, 9));
+        } catch (GomokuGame.InvalidMoveThrowable e) {
             e.printStackTrace();
         }
         Stone stoneColor = board.getStoneAt(new Coordinates(8, 9));
@@ -93,10 +93,10 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         try {
-            game.makeMove(secondPlayer, new Coordinates(1, 1));
-        } catch (Game.InvalidMoveThrowable e) {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(1, 1));
+        } catch (GomokuGame.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             Stone stoneColor = board.getStoneAt(new Coordinates(1, 1));
@@ -109,7 +109,7 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        new Game(board, firstPlayer, secondPlayer);
+        new GomokuGame(board, firstPlayer, secondPlayer);
         Coordinates coordinates = new Coordinates(board.getBoardDimension() / 2,
                 board.getBoardDimension() / 2);
         Assertions.assertEquals(Stone.BLACK, board.getStoneAt(coordinates));
@@ -117,21 +117,21 @@ public class GameTest {
 
 
     @Test
-    public void testMakeConsecutiveMoves() throws Game.InvalidMoveThrowable {
+    public void testMakeConsecutiveMoves() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         // pedina non adiacente, mi aspetto che non faccia nulla
         try {
-            game.makeMove(secondPlayer, new Coordinates(1, 2));
-        } catch (Game.InvalidMoveThrowable e) {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(1, 2));
+        } catch (GomokuGame.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             // suppongo che si faccia ripetere la mossa, stavolta in un punto adiacente
-            game.makeMove(secondPlayer, new Coordinates(8, 9));
-            game.makeMove(firstPlayer, new Coordinates(7, 9));
-            game.makeMove(secondPlayer, new Coordinates(7, 8));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(8, 9));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(7, 9));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(7, 8));
             int[][] expectedBoard =
                     {
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -169,20 +169,20 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         try {
-            game.makeMove(secondPlayer, new Coordinates(9, 10));
-            game.makeMove(firstPlayer, new Coordinates(9, 11));
-            game.makeMove(secondPlayer, new Coordinates(9, 12));
-            game.makeMove(firstPlayer, new Coordinates(9, 13));
-            game.makeMove(secondPlayer, new Coordinates(9, 14));
-            game.makeMove(firstPlayer, new Coordinates(9, 15));
-            game.makeMove(secondPlayer, new Coordinates(9, 16));
-            game.makeMove(firstPlayer, new Coordinates(9, 17));
-            game.makeMove(secondPlayer, new Coordinates(9, 18));
-            game.makeMove(firstPlayer, new Coordinates(0, 18));
-            game.makeMove(firstPlayer, new Coordinates(9, 19));
-        } catch (Game.InvalidMoveThrowable e) {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(9, 11));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(9, 13));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 14));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(9, 15));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 16));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(9, 17));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 18));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(0, 18));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(9, 19));
+        } catch (GomokuGame.InvalidMoveThrowable e) {
             System.err.println("Handled makeMove Exception");
         } finally {
             int[][] expectedBoard =
@@ -219,36 +219,36 @@ public class GameTest {
 
 
     @Test
-    public void testIsPlayerWinningGame() throws Game.InvalidMoveThrowable {
+    public void testIsPlayerWinningGame() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
         boolean[] result = new boolean[8];
         int i = 0;
-        game.makeMove(secondPlayer, new Coordinates(9, 10));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(firstPlayer, new Coordinates(8, 8));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(secondPlayer, new Coordinates(9, 11));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(firstPlayer, new Coordinates(7, 7));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(secondPlayer, new Coordinates(9, 12));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(firstPlayer, new Coordinates(6, 6));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(secondPlayer, new Coordinates(9, 13));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
         i++;
-        game.makeMove(firstPlayer, new Coordinates(5, 5));
-        result[i] = game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
 
         boolean[] expected_result = {false, false, false, false, false, false, false, true};
         for (int j = 0; j < result.length; j++) {
@@ -263,26 +263,26 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game;
+        GomokuGame gomokuGame;
         try {
-            game = new Game(board, firstPlayer, secondPlayer);
-            game.makeMove(secondPlayer, new Coordinates(9, 10));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(firstPlayer, new Coordinates(8, 8));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(secondPlayer, new Coordinates(9, 11));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(firstPlayer, new Coordinates(7, 7));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(secondPlayer, new Coordinates(9, 12));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(firstPlayer, new Coordinates(6, 6));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(secondPlayer, new Coordinates(9, 13));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-            game.makeMove(firstPlayer, new Coordinates(5, 5));
-            result.add(game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        } catch (Game.InvalidMoveThrowable e) {
+            gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+        } catch (GomokuGame.InvalidMoveThrowable e) {
             throw new RuntimeException(e);
         }
 
@@ -297,7 +297,7 @@ public class GameTest {
         Player player2 = new Player("player", Stone.WHITE);
 
         Assertions.assertThrowsExactly(
-                IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+                IllegalArgumentException.class, () -> new GomokuGame(new BoardImplementation(), player1, player2),
                 "invalid player names");
     }
 
@@ -307,7 +307,7 @@ public class GameTest {
         Player player2 = new Player("player2", Stone.BLACK);
 
         Assertions.assertThrowsExactly(
-                IllegalArgumentException.class, () -> new Game(new BoardImplementation(), player1, player2),
+                IllegalArgumentException.class, () -> new GomokuGame(new BoardImplementation(), player1, player2),
                 "invalid player colours");
     }
 
@@ -316,17 +316,17 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
 
         Assertions.assertThrowsExactly(
-                Game.InvalidMoveThrowable.class,
-                () -> game.makeMove(secondPlayer, new Coordinates(0, 0)),
+                GomokuGame.InvalidMoveThrowable.class,
+                () -> gomokuGame.makeMove(secondPlayer, new Coordinates(0, 0)),
                 "Move not feasible"
         );
 
         Assertions.assertThrowsExactly(
-                Game.InvalidMoveThrowable.class,
-                () -> game.makeMove(firstPlayer, new Coordinates(0, 0)),
+                GomokuGame.InvalidMoveThrowable.class,
+                () -> gomokuGame.makeMove(firstPlayer, new Coordinates(0, 0)),
                 "Is not First's turn"
         );
     }
@@ -338,14 +338,14 @@ public class GameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
 
         for (int i = 0; i < MAX_NUMBER_OF_STONES - 1; i++) {
             secondPlayer.addMove(new Coordinates(0, 0));
         }
-        Assertions.assertFalse(game.areTheStonesOfAPlayerFinished());
+        Assertions.assertFalse(gomokuGame.areTheStonesOfAPlayerFinished());
         secondPlayer.addMove(new Coordinates(0, 0));
-        Assertions.assertTrue(game.areTheStonesOfAPlayerFinished());
+        Assertions.assertTrue(gomokuGame.areTheStonesOfAPlayerFinished());
         Assertions.assertEquals(60, secondPlayer.getMovesList().size());
         Assertions.assertFalse(secondPlayer.getMovesList().size() > 60);
     }
@@ -362,24 +362,24 @@ public class GameTest {
 
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
-        Game game = new Game(board, firstPlayer, secondPlayer);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
 //        System.out.println("Calculations 1");
 //        System.out.println(game.getPlayer1().getMovesList().size());
 //        System.out.println(game.getPlayer2().getMovesList().size());
-        boolean isGameTie = game.areTheStonesOfAPlayerFinished();
+        boolean isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertFalse(isGameTie);
 
-        long numberOfBlackStones = countBlackStones((BoardImplementation) game.getBoard());
-        long numberOfWhiteStones = countWhiteStones((BoardImplementation) game.getBoard());
+        long numberOfBlackStones = countBlackStones((BoardImplementation) gomokuGame.getBoard());
+        long numberOfWhiteStones = countWhiteStones((BoardImplementation) gomokuGame.getBoard());
         Coordinates fakeCoordinates = new Coordinates(0, 0);
         for (int i = 0; i < numberOfBlackStones - 1; i++) // -1 perché c'è la prima mossa obbligata
-            game.getPlayer1().addMove(fakeCoordinates);
+            gomokuGame.getPlayer1().addMove(fakeCoordinates);
         for (int i = 0; i < numberOfWhiteStones; i++)
-            game.getPlayer2().addMove(fakeCoordinates);
+            gomokuGame.getPlayer2().addMove(fakeCoordinates);
 //        System.out.println("Calculations 2");
 //        System.out.println(game.getPlayer1().getMovesList().size());
 //        System.out.println(game.getPlayer2().getMovesList().size());
-        isGameTie = game.areTheStonesOfAPlayerFinished();
+        isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertTrue(isGameTie);
     }
 }

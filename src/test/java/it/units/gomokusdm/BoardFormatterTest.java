@@ -51,7 +51,7 @@ public class BoardFormatterTest {
     @Test
     void testBoardFormattingWithAStone() {
         Board board = new BoardImplementation(BOARD_DIMENSION);
-        new Game(board, new Player("one", Stone.BLACK), new Player("two", Stone.WHITE));
+        new GomokuGame(board, new Player("one", Stone.BLACK), new Player("two", Stone.WHITE));
         String formattedBoard = BoardFormatter.formatBoard(board);
 
         String expectedOutputString = System.lineSeparator() +
