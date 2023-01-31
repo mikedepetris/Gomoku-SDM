@@ -78,7 +78,7 @@ public class GUI implements ActionListener, MouseListener {
         return game;
     }
 
-    public void setGame(Game game) {
+    public void setGame(GomokuGame game) {
         this.game = game;
     }
 
