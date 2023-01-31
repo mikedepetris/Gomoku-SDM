@@ -12,7 +12,7 @@ public class CLIController {
     private final Player player1;
     private final Player player2;
     private Board board;
-    private Game game;
+    private BoardGame game;
     private Player winner;
 
 
