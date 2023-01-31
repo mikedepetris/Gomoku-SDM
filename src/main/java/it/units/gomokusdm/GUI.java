@@ -1,6 +1,11 @@
 package it.units.gomokusdm;
 
+import com.sun.tools.javac.Main;
+
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -207,7 +212,6 @@ public class GUI implements ActionListener, MouseListener {
         upperPanel.setBounds(0, 0, 800, 100);
         upperPanel.add(title);
 
-        // TODO: non va bene, è senza layout, è provvisorio
         startPanel.setLayout(null);
         startPanel.setBackground(new Color(234, 214, 84));
 
@@ -329,15 +333,13 @@ public class GUI implements ActionListener, MouseListener {
                 gridPanel.add(boardImg19);
                 boardImg19.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
-                blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
-                boardImg19.add(blackstone);
+                showStone(blackStoneImg,26 * 9, 26 * 9,Stone.BLACK,1);
             }
             case 15 -> {
                 gridPanel.add(boardImg15);
                 boardImg15.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
-                blackstone.setBounds(26 * 9 + 22, 26 * 9 + 22, 24, 24);
-                boardImg15.add(blackstone);
+                showStone(blackStoneImg,26 * 9-54, 26 * 9-54,Stone.BLACK,1);
             }
         }
 
@@ -375,6 +377,15 @@ public class GUI implements ActionListener, MouseListener {
             case 15 -> {
                 resize = 22 + 54;
                 stone.setBounds(resizeX + resize, resizeY + resize, 24, 24);
+                if (num > 0) {
+                    if (stoneColor == Stone.BLACK)
+                        stone.setForeground(Color.white);
+                    else
+                        stone.setForeground(Color.black);
+                    stone.setText(String.valueOf(num));
+                    stone.setHorizontalTextPosition(JLabel.CENTER);
+                    stone.setVerticalTextPosition(JLabel.CENTER);
+                }
                 boardImg15.add(stone);
             }
         }
@@ -529,6 +540,8 @@ public class GUI implements ActionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+
 
 
 }
