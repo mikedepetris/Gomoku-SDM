@@ -1,11 +1,6 @@
 package it.units.gomokusdm;
 
-import com.sun.tools.javac.Main;
-
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -82,8 +77,8 @@ public class GUI implements ActionListener, MouseListener {
         return game;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGame(GomokuGame gomokuGame) {
+        this.game = gomokuGame;
     }
 
     public Player getPlayer1() {
@@ -318,7 +313,7 @@ public class GUI implements ActionListener, MouseListener {
 //        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
-            this.game = new Game(board, player1, player2);
+            this.game = new GomokuGame(board, player1, player2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -497,7 +492,7 @@ public class GUI implements ActionListener, MouseListener {
                     showStone(blackStoneImg, resizeX, resizeY, Stone.BLACK
                             , ((BoardImplementation)game.getBoard()).getNumberOfOccupiedPositionInBoard());
                 }
-            } catch (Game.InvalidMoveThrowable ex) {
+            } catch (GomokuGame.InvalidMoveThrowable ex) {
                 title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
             }
             gridPanel.repaint();

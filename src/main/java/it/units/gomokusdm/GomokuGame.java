@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-public class Game implements BoardGame {
+public class GomokuGame implements BoardGame {
 
     public static final int MAX_NUMBER_OF_STONES = 60;
     private final Board board;
@@ -15,7 +15,7 @@ public class Game implements BoardGame {
     private Player currentMovingPlayer;
     private Player winner;
 
-    public Game(Board board, Player player1, Player player2) {
+    public GomokuGame(Board board, Player player1, Player player2) {
         Utilities.getLoggerOfClass(getClass())
                 .log(Level.INFO, "Game constructor called with player1=%s, player2=%s"
                         .formatted(player1.getUsername(), player2.getUsername()));
