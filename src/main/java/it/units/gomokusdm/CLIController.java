@@ -12,7 +12,7 @@ public class CLIController {
     private final Player player1;
     private final Player player2;
     private Board board;
-    private Game game;
+    private BoardGame game;
     private Player winner;
 
 
@@ -107,7 +107,7 @@ public class CLIController {
         }
     }
 
-    public Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
+    private Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
         if (string != null && isAValidStringForCoordinates(string)) {
             String[] tokens = string.split(",");
             return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
@@ -128,7 +128,7 @@ public class CLIController {
         return string.matches("^\\d+,[\" ]*\\d+$");
     }
 
-    public void printBoard() {
+    private void printBoard() {
         outputStream.print(BoardFormatter.formatBoard(board));
     }
 

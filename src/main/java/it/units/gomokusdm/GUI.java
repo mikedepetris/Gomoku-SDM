@@ -29,7 +29,7 @@ public class GUI implements ActionListener, MouseListener {
     private boolean isGameFinished = false;
     private Board board;
     //private Player winner; //come in CLI Controller
-    private Game game;
+    private BoardGame game;
     private Player player1;
     private Player player2;
     private JFrame frame = new JFrame(); // frame totale
@@ -73,7 +73,7 @@ public class GUI implements ActionListener, MouseListener {
         this.board = board;
     }
 
-    public Game getGame() {
+    public BoardGame getGame() {
         return game;
     }
 
