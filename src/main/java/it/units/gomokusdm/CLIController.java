@@ -128,7 +128,7 @@ public class CLIController {
         return string.matches("^\\d+,[\" ]*\\d+$");
     }
 
-    public void printBoard() {
+    private void printBoard() {
         outputStream.print(BoardFormatter.formatBoard(board));
     }
 
