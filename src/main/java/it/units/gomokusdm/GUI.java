@@ -413,10 +413,14 @@ public class GUI implements ActionListener, MouseListener {
             }
             case 1 -> { // Window: Settings
                 if (e.getSource() == comboDimensions) { // Click: "15x15", "19x19"
-                    JComboBox cb = (JComboBox) e.getSource();
-                    String lineDimension = (String) cb.getSelectedItem();
-                    assert lineDimension != null;
-                    this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
+                    JComboBox<?> cb = null;
+                    Object source = e.getSource();
+                    if (source instanceof JComboBox) {
+                        cb = (JComboBox<?>) source;
+                    }
+                    String lineDimension = (String) (cb != null ? cb.getSelectedItem() : null);
+                    this.selectedBoardSize = Integer.parseInt(lineDimension != null ?
+                            lineDimension.substring(0, 2) : null);
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
                 if (e.getSource() == buttons[2]) { // Click: Back to Main Menu
@@ -459,7 +463,7 @@ public class GUI implements ActionListener, MouseListener {
 
         if (!isGameFinished) {
             int paddingBoard = switch (board.getBoardDimension()) {
-                case 19 -> 30;
+                //case 19 -> 30; default
                 case 15 -> 84;
                 default -> 30;
             };
