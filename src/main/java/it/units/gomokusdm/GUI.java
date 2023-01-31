@@ -314,7 +314,7 @@ public class GUI implements ActionListener, MouseListener {
 //        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
-            this.game = new Game(board, player1, player2);
+            this.game = new GomokuGame(board, player1, player2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -504,7 +504,7 @@ public class GUI implements ActionListener, MouseListener {
                             , ((BoardImplementation) game.getBoard()).getNumberOfOccupiedPositionInBoard());
                     //System.out.printf("5");
                 }
-            } catch (Game.InvalidMoveThrowable ex) {
+            } catch (GomokuGame.InvalidMoveThrowable ex) {
                 System.out.printf("InvalidMoveThrowable: Invalid Move %d, %d, %s Try Again%s"
                         .formatted(newX + 1, newY + 1, nextMovingPlayer.getUsername(), System.lineSeparator()));
                 title.setText("Invalid Move, %s Try Again".formatted(nextMovingPlayer.getUsername()));
