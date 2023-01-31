@@ -107,7 +107,7 @@ public class CLIController {
         }
     }
 
-    public Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
+    private Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
         if (string != null && isAValidStringForCoordinates(string)) {
             String[] tokens = string.split(",");
             return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));

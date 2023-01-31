@@ -44,26 +44,76 @@ public class CLIControllerTest {
 
     @Test
     void testPlayersCoordinatesInput() throws IOException, CLIController.WrongStringFormatException {
-        String inputString = "1,1" + System.lineSeparator(); //position (1,1)
+        String inputString = """
+                2
+                PlayerOne
+                PlayerTwo
+                7, 8
+                STOP
+                """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream outputStream = new PrintStream(byteArrayOutputStream);
         CLIController.closeInstance();
-        CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player = new Player("A", Stone.WHITE);
-        String input = cli.getPlayerInput(player);
-        Coordinates coordinates = cli.getCoordinatesFromString(input);
-        Assertions.assertEquals(new Coordinates(1, 1), coordinates);
+        CLIController cli = CLIController.createInstance(outputStream, inputStream);
+        cli.initializeGameCLI();
+        cli.startGameClI();
+        String cliOutput = byteArrayOutputStream.toString();
+        String outputBoardExpected =                 "0\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "3\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "4\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "5\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "6\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "7\t*---*---*---*---*---*---*---B---W---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "8\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "9\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "10\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "11\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "12\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "13\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
+                "14\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
+                "\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t" +
+                System.lineSeparator();
+
+        Assertions.assertTrue(cliOutput.contains(outputBoardExpected));
     }
 
     @Test
     void testNonNumericPlayersCoordinatesInput() throws IOException {
-        String inputString = "a" + System.lineSeparator() + "a" + System.lineSeparator();
+        String inputString =
+                """
+                        1
+                        player one
+                        player two
+                        abc, def
+                        STOP
+                        """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
+        OutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream outputStream = new PrintStream(byteArrayOutputStream);
         CLIController.closeInstance();
-        CLIController cli = CLIController.createInstance(System.out, inputStream);
-        Player player = new Player("A", Stone.WHITE);
-        String input = cli.getPlayerInput(player);
-        Assertions.assertThrowsExactly(CLIController.WrongStringFormatException.class,
-                () -> cli.getCoordinatesFromString(input));
+        CLIController cli = CLIController.createInstance(outputStream, inputStream);
+        cli.initializeGameCLI();
+        cli.startGameClI();
+        String cliOutput = byteArrayOutputStream.toString();
+
+        Assertions.assertTrue(cliOutput.contains("Invalid coordinates! String doesn't match the expected format: row,col"));
     }
 
     @Test
@@ -88,6 +138,7 @@ public class CLIControllerTest {
         Player player1 = cli.getPlayer1();
         cli.initializeGameCLI();
         cli.startGameClI();
+
         Assertions.assertEquals(cli.getWinner(), player1);
     }
 
@@ -114,6 +165,7 @@ public class CLIControllerTest {
         Player player1 = cli.getPlayer1();
         cli.initializeGameCLI();
         cli.startGameClI();
+
         Assertions.assertEquals(cli.getWinner(), player1);
     }
 
