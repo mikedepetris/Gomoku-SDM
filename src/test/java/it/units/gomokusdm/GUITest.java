@@ -156,8 +156,23 @@ public class GUITest {
     public void testShowStartingWindow() {
         gui.setMainElements();
         gui.showStartingWindow();
-        assertEquals(0, gui.currentWindow); // 1
+        assertEquals(0, gui.currentWindow);
         assertEquals("Play", gui.getButtons()[0].getText());
         assertEquals("Settings", gui.getButtons()[1].getText());
+    }
+
+    @Test
+    public void testShowSettings() {
+        gui.setMainElements();
+        gui.showStartingWindow();
+        gui.startFrame();
+        gui.showSettings();
+        assertEquals(1, gui.currentWindow);
+        assertTrue(gui.getSettingsPanel().isVisible());
+        assertTrue(gui.getComboDimensions().isVisible());
+        assertEquals("19x19", gui.getComboDimensions().getSelectedItem());
+        assertTrue(gui.getCheckBoxMoveCounter().isVisible());
+        assertFalse(gui.getCheckBoxMoveCounter().isSelected());
+        assertEquals("Show move counter on stones", gui.getCheckBoxMoveCounter().getText());
     }
 }
