@@ -1,11 +1,6 @@
 package it.units.gomokusdm;
 
-import com.sun.tools.javac.Main;
-
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,8 +22,7 @@ public class GUI implements ActionListener, MouseListener {
     public static final String GAME_TITLE = "Gomoku";
     private final JPanel settingsPanel = new JPanel();
     private boolean settingsPanelAlreadyVisited = false;
-    private final String[] dimensions = {"15x15", "19x19"};
-    private final JComboBox comboDimensions = new JComboBox(dimensions);
+    private final JComboBox<String> comboDimensions;
     int currentWindow; // finestra in cui mi trovo nel gioco
     int selectedBoardSize;
     private boolean isGameFinished = false;
@@ -44,7 +38,7 @@ public class GUI implements ActionListener, MouseListener {
     private JTextField inputPlayer1 = new JTextField("Player 1");
     private JTextField inputPlayer2 = new JTextField("Player 2");
     private JPanel gridPanel = new JPanel();
-    private boolean gridPanelAlreadyVisited = false;
+    private final boolean gridPanelAlreadyVisited = false;
     private JButton[] buttons = new JButton[4];
     private JLabel boardImg19 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
     private JLabel boardImg15 = new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
@@ -54,6 +48,8 @@ public class GUI implements ActionListener, MouseListener {
     public GUI() throws IOException {
 
         this.selectedBoardSize = 19; //default
+        String[] dimensions = {"15x15", "19x19"};
+        comboDimensions = new JComboBox<>(dimensions);
 
         setMainElements();
 
@@ -326,20 +322,22 @@ public class GUI implements ActionListener, MouseListener {
         this.currentWindow = 2;
         frame.add(gridPanel);
 
-        JLabel blackstone = new JLabel(new ImageIcon(blackStoneImg));
+        //JLabel blackstone = new JLabel(new ImageIcon(blackStoneImg));
         Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
         switch (board.getBoardDimension()) {
             case 19 -> {
                 gridPanel.add(boardImg19);
+                boardImg19.removeMouseListener(this);
                 boardImg19.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
-                showStone(blackStoneImg,26 * 9, 26 * 9,Stone.BLACK,1);
+                showStone(blackStoneImg, 26 * 9, 26 * 9, Stone.BLACK, 1);
             }
             case 15 -> {
                 gridPanel.add(boardImg15);
+                boardImg15.removeMouseListener(this);
                 boardImg15.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
-                showStone(blackStoneImg,26 * 9-54, 26 * 9-54,Stone.BLACK,1);
+                showStone(blackStoneImg, 26 * 9 - 54, 26 * 9 - 54, Stone.BLACK, 1);
             }
         }
 
@@ -356,7 +354,7 @@ public class GUI implements ActionListener, MouseListener {
 
     public void showStone(BufferedImage stoneImg, int resizeX, int resizeY, Stone stoneColor, int num) {
         JLabel stone = new JLabel(new ImageIcon(stoneImg));
-        int resize = 0;
+        int resize;
         // resize computato in base all'immagine della board utilizzata (sia 19 che 15)
         switch (board.getBoardDimension()) {
             case 19 -> {
@@ -415,10 +413,14 @@ public class GUI implements ActionListener, MouseListener {
             }
             case 1 -> { // Window: Settings
                 if (e.getSource() == comboDimensions) { // Click: "15x15", "19x19"
-                    JComboBox cb = (JComboBox) e.getSource();
-                    String lineDimension = (String) cb.getSelectedItem();
-                    assert lineDimension != null;
-                    this.selectedBoardSize = Integer.parseInt(lineDimension.substring(0, 2));
+                    JComboBox<?> cb = null;
+                    Object source = e.getSource();
+                    if (source instanceof JComboBox) {
+                        cb = (JComboBox<?>) source;
+                    }
+                    String lineDimension = (String) (cb != null ? cb.getSelectedItem() : null);
+                    this.selectedBoardSize = Integer.parseInt(lineDimension != null ?
+                            lineDimension.substring(0, 2) : null);
                     this.board = new BoardImplementation(selectedBoardSize);
                 }
                 if (e.getSource() == buttons[2]) { // Click: Back to Main Menu
@@ -461,7 +463,7 @@ public class GUI implements ActionListener, MouseListener {
 
         if (!isGameFinished) {
             int paddingBoard = switch (board.getBoardDimension()) {
-                case 19 -> 30;
+                //case 19 -> 30; default
                 case 15 -> 84;
                 default -> 30;
             };
@@ -486,19 +488,26 @@ public class GUI implements ActionListener, MouseListener {
             // Provo a eseguire una mossa
             Player nextMovingPlayer = game.getNextMovingPlayer();
             try {
+                //System.out.printf("%s1: newX=%%d, newY=%%d%%n".formatted(System.lineSeparator()), newX, newY);
                 game.makeMove(nextMovingPlayer, new Coordinates(newX, newY));
-//                System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
+                //System.out.println(game.getBoard().getStoneAt(new Coordinates(9, 9)));
                 // Inserisco l'immagine di una stone bianca oppure nera a seconda dei casi
                 if (nextMovingPlayer.getColour() == Stone.WHITE) {
+                    //System.out.printf("2");
                     //showStone(whiteStoneImg, resizeX, resizeY, nextMovingPlayer.getMovesList().size());
                     showStone(whiteStoneImg, resizeX, resizeY, Stone.WHITE
-                            , ((BoardImplementation)game.getBoard()).getNumberOfOccupiedPositionInBoard());
+                            , ((BoardImplementation) game.getBoard()).getNumberOfOccupiedPositionInBoard());
+                    //System.out.printf("3");
                 } else if (nextMovingPlayer.getColour() == Stone.BLACK) {
+                    //System.out.printf("4");
                     showStone(blackStoneImg, resizeX, resizeY, Stone.BLACK
-                            , ((BoardImplementation)game.getBoard()).getNumberOfOccupiedPositionInBoard());
+                            , ((BoardImplementation) game.getBoard()).getNumberOfOccupiedPositionInBoard());
+                    //System.out.printf("5");
                 }
             } catch (Game.InvalidMoveThrowable ex) {
-                title.setText("Invalid Move, " + nextMovingPlayer.getUsername() + " Try Again");
+                System.out.printf("InvalidMoveThrowable: Invalid Move %d, %d, %s Try Again%s"
+                        .formatted(newX + 1, newY + 1, nextMovingPlayer.getUsername(), System.lineSeparator()));
+                title.setText("Invalid Move, %s Try Again".formatted(nextMovingPlayer.getUsername()));
             }
             gridPanel.repaint();
             if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {
@@ -540,8 +549,6 @@ public class GUI implements ActionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-
-
 
 
 }
