@@ -69,6 +69,8 @@ public class GomokuGame implements BoardGame {
 
     @Override
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
+        Utilities.getLoggerOfClass(getClass()).log(Level.INFO,
+                "makeMove: player=%s %s".formatted(player.getUsername(), coordinates));
         if (isFeasibleMove(coordinates) && isTurnOfPlayer(player) && !isGameFinished()) {
             board.setCell(player.getColour(), coordinates);
             Utilities.getLoggerOfClass(getClass()).log(Level.INFO, BoardFormatter.formatBoardCompact(board));
@@ -218,7 +220,6 @@ public class GomokuGame implements BoardGame {
         this.currentMovingPlayer = player;
         currentMovingPlayer.addMove(boardCenter);
     }
-
 
 
 }

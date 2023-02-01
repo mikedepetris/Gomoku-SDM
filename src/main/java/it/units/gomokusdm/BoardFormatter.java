@@ -26,7 +26,7 @@ public class BoardFormatter {
                         .append(System.lineSeparator());
             }
         }
-        // riga finale con i numeri di colonna TODO: a-->o ma poi cambiano gli inserimenti coordinate
+        // riga finale con i numeri di colonna
         stringBuilder.append("\t");
         IntStream.range(0, board.getBoardDimension())
                 .forEach(value ->
@@ -60,7 +60,6 @@ public class BoardFormatter {
         stringBuilder.append(System.lineSeparator());
         for (int row = 0; row < boardPartitionString.size(); row++) {
             // numero di riga a sinistra 19-->1
-            // TODO: cambiare gli inserimenti coordinate
             stringBuilder.append(String.format("%1s", boardPartitionString.size() - row)).append("\t");
             appendRowCells(stringBuilder, boardPartitionString, row);
             // tranne l'ultima riga inserisce le indicazioni delle colonne con il simbolo di pipe | separato da TAB
@@ -70,7 +69,7 @@ public class BoardFormatter {
                         .append(System.lineSeparator());
             }
         }
-        // riga finale con i numeri di colonna TODO: a-->o ma poi cambiano gli inserimenti coordinate
+        // riga finale con i numeri di colonna a-->o
         stringBuilder.append("\t");
         IntStream.range(0, board.getBoardDimension())
                 .forEach(value ->
