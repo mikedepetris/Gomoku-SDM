@@ -8,7 +8,9 @@ import java.util.logging.Level;
 public class GomokuGame implements BoardGame {
 
     public static final int MAX_NUMBER_OF_STONES = 60;
+    public static final int WINNING_NUMBER_OF_STONES_5 = 5;
     private final Board board;
+    private boolean isOverlineWinner = true;
     private BoardGameStatus gameStatus;
     private final Player player1;
     private final Player player2;
@@ -16,6 +18,10 @@ public class GomokuGame implements BoardGame {
     private Player winner;
 
     public GomokuGame(Board board, Player player1, Player player2) {
+        this(board, player1, player2, true); // overline is winner by default
+    }
+
+    public GomokuGame(Board board, Player player1, Player player2, boolean isOverlineWinner) {
         Utilities.getLoggerOfClass(getClass())
                 .log(Level.INFO, "Game constructor called with player1=%s, player2=%s"
                         .formatted(player1.getUsername(), player2.getUsername()));
@@ -34,6 +40,7 @@ public class GomokuGame implements BoardGame {
                             .formatted(player1.getColour().toString(), getPlayer2().getColour().toString()));
             throw new IllegalArgumentException("invalid player colors");
         }
+        this.isOverlineWinner = isOverlineWinner;
         setupGame();
     }
 
@@ -111,7 +118,10 @@ public class GomokuGame implements BoardGame {
     }
 
     private boolean thereIsAWinner() {
-        return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
+        if (isOverlineWinner)
+            return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
+        else
+            return checkIfThereAreFiveConsecutiveStonesNoOverline(getCurrentMovingPlayer().getColour());
     }
 
     private boolean isTurnOfPlayer(Player player) {
@@ -128,23 +138,36 @@ public class GomokuGame implements BoardGame {
     }
 
     private boolean checkIfThereAreFiveConsecutiveStones(Stone stone) {
-        int numberOfStones = 5;
+        return checkIfThereAreFiveConsecutiveStones(stone, true);
+    }
+
+    private boolean checkIfThereAreFiveConsecutiveStonesNoOverline(Stone stone) {
+        return checkIfThereAreFiveConsecutiveStones(stone, false);
+    }
+
+    private boolean checkIfThereAreFiveConsecutiveStones(Stone stone, boolean overline) {
         boolean areStonesEqual = false;
         Direction[] directions = {Direction.LEFT, Direction.UP, Direction.UP_MAIN_DIAGONAL, Direction.UP_ANTI_DIAGONAL};
         int len = 0;
         List<Coordinates> coordinatesToCheck = new ArrayList<>();
-        while (len < directions.length && !areStonesEqual) {
-            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx()
-                    , numberOfStones);
-            areStonesEqual = checkNStonesEqual(coordinatesToCheck, stone, numberOfStones);
+        while (len < directions.length) {
+            findStonesToCheck(coordinatesToCheck, directions[len].getColIdx(), directions[len].getRowIdx());
+            int maxNumberOfEqualStones = countMaxNumberOfEqualStones(coordinatesToCheck, stone);
+            if (overline && maxNumberOfEqualStones >= WINNING_NUMBER_OF_STONES_5
+                    || !overline && maxNumberOfEqualStones == WINNING_NUMBER_OF_STONES_5) {
+                areStonesEqual = true;
+                break;
+            }
             len++;
             coordinatesToCheck.clear();
         }
         return areStonesEqual;
     }
 
-    private void findStonesToCheck(List<Coordinates> coordinates, int colDirection, int rowDirection, int nStones) {
-        int checkingStones = nStones - 1;
+    private void findStonesToCheck(List<Coordinates> coordinates, int colDirection, int rowDirection) {
+        // check all possible position to support overline rule
+        //int checkingStones = nStones - 1;
+        int checkingStones = board.getBoardDimension() - 1;
         Coordinates insertedStoneCoordinates = getLastMoveCoordinates();
         int insertedStoneRow = insertedStoneCoordinates.getRowIndex();
         int insertedStoneCol = insertedStoneCoordinates.getColIndex();
@@ -162,19 +185,23 @@ public class GomokuGame implements BoardGame {
         }
     }
 
-    private boolean checkNStonesEqual(List<Coordinates> coordinates, Stone stone, int nStones) {
+    private int countMaxNumberOfEqualStones(List<Coordinates> coordinates, Stone stone) {
         int i = 0;
         int counterStones = 0;
-        while (i < coordinates.size() && counterStones != nStones) {
+        int maxCounterStones = 0;
+        //while (i < coordinates.size() && counterStones != nStones) {
+        while (i < coordinates.size()) {
             Stone actualStone = board.getStoneAt(coordinates.get(i));
             if (Objects.equals(actualStone.toString(), stone.toString())) {
                 counterStones++;
             } else {
+                if (counterStones > maxCounterStones)
+                    maxCounterStones = counterStones;
                 counterStones = 0;
             }
             i++;
         }
-        return (counterStones == nStones);
+        return (maxCounterStones);
     }
 
 

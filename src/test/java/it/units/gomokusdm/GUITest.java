@@ -173,6 +173,8 @@ public class GUITest {
         assertEquals("19x19", gui.getComboDimensions().getSelectedItem());
         assertTrue(gui.getCheckBoxMoveCounter().isVisible());
         assertFalse(gui.getCheckBoxMoveCounter().isSelected());
+        assertTrue(gui.getCheckBoxIsOverlineWinner().isVisible());
+        assertTrue(gui.getCheckBoxIsOverlineWinner().isSelected());
         assertEquals("Show move counter on stones", gui.getCheckBoxMoveCounter().getText());
     }
 }
