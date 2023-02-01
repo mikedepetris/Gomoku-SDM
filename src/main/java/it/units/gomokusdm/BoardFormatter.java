@@ -18,16 +18,7 @@ public class BoardFormatter {
         for (int row = 0; row < boardPartitionString.size(); row++) {
             // numero di riga a sinistra
             stringBuilder.append(String.format("%1s", row)).append("\t");
-            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
-                // da sinistra a destra per ogni cella usa "*" o "B" o "W" separati da spazi per QUATTRO posizioni
-                if (stone == boardPartitionString.get(row).size() - 1) {
-                    stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
-                            .append(System.lineSeparator());
-                } else {
-                    stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
-                            .replace(" ", "-"));
-                }
-            }
+            appendRowCells(stringBuilder, boardPartitionString, row);
             // tranne l'ultima riga inserisce le indicazioni delle colonne con il simbolo di pipe | separato da TAB
             if (row != boardPartitionString.size() - 1) {
                 stringBuilder.append("\t")
@@ -45,6 +36,19 @@ public class BoardFormatter {
         return stringBuilder.toString();
     }
 
+    private static void appendRowCells(StringBuilder stringBuilder, List<List<String>> boardPartitionString, int row) {
+        for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
+            // da sinistra a destra per ogni cella usa "*" o "B" o "W" separati da spazi per QUATTRO posizioni
+            if (stone == boardPartitionString.get(row).size() - 1) {
+                stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
+                        .append(System.lineSeparator());
+            } else {
+                stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
+                        .replace(" ", "-"));
+            }
+        }
+    }
+
     public static String formatBoard15to1(Board board) {
         StringBuilder stringBuilder = new StringBuilder();
         // indicazioni delle colonne con il simbolo di pipe | separato da TAB
@@ -58,16 +62,7 @@ public class BoardFormatter {
             // numero di riga a sinistra 19-->1
             // TODO: cambiare gli inserimenti coordinate
             stringBuilder.append(String.format("%1s", boardPartitionString.size() - row)).append("\t");
-            for (int stone = 0; stone < boardPartitionString.get(row).size(); stone++) {
-                // da sinistra a destra per ogni cella usa "*" o "B" o "W" separati da spazi per QUATTRO posizioni
-                if (stone == boardPartitionString.get(row).size() - 1) {
-                    stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone)))
-                            .append(System.lineSeparator());
-                } else {
-                    stringBuilder.append(String.format("%-4s", boardPartitionString.get(row).get(stone))
-                            .replace(" ", "-"));
-                }
-            }
+            appendRowCells(stringBuilder, boardPartitionString, row);
             // tranne l'ultima riga inserisce le indicazioni delle colonne con il simbolo di pipe | separato da TAB
             if (row != boardPartitionString.size() - 1) {
                 stringBuilder.append("\t")
