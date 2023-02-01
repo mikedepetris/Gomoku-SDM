@@ -3,7 +3,7 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class BoardFormatterTest {
+class BoardFormatterTest {
 
     private static final int BOARD_DIMENSION_15 = 15;
     private static final int BOARD_DIMENSION_19 = 19;

@@ -10,11 +10,11 @@ import static it.units.gomokusdm.BoardImplementationTest.*;
 import static it.units.gomokusdm.GomokuGame.MAX_NUMBER_OF_STONES;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-public class GomokuGameTest {
+class GomokuGameTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
     @Test
-    public void testGameInstantiation() {
+    void testGameInstantiation() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -25,7 +25,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testInvalidGameInstantiationWithColorPlayersEqual() {
+    void testInvalidGameInstantiationWithColorPlayersEqual() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new BoardImplementation();
@@ -33,7 +33,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testInvalidGameInstantiationWithPlayerNamesEqual() {
+    void testInvalidGameInstantiationWithPlayerNamesEqual() {
         Player firstPlayer = new Player("SameName", Stone.BLACK);
         Player secondPlayer = new Player("SameName", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -43,7 +43,7 @@ public class GomokuGameTest {
 
 
     @Test
-    public void testIsFeasibleMove() {
+    void testIsFeasibleMove() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -54,7 +54,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testIsNotFeasibleMove() {
+    void testIsNotFeasibleMove() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -70,7 +70,7 @@ public class GomokuGameTest {
     // The second player (white) tries to make the move, in adjacent coordinates (8,9)
 
     @Test
-    public void testMakeFirstMoveAdjacent() {
+    void testMakeFirstMoveAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -90,7 +90,7 @@ public class GomokuGameTest {
     // The second player (white) tries to make the move, but in not adjacent coordinates (1,1)
     // the cell is empty
     @Test
-    public void testMakeFirstMoveNotAdjacent() {
+    void testMakeFirstMoveNotAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -106,7 +106,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() {
+    void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -118,7 +118,7 @@ public class GomokuGameTest {
 
 
     @Test
-    public void testMakeConsecutiveMoves() throws GomokuGame.InvalidMoveThrowable {
+    void testMakeConsecutiveMoves() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -166,7 +166,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testMakeConsecutiveMovesOutsideTheBoard() {
+    void testMakeConsecutiveMovesOutsideTheBoard() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -220,7 +220,7 @@ public class GomokuGameTest {
 
 
     @Test
-    public void testIsPlayerWinningGame() throws GomokuGame.InvalidMoveThrowable {
+    void testIsPlayerWinningGame() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -251,7 +251,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testIsPlayerWinningGameWith5ConsecutiveStones() {
+    void testIsPlayerWinningGameWith5ConsecutiveStones() {
         List<Boolean> result = new ArrayList<>();
 
         Player firstPlayer = new Player("First", Stone.BLACK);
@@ -345,7 +345,7 @@ public class GomokuGameTest {
     }
 
     @Test
-    public void testBoardGameDraw60Stones() {
+    void testBoardGameDraw60Stones() {
         BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
         final int boardDimension = board.getBoardDimension();
         int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
@@ -379,7 +379,7 @@ public class GomokuGameTest {
 
     // overline: more than five stones in a row
     @Test
-    public void testIsPlayerNotWinningGameWithOverline() throws GomokuGame.InvalidMoveThrowable {
+    void testIsPlayerNotWinningGameWithOverline() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayerBlack = new Player("First", Stone.BLACK);
         Player secondPlayerWhite = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);

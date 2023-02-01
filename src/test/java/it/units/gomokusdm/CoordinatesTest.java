@@ -4,7 +4,7 @@ package it.units.gomokusdm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CoordinatesTest {
+class CoordinatesTest {
 
     @Test
     void getRowIndexOfCoordinate() {

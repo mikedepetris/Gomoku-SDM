@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class BoardImplementationTest {
+class BoardImplementationTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
     private static Stream<Arguments> generateSomeValidCoordinates() {
@@ -97,199 +97,6 @@ public class BoardImplementationTest {
         return getBoardFromLines(lines);
     }
 
-    @Test
-    public void testBoardInitWithDefaultBoardSizeOf19x19() {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        int numOfNonEmptyStones = board.getNumberOfOccupiedPositionInBoard();
-        Assertions.assertEquals(0, numOfNonEmptyStones);
-    }
-
-    @Test
-    public void testDefaultBoardSize() {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Assertions.assertEquals(DEFAULT_BOARD_SIZE, board.getBoardDimension());
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {5, 9, 15})
-    public void testBoardCreationWithDifferentBoardSize(int boardSize) {
-        Board board = new BoardImplementation(boardSize);
-        Assertions.assertEquals(boardSize, board.getBoardDimension());
-    }
-
-    @ParameterizedTest
-    @MethodSource("generateSomeValidCoordinates")
-    public void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Assertions.assertTrue(board.areValidCoordinates(coordinates));
-    }
-
-    @ParameterizedTest
-    @MethodSource("generateSomeInvalidCoordinates")
-    public void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates) {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Assertions.assertFalse(board.areValidCoordinates(coordinates));
-    }
-
-    private BoardImplementation occupyAllTheBoard() {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        IntStream.range(0, DEFAULT_BOARD_SIZE).forEach(row -> IntStream.range(0, DEFAULT_BOARD_SIZE).forEach(col -> {
-            if (col % 2 == 0) {
-                board.setCell(Stone.BLACK, new Coordinates(row, col));
-            } else {
-                board.setCell(Stone.WHITE, new Coordinates(row, col));
-            }
-        }));
-        return board;
-    }
-
-    @Test
-    public void testOccupyAllBoard() {
-        BoardImplementation board = occupyAllTheBoard();
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals(0, numberOfEmptyCell);
-    }
-
-    @Test
-    public void testBoardToStringAtTheBeginning() {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        String result = board.toString();
-        int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
-        String expected_result = "*".repeat(numberOfStonesInAFullBoard);
-        Assertions.assertEquals(expected_result, result);
-    }
-
-    @Test
-    public void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
-        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Coordinates coordinates = new Coordinates(0, 0);
-        Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
-    }
-
-    @Test
-    void testGetAdjacentCoordinates() {
-        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        Coordinates coordinateUsedToGetAdjCoordinates = new Coordinates(1, 1);
-        List<Coordinates> expectedAdjacentCoordinates = List.of(new Coordinates(0, 0),
-                new Coordinates(0, 1),
-                new Coordinates(0, 2),
-                new Coordinates(1, 0),
-                new Coordinates(1, 2),
-                new Coordinates(2, 0),
-                new Coordinates(2, 1),
-                new Coordinates(2, 2));
-        List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinateUsedToGetAdjCoordinates);
-        expectedAdjacentCoordinates.forEach(eachExpectedAdjacentCoordinates
-                -> Assertions.assertTrue(adjacentCoordinates.contains(eachExpectedAdjacentCoordinates)));
-    }
-
-    @Test
-    public void testLoadBoard() {
-        final int BOARD_DIMENSION = 19;
-        BoardImplementation board = new BoardImplementation();
-        int[][] intBoard = {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
-        for (int xCoordinate = 0; xCoordinate < BOARD_DIMENSION; xCoordinate++) {
-            for (int yCoordinate = 0; yCoordinate < BOARD_DIMENSION; yCoordinate++) {
-                if (intBoard[xCoordinate][yCoordinate] == 1)
-                    board.setCell(Stone.BLACK, new Coordinates(xCoordinate, yCoordinate));
-                else if (intBoard[xCoordinate][yCoordinate] == 2)
-                    board.setCell(Stone.WHITE, new Coordinates(xCoordinate, yCoordinate));
-            }
-        }
-        System.out.println(insertLineSeparatorFunctional(board.toString(), BOARD_DIMENSION));
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals(BOARD_DIMENSION * BOARD_DIMENSION - 10, numberOfEmptyCell);
-    }
-
-    @Test
-    public void testLoadBoardFunctional() {
-        int[][] intBoard = {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-        };
-        int boardDimension = intBoard.length;
-        BoardImplementation board = getBoardFromIntBoard(intBoard);
-        System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals(boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
-    }
-
-    @Test
-    public void testLoadBoard4() {
-        int[][] intBoard = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 1}, {0, 0, 0, 0},};
-        final int boardDimension = intBoard.length;
-        BoardImplementation board = getBoardFromIntBoard(intBoard);
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals(boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
-    }
-
-    @Test
-    public void testLoadBoard4FromLines() {
-        List<String> lines = Arrays.asList("****", "****", "*BWB", "****");
-        final int boardDimension = lines.size();
-        int[][] intBoard = getIntBoardFromLines(lines);
-        BoardImplementation board = getBoardFromIntBoard(intBoard);
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
-    }
-
-    @Test
-    public void testLoadBoardFromFile() {
-        BoardImplementation board = readBoardFromFile("src/test/resources/board_06.txt");
-        final int boardDimension = board.getBoardDimension();
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(board), numberOfEmptyCell);
-        Assertions.assertEquals((long) boardDimension * boardDimension - 9, numberOfEmptyCell);
-    }
-
-    @Test
-    public void testBoardGameDraw60Stones() {
-        BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
-        final int boardDimension = board.getBoardDimension();
-        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
-        // 19*19=361 59+60=119 361-119=242
-        Assertions.assertEquals(361, boardDimension * boardDimension);
-        Assertions.assertEquals(countNonZeroes(board), (long) boardDimension * boardDimension - numberOfEmptyCell);
-        Assertions.assertEquals(119, boardDimension * boardDimension - numberOfEmptyCell);
-    }
-
     private static int[][] getIntBoardFromLines(List<String> lines) {
         return lines.stream()
                 .map(line -> line.chars()
@@ -336,6 +143,199 @@ public class BoardImplementationTest {
         System.out.println("insertLineSeparatorFunctional(board.toString(), boardDimension)");
         System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
         return board;
+    }
+
+    @Test
+    void testBoardInitWithDefaultBoardSizeOf19x19() {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        int numOfNonEmptyStones = board.getNumberOfOccupiedPositionInBoard();
+        Assertions.assertEquals(0, numOfNonEmptyStones);
+    }
+
+    @Test
+    void testDefaultBoardSize() {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Assertions.assertEquals(DEFAULT_BOARD_SIZE, board.getBoardDimension());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5, 9, 15})
+    void testBoardCreationWithDifferentBoardSize(int boardSize) {
+        Board board = new BoardImplementation(boardSize);
+        Assertions.assertEquals(boardSize, board.getBoardDimension());
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateSomeValidCoordinates")
+    void testIfCoordinatesAreValidOn19x19Board(Coordinates coordinates) {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Assertions.assertTrue(board.areValidCoordinates(coordinates));
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateSomeInvalidCoordinates")
+    void testIfCoordinatesAreInvalidOn19x19Board(Coordinates coordinates) {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Assertions.assertFalse(board.areValidCoordinates(coordinates));
+    }
+
+    private BoardImplementation occupyAllTheBoard() {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        IntStream.range(0, DEFAULT_BOARD_SIZE).forEach(row -> IntStream.range(0, DEFAULT_BOARD_SIZE).forEach(col -> {
+            if (col % 2 == 0) {
+                board.setCell(Stone.BLACK, new Coordinates(row, col));
+            } else {
+                board.setCell(Stone.WHITE, new Coordinates(row, col));
+            }
+        }));
+        return board;
+    }
+
+    @Test
+    void testOccupyAllBoard() {
+        BoardImplementation board = occupyAllTheBoard();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals(0, numberOfEmptyCell);
+    }
+
+    @Test
+    void testBoardToStringAtTheBeginning() {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        String result = board.toString();
+        int numberOfStonesInAFullBoard = (int) Math.pow(board.getBoardDimension(), 2);
+        String expected_result = "*".repeat(numberOfStonesInAFullBoard);
+        Assertions.assertEquals(expected_result, result);
+    }
+
+    @Test
+    void testGetStoneInTheFirstCellOfBoardAfterTheStartOfTheGame() {
+        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Coordinates coordinates = new Coordinates(0, 0);
+        Assertions.assertEquals(Stone.EMPTY, board.getStoneAt(coordinates));
+    }
+
+    @Test
+    void testGetAdjacentCoordinates() {
+        BoardImplementation board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        Coordinates coordinateUsedToGetAdjCoordinates = new Coordinates(1, 1);
+        List<Coordinates> expectedAdjacentCoordinates = List.of(new Coordinates(0, 0),
+                new Coordinates(0, 1),
+                new Coordinates(0, 2),
+                new Coordinates(1, 0),
+                new Coordinates(1, 2),
+                new Coordinates(2, 0),
+                new Coordinates(2, 1),
+                new Coordinates(2, 2));
+        List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinateUsedToGetAdjCoordinates);
+        expectedAdjacentCoordinates.forEach(eachExpectedAdjacentCoordinates
+                -> Assertions.assertTrue(adjacentCoordinates.contains(eachExpectedAdjacentCoordinates)));
+    }
+
+    @Test
+    void testLoadBoard() {
+        final int BOARD_DIMENSION = 19;
+        BoardImplementation board = new BoardImplementation();
+        int[][] intBoard = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+        for (int xCoordinate = 0; xCoordinate < BOARD_DIMENSION; xCoordinate++) {
+            for (int yCoordinate = 0; yCoordinate < BOARD_DIMENSION; yCoordinate++) {
+                if (intBoard[xCoordinate][yCoordinate] == 1)
+                    board.setCell(Stone.BLACK, new Coordinates(xCoordinate, yCoordinate));
+                else if (intBoard[xCoordinate][yCoordinate] == 2)
+                    board.setCell(Stone.WHITE, new Coordinates(xCoordinate, yCoordinate));
+            }
+        }
+        System.out.println(insertLineSeparatorFunctional(board.toString(), BOARD_DIMENSION));
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals(BOARD_DIMENSION * BOARD_DIMENSION - 10, numberOfEmptyCell);
+    }
+
+    @Test
+    void testLoadBoardFunctional() {
+        int[][] intBoard = {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+        };
+        int boardDimension = intBoard.length;
+        BoardImplementation board = getBoardFromIntBoard(intBoard);
+        System.out.println(insertLineSeparatorFunctional(board.toString(), boardDimension));
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals(boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
+    }
+
+    @Test
+    void testLoadBoard4() {
+        int[][] intBoard = {{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 2, 1}, {0, 0, 0, 0},};
+        final int boardDimension = intBoard.length;
+        BoardImplementation board = getBoardFromIntBoard(intBoard);
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals(boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
+    }
+
+    @Test
+    void testLoadBoard4FromLines() {
+        List<String> lines = Arrays.asList("****", "****", "*BWB", "****");
+        final int boardDimension = lines.size();
+        int[][] intBoard = getIntBoardFromLines(lines);
+        BoardImplementation board = getBoardFromIntBoard(intBoard);
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(intBoard), numberOfEmptyCell);
+    }
+
+    @Test
+    void testLoadBoardFromFile() {
+        BoardImplementation board = readBoardFromFile("src/test/resources/board_06.txt");
+        final int boardDimension = board.getBoardDimension();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        Assertions.assertEquals((long) boardDimension * boardDimension - countNonZeroes(board), numberOfEmptyCell);
+        Assertions.assertEquals((long) boardDimension * boardDimension - 9, numberOfEmptyCell);
+    }
+
+    @Test
+    void testBoardGameDraw60Stones() {
+        BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
+        final int boardDimension = board.getBoardDimension();
+        int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
+        // 19*19=361 59+60=119 361-119=242
+        Assertions.assertEquals(361, boardDimension * boardDimension);
+        Assertions.assertEquals(countNonZeroes(board), (long) boardDimension * boardDimension - numberOfEmptyCell);
+        Assertions.assertEquals(119, boardDimension * boardDimension - numberOfEmptyCell);
     }
 
 }
