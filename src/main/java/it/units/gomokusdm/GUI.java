@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.util.Objects;
 import java.util.logging.Level;
 
 
@@ -20,6 +20,10 @@ public class GUI implements ActionListener, MouseListener {
 //    }
 
     public static final String GAME_TITLE = "Gomoku";
+    public static final String IMAGES_BOARD_IMG_19_PNG = "/images/boardImg19.png";
+    public static final String IMAGES_BOARD_IMG_15_PNG = "/images/boardImg15.png";
+    public static final String IMAGES_BLACK_STONE_IMG_PNG = "/images/blackStoneImg.png";
+    public static final String IMAGES_WHITE_STONE_IMG_PNG = "/images/whiteStoneImg.png";
     private final JPanel settingsPanel = new JPanel();
     private boolean settingsPanelAlreadyVisited = false;
 
@@ -53,11 +57,20 @@ public class GUI implements ActionListener, MouseListener {
     //    private final boolean gridPanelAlreadyVisited = false;
     private final JButton[] buttons = new JButton[4];
     private final JLabel boardImg19 =
-            new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
+            //new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/hq1JiiM.png"))));
+            new JLabel(new ImageIcon(
+                    ImageIO.read(Objects.requireNonNull(GUI.class.getResource(IMAGES_BOARD_IMG_19_PNG)))));
     private final JLabel boardImg15 =
-            new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
-    private final BufferedImage blackStoneImg = ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
-    private final BufferedImage whiteStoneImg = ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
+            //new JLabel(new ImageIcon(ImageIO.read(new URL("https://i.imgur.com/1S2qfYu.png"))));
+            new JLabel(new ImageIcon(
+                    ImageIO.read(Objects.requireNonNull(GUI.class.getResource(IMAGES_BOARD_IMG_15_PNG)))));
+
+    private final BufferedImage blackStoneImg =
+            //ImageIO.read(new URL("https://i.imgur.com/cDfy5SP.png"));
+            ImageIO.read(Objects.requireNonNull(GUI.class.getResource(IMAGES_BLACK_STONE_IMG_PNG)));
+    private final BufferedImage whiteStoneImg =
+            //ImageIO.read(new URL("https://i.imgur.com/kIXiq4Q.png"));
+            ImageIO.read(Objects.requireNonNull(GUI.class.getResource(IMAGES_WHITE_STONE_IMG_PNG)));
 
     public GUI() throws IOException {
 
