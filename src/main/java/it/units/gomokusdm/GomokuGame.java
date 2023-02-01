@@ -10,15 +10,6 @@ public class GomokuGame implements BoardGame {
     public static final int MAX_NUMBER_OF_STONES = 60;
     public static final int WINNING_NUMBER_OF_STONES_5 = 5;
     private final Board board;
-
-    public boolean isOverlineWinner() {
-        return isOverlineWinner;
-    }
-
-    public void setOverlineWinner(boolean overlineWinner) {
-        isOverlineWinner = overlineWinner;
-    }
-
     private boolean isOverlineWinner = true;
     private BoardGameStatus gameStatus;
     private final Player player1;
@@ -27,6 +18,10 @@ public class GomokuGame implements BoardGame {
     private Player winner;
 
     public GomokuGame(Board board, Player player1, Player player2) {
+        this(board, player1, player2, true); // overline is winner by default
+    }
+
+    public GomokuGame(Board board, Player player1, Player player2, boolean isOverlineWinner) {
         Utilities.getLoggerOfClass(getClass())
                 .log(Level.INFO, "Game constructor called with player1=%s, player2=%s"
                         .formatted(player1.getUsername(), player2.getUsername()));
@@ -45,6 +40,7 @@ public class GomokuGame implements BoardGame {
                             .formatted(player1.getColour().toString(), getPlayer2().getColour().toString()));
             throw new IllegalArgumentException("invalid player colors");
         }
+        this.isOverlineWinner = isOverlineWinner;
         setupGame();
     }
 

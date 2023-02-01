@@ -376,14 +376,14 @@ public class GomokuGameTest {
         isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertTrue(isGameTie);
     }
+
     // overline: more than five stones in a row
     @Test
     public void testIsPlayerNotWinningGameWithOverline() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayerBlack = new Player("First", Stone.BLACK);
         Player secondPlayerWhite = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        GomokuGame gomokuGame = new GomokuGame(board, firstPlayerBlack, secondPlayerWhite);
-        gomokuGame.setOverlineWinner(false);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayerBlack, secondPlayerWhite, false);
         List<Boolean> resultList = new ArrayList<>();
         gomokuGame.makeMove(secondPlayerWhite, new Coordinates(10, 10));
         resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));

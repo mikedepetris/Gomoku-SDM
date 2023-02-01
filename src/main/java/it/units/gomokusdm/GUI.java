@@ -35,12 +35,18 @@ public class GUI implements ActionListener, MouseListener {
         return comboDimensions;
     }
 
+    // used in tests
     public JCheckBox getCheckBoxMoveCounter() {
         return checkBoxMoveCounter;
     }
 
+    public JCheckBox getCheckBoxIsOverlineWinner() {
+        return checkBoxisOverlineWinner;
+    }
+
     private final JComboBox<String> comboDimensions;
     private JCheckBox checkBoxMoveCounter;
+    private JCheckBox checkBoxisOverlineWinner;
     int currentWindow; // finestra in cui mi trovo nel gioco
     int selectedBoardSize;
     private boolean isGameFinished = false;
@@ -77,7 +83,8 @@ public class GUI implements ActionListener, MouseListener {
         this.selectedBoardSize = 19; //default
         String[] dimensions = {"15x15", "19x19"};
         comboDimensions = new JComboBox<>(dimensions);
-        checkBoxMoveCounter = new JCheckBox("Show move counter on stones");
+        checkBoxMoveCounter = new JCheckBox("Show move counter on stones", false);
+        checkBoxisOverlineWinner = new JCheckBox("Overline (>5 stones) is valid to win the game", true);
 
         setMainElements();
 
@@ -325,6 +332,11 @@ public class GUI implements ActionListener, MouseListener {
             checkBoxMoveCounter.setBounds(250, 230, 200, 20);
             settingsPanel.add(checkBoxMoveCounter);
 
+            checkBoxisOverlineWinner = new JCheckBox("Overline (>5 stones) is valid to win the game", true);
+            checkBoxisOverlineWinner.setBackground(new Color(234, 214, 84));
+            checkBoxisOverlineWinner.setBounds(250, 260, 200, 20);
+            settingsPanel.add(checkBoxisOverlineWinner);
+
             JButton backToMainMenuStart = new JButton("Back to Main Menu");
             settingsPanel.add(backToMainMenuStart);
             buttons[2] = backToMainMenuStart;
@@ -347,7 +359,7 @@ public class GUI implements ActionListener, MouseListener {
 //        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
-            this.game = new GomokuGame(board, player1, player2);
+            this.game = new GomokuGame(board, player1, player2, checkBoxisOverlineWinner.isSelected());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
