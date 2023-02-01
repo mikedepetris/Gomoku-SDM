@@ -6,7 +6,6 @@ import java.util.logging.Level;
 public class CLIController {
 
     private static CLIController cli = null;
-
     private final PrintStream outputStream;
     private final BufferedReader reader;
     private final Player player1;
@@ -110,7 +109,9 @@ public class CLIController {
     private Coordinates getCoordinatesFromString(String string) throws WrongStringFormatException {
         if (string != null && isAValidStringForCoordinates(string)) {
             String[] tokens = string.split(",");
-            return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
+            //return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
+            int dim = board.getBoardDimension();
+            return new Coordinates(dim - Integer.parseInt(tokens[0].trim()), tokens[1].trim().charAt(0) - 'a' + 1);
         }
         throw new WrongStringFormatException("String doesn't match the expected format: row,col");
     }
@@ -125,11 +126,16 @@ public class CLIController {
     }
 
     private boolean isAValidStringForCoordinates(String string) {
-        return string.matches("^\\d+,[\" ]*\\d+$");
+        //return string.matches("^\\d+,[\" ]*\\d+$");
+        return string.matches("^\\d+,[\" ]*[a-z]$");
     }
 
     private void printBoard() {
         outputStream.print(BoardFormatter.formatBoard(board));
+    }
+
+    public String getFormattedBoard15to1andAtoO() {
+        return BoardFormatter.formatBoard15to1andAtoO(board);
     }
 
     public static class WrongStringFormatException extends Exception {
