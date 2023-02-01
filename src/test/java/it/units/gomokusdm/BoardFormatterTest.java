@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 
 public class BoardFormatterTest {
 
-    private static final int BOARD_DIMENSION = 15;
+    private static final int BOARD_DIMENSION_15 = 15;
+    private static final int BOARD_DIMENSION_19 = 19;
 
     @Test
     void testWhiteBoardFormatting() {
-        Board board = new BoardImplementation(BOARD_DIMENSION);
+        Board board = new BoardImplementation(BOARD_DIMENSION_15);
         String formattedBoard = BoardFormatter.formatBoard(board);
 
         String expectedOutputString = System.lineSeparator() +
@@ -50,7 +51,7 @@ public class BoardFormatterTest {
 
     @Test
     void testBoardFormattingWithAStone() {
-        Board board = new BoardImplementation(BOARD_DIMENSION);
+        Board board = new BoardImplementation(BOARD_DIMENSION_15);
         new GomokuGame(board, new Player("one", Stone.BLACK), new Player("two", Stone.WHITE));
         String formattedBoard = BoardFormatter.formatBoard(board);
 
@@ -91,9 +92,9 @@ public class BoardFormatterTest {
     }
 
     @Test
-    void testWhiteBoardFormatting15to1() {
-        Board board = new BoardImplementation(BOARD_DIMENSION);
-        String formattedBoard = BoardFormatter.formatBoard15to1(board);
+    void testWhiteBoardFormatting15to1andAtoQ() {
+        Board board = new BoardImplementation(BOARD_DIMENSION_15);
+        String formattedBoard = BoardFormatter.formatBoard15to1andAtoO(board);
 
         String expectedOutputString = System.lineSeparator() +
                 "15\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
@@ -125,7 +126,7 @@ public class BoardFormatterTest {
                 "2\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
                 "\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t|\t" + System.lineSeparator() +
                 "1\t*---*---*---*---*---*---*---*---*---*---*---*---*---*---*   " + System.lineSeparator() +
-                "\t0\t1\t2\t3\t4\t5\t6\t7\t8\t9\t10\t11\t12\t13\t14\t" +
+                "\ta\tb\tc\td\te\tf\tg\th\ti\tj\tk\tl\tm\tn\to\t" +
                 System.lineSeparator();
 
         Assertions.assertEquals(expectedOutputString, formattedBoard);

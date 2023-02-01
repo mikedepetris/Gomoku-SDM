@@ -49,7 +49,7 @@ public class BoardFormatter {
         }
     }
 
-    public static String formatBoard15to1(Board board) {
+    public static String formatBoard15to1andAtoO(Board board) {
         StringBuilder stringBuilder = new StringBuilder();
         // indicazioni delle colonne con il simbolo di pipe | separato da TAB
         String repeatedLine = "|\t".repeat(board.getBoardDimension());
@@ -74,7 +74,7 @@ public class BoardFormatter {
         stringBuilder.append("\t");
         IntStream.range(0, board.getBoardDimension())
                 .forEach(value ->
-                        stringBuilder.append(String.format("%1s", value)).append("\t"));
+                        stringBuilder.append(String.format("%1c", 'a' + value)).append("\t"));
         stringBuilder.append(System.lineSeparator());
 
         return stringBuilder.toString();
