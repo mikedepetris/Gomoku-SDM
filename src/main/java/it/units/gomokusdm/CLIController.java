@@ -52,6 +52,12 @@ public class CLIController {
         setPlayerName(player1);
         setPlayerName(player2);
         game = new GomokuGame(board, player1, player2);
+        game.addGameStatusChangedEventListener(new GameStatusChangedEventListener() {
+            @Override
+            public void onChange(BoardGameStatus status) {
+
+            }
+        });
     }
 
     public void startGameClI() throws IOException {
@@ -77,7 +83,7 @@ public class CLIController {
         }
         if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {
             outputStream.printf("Nobody won, the game is tie! %n");
-        } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
+        } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER)) {
             winner = game.getWinner();
             outputStream.printf("%s won the game! %n", winner.getUsername());
         }
