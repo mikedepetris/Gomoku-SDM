@@ -359,7 +359,7 @@ public class GUI implements ActionListener, MouseListener {
 //        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
-            this.game = new GomokuGame(board, player1, player2, checkBoxisOverlineWinner.isSelected());
+            this.game = new GomokuGame(board, player1, player2, checkBoxisOverlineWinner.isSelected(), true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

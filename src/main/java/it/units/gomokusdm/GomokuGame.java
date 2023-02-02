@@ -1,5 +1,7 @@
 package it.units.gomokusdm;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,19 +11,24 @@ public class GomokuGame implements BoardGame {
 
     public static final int MAX_NUMBER_OF_STONES = 60;
     public static final int WINNING_NUMBER_OF_STONES_5 = 5;
+    private static final int DEFAULT_TIMER_DURATION_IN_SECONDS = 180;
     private final Board board;
+    private final boolean arePlayersTimerActive;
+    private PlayerTimer player1Timer;
+    private PlayerTimer player2Timer;
     private boolean isOverlineWinner = true;
     private BoardGameStatus gameStatus;
     private final Player player1;
     private final Player player2;
     private Player currentMovingPlayer;
     private Player winner;
+    private GameStatusChangedEventListener gameStatusChangedEventListener;
 
     public GomokuGame(Board board, Player player1, Player player2) {
-        this(board, player1, player2, true); // overline is winner by default
+        this(board, player1, player2, true, false); // overline is winner by default
     }
 
-    public GomokuGame(Board board, Player player1, Player player2, boolean isOverlineWinner) {
+    public GomokuGame(Board board, Player player1, Player player2, boolean isOverlineWinner, boolean arePlayersTimerActive) {
         Utilities.getLoggerOfClass(getClass())
                 .log(Level.INFO, "Game constructor called with player1=%s, player2=%s"
                         .formatted(player1.getUsername(), player2.getUsername()));
@@ -41,6 +48,12 @@ public class GomokuGame implements BoardGame {
             throw new IllegalArgumentException("invalid player colors");
         }
         this.isOverlineWinner = isOverlineWinner;
+        this.arePlayersTimerActive = arePlayersTimerActive;
+
+        if(this.arePlayersTimerActive) {
+            setPlayersTimer(DEFAULT_TIMER_DURATION_IN_SECONDS);
+        }
+
         setupGame();
     }
 
@@ -75,6 +88,11 @@ public class GomokuGame implements BoardGame {
     }
 
     @Override
+    public void addGameStatusChangedEventListener(GameStatusChangedEventListener listener) {
+        this.gameStatusChangedEventListener = listener;
+    }
+
+    @Override
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
         Utilities.getLoggerOfClass(getClass()).log(Level.INFO,
                 "makeMove: player=%s %s".formatted(player.getUsername(), coordinates));
@@ -84,6 +102,9 @@ public class GomokuGame implements BoardGame {
             currentMovingPlayer = player;
             currentMovingPlayer.addMove(coordinates);
             updateGameStatus();
+            if (arePlayersTimerActive) {
+                changeTimerCountForPlayer(player);
+            }
         } else {
             String exceptionMessage = "";
             if (!isFeasibleMove(coordinates)) {
@@ -104,12 +125,28 @@ public class GomokuGame implements BoardGame {
         return winner;
     }
 
+    private void changeTimerCountForPlayer(Player player) {
+        if (player == player1) {
+            player1Timer.stopTimer();
+            player2Timer.startTimer();
+        } else {
+            player2Timer.stopTimer();
+            player1Timer.startTimer();
+        }
+    }
+
     private void updateGameStatus() {
         if (thereIsAWinner()) {
-            gameStatus = BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER;
-            winner = currentMovingPlayer;
+            gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_WINNER;
+            if (gameStatusChangedEventListener != null) {
+                gameStatusChangedEventListener.onChange(gameStatus);
+            }
+            winner = (winner == null) ? currentMovingPlayer : winner;
         } else if (areTheStonesOfAPlayerFinished()) {
             gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_DRAW;
+            if (gameStatusChangedEventListener != null) {
+                gameStatusChangedEventListener.onChange(gameStatus);
+            }
         }
     }
 
@@ -118,10 +155,14 @@ public class GomokuGame implements BoardGame {
     }
 
     private boolean thereIsAWinner() {
-        if (isOverlineWinner)
-            return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
-        else
-            return checkIfThereAreFiveConsecutiveStonesNoOverline(getCurrentMovingPlayer().getColour());
+        if (winner != null) {
+            return true;
+        } else {
+            if (isOverlineWinner)
+                return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
+            else
+                return checkIfThereAreFiveConsecutiveStonesNoOverline(getCurrentMovingPlayer().getColour());
+        }
     }
 
     private boolean isTurnOfPlayer(Player player) {
@@ -246,6 +287,32 @@ public class GomokuGame implements BoardGame {
         board.setCell(player.getColour(), boardCenter);
         this.currentMovingPlayer = player;
         currentMovingPlayer.addMove(boardCenter);
+        if (arePlayersTimerActive) {
+            player2Timer.startTimer();
+        }
+    }
+
+    private void setPlayersTimer(int durationInSeconds) {
+        PlayerTimerExpiredEventListener listener = getPlayerTimerExpiredEventListener();
+        player1Timer = new PlayerTimer(durationInSeconds, player1, listener);
+        player2Timer = new PlayerTimer(durationInSeconds, player2, listener);
+    }
+
+    public void changeTimersDuration(int newDurationInSeconds) {
+        setPlayersTimer(newDurationInSeconds);
+        if (getNextMovingPlayer() == player1) {
+            player1Timer.startTimer();
+        } else {
+            player2Timer.startTimer();
+        }
+    }
+
+    @NotNull
+    private PlayerTimerExpiredEventListener getPlayerTimerExpiredEventListener() {
+        return player -> {
+            winner = (player == player1) ? player2 : player1;
+            updateGameStatus();
+        };
     }
 
 
