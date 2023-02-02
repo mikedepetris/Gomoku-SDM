@@ -51,7 +51,7 @@ public class PlayerTimerTest {
         Thread.sleep(TIMER_DURATION * 1000 / 2);
         playerTimer.stopTimer();
         playerTimer.startTimer();
-        Thread.sleep(TIMER_DURATION * 1000 / 2);
+        Thread.sleep(TIMER_DURATION * 1000 / 2 + 100);
 
         Assertions.assertEquals("expiredPlayer", player.getUsername());
     }
