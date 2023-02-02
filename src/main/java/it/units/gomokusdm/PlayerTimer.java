@@ -29,8 +29,10 @@ public class PlayerTimer {
     }
 
     public void stopTimer() {
-        timer.cancel();
-        playerRemainingMillis -= System.currentTimeMillis() - millisWhenStartTimeIsInvoked;
+        if (timer != null) {
+            timer.cancel();
+            playerRemainingMillis -= System.currentTimeMillis() - millisWhenStartTimeIsInvoked;
+        }
     }
 
     public long getRemaining() {

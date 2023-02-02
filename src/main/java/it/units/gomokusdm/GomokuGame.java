@@ -13,8 +13,7 @@ public class GomokuGame implements BoardGame {
     public static final int WINNING_NUMBER_OF_STONES_5 = 5;
     private static final int DEFAULT_TIMER_DURATION_IN_SECONDS = 180;
     private final Board board;
-    private PlayerTimer player1Timer;
-    private PlayerTimer player2Timer;
+    private PlayerTimersManager timersManager;
     private final boolean arePlayersTimerActive;
     private final boolean isOverlineWinner;
     private BoardGameStatus gameStatus;
@@ -51,7 +50,11 @@ public class GomokuGame implements BoardGame {
         this.arePlayersTimerActive = arePlayersTimerActive;
 
         if(this.arePlayersTimerActive) {
-            setPlayersTimer(DEFAULT_TIMER_DURATION_IN_SECONDS);
+            timersManager = new PlayerTimersManager(player1, player2, player -> {
+                winner = (player == player1) ? player2 : player1;
+                updateGameStatus();
+            });
+            timersManager.setPlayersTimer(DEFAULT_TIMER_DURATION_IN_SECONDS);
         }
 
         setupGame();
@@ -103,7 +106,7 @@ public class GomokuGame implements BoardGame {
             currentMovingPlayer.addMove(coordinates);
             updateGameStatus();
             if (arePlayersTimerActive) {
-                changeTimerCountForPlayer(player);
+                timersManager.stopTimerCountForPlayerAndStartForTheOther(player);
             }
         } else {
             String exceptionMessage = "";
@@ -123,16 +126,6 @@ public class GomokuGame implements BoardGame {
     @Override
     public Player getWinner() {
         return winner;
-    }
-
-    private void changeTimerCountForPlayer(Player player) {
-        if (player == player1) {
-            player1Timer.stopTimer();
-            player2Timer.startTimer();
-        } else {
-            player2Timer.stopTimer();
-            player1Timer.startTimer();
-        }
     }
 
     private void updateGameStatus() {
@@ -289,31 +282,12 @@ public class GomokuGame implements BoardGame {
         this.currentMovingPlayer = player;
         currentMovingPlayer.addMove(boardCenter);
         if (arePlayersTimerActive) {
-            player2Timer.startTimer();
+            timersManager.startTimerForPlayer(player);
         }
     }
 
-    private void setPlayersTimer(int durationInSeconds) {
-        PlayerTimerExpiredEventListener listener = getPlayerTimerExpiredEventListener();
-        player1Timer = new PlayerTimer(durationInSeconds, player1, listener);
-        player2Timer = new PlayerTimer(durationInSeconds, player2, listener);
-    }
-
-    protected void changeTimersDuration(int newDurationInSeconds) {
-        setPlayersTimer(newDurationInSeconds);
-        if (getNextMovingPlayer() == player1) {
-            player1Timer.startTimer();
-        } else {
-            player2Timer.startTimer();
-        }
-    }
-
-    @NotNull
-    private PlayerTimerExpiredEventListener getPlayerTimerExpiredEventListener() {
-        return player -> {
-            winner = (player == player1) ? player2 : player1;
-            updateGameStatus();
-        };
+    public PlayerTimersManager getTimersManager() {
+        return timersManager;
     }
 
 }

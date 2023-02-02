@@ -390,7 +390,7 @@ public class GomokuGameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer, true, true);
-        gomokuGame.changeTimersDuration(timerDuration);
+        gomokuGame.getTimersManager().setPlayersTimer(timerDuration);
         try {
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
         } catch (BoardGame.InvalidMoveThrowable e) {
@@ -409,7 +409,7 @@ public class GomokuGameTest {
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
         GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer, true, true);
-        gomokuGame.changeTimersDuration(timerDuration);
+        gomokuGame.getTimersManager().setPlayersTimer(timerDuration);
         try {
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
         } catch (BoardGame.InvalidMoveThrowable e) {
