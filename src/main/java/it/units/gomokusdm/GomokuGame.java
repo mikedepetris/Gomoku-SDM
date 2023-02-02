@@ -13,10 +13,10 @@ public class GomokuGame implements BoardGame {
     public static final int WINNING_NUMBER_OF_STONES_5 = 5;
     private static final int DEFAULT_TIMER_DURATION_IN_SECONDS = 180;
     private final Board board;
-    private final boolean arePlayersTimerActive;
     private PlayerTimer player1Timer;
     private PlayerTimer player2Timer;
-    private boolean isOverlineWinner = true;
+    private final boolean arePlayersTimerActive;
+    private final boolean isOverlineWinner;
     private BoardGameStatus gameStatus;
     private final Player player1;
     private final Player player2;
@@ -137,16 +137,17 @@ public class GomokuGame implements BoardGame {
 
     private void updateGameStatus() {
         if (thereIsAWinner()) {
-            gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_WINNER;
-            if (gameStatusChangedEventListener != null) {
-                gameStatusChangedEventListener.onChange(gameStatus);
-            }
+            changeGameStatus(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
             winner = (winner == null) ? currentMovingPlayer : winner;
         } else if (areTheStonesOfAPlayerFinished()) {
-            gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_DRAW;
-            if (gameStatusChangedEventListener != null) {
-                gameStatusChangedEventListener.onChange(gameStatus);
-            }
+            changeGameStatus(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW);
+        }
+    }
+
+    private void changeGameStatus(BoardGameStatus gameFinishedWithAWinner) {
+        gameStatus = gameFinishedWithAWinner;
+        if (gameStatusChangedEventListener != null) {
+            gameStatusChangedEventListener.onChange(gameStatus);
         }
     }
 
@@ -298,7 +299,7 @@ public class GomokuGame implements BoardGame {
         player2Timer = new PlayerTimer(durationInSeconds, player2, listener);
     }
 
-    public void changeTimersDuration(int newDurationInSeconds) {
+    protected void changeTimersDuration(int newDurationInSeconds) {
         setPlayersTimer(newDurationInSeconds);
         if (getNextMovingPlayer() == player1) {
             player1Timer.startTimer();
@@ -314,6 +315,5 @@ public class GomokuGame implements BoardGame {
             updateGameStatus();
         };
     }
-
 
 }

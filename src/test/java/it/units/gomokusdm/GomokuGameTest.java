@@ -401,4 +401,23 @@ public class GomokuGameTest {
         Assertions.assertEquals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER, gomokuGame.getGameStatus());
         Assertions.assertEquals(secondPlayer, gomokuGame.getWinner());
     }
+
+    @Test
+    void testGameStatusChange() throws InterruptedException {
+        final int timerDuration = 1;
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer, true, true);
+        gomokuGame.changeTimersDuration(timerDuration);
+        try {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+        } catch (BoardGame.InvalidMoveThrowable e) {
+            throw new RuntimeException(e);
+        }
+
+        gomokuGame.addGameStatusChangedEventListener(gameStatus ->
+                Assertions.assertEquals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER, gameStatus));
+        Thread.sleep(timerDuration * 1000 + 100);
+    }
 }
