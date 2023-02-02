@@ -1,6 +1,7 @@
 **Gomoku game**
 
 build with "**gradle build**"
+
 GUI tests are disabled on CircleCI https://app.circleci.com/pipelines/github/mikedepetris
 
 
