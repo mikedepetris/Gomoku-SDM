@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisabledIf(value = "java.awt.GraphicsEnvironment#isHeadless", disabledReason = "headless environment")
 //@ExtendWith(MockitoExtension.class)
-public class GUITest {
+class GUITest {
 
     private GUI gui;
 
     @Before
-    public void setUp() {
+    void setUp() {
         // Set up headless mode
 //        System.out.println("@Before: Set up headless mode");
 //        System.setProperty("java.awt.headless", "true");
@@ -52,7 +52,7 @@ public class GUITest {
     // This test case only test the showStartingWindow method.
     // It's a good practice to test each method separately to make it easier to find the bugs.
     @Test
-    public void testShowStartingWindow1() {
+    void testShowStartingWindow1() {
         gui.showStartingWindow();
         JButton play = gui.getButtons()[0];
         JButton settings = gui.getButtons()[1];
@@ -61,7 +61,7 @@ public class GUITest {
     }
 
     @Test
-    public void testShowStartingWindow2() {
+    void testShowStartingWindow2() {
         gui.showStartingWindow();
         assertEquals(gui.currentWindow, 0);
         assertTrue(gui.getButtons()[0].isVisible());
@@ -71,7 +71,7 @@ public class GUITest {
     }
 
     @Test
-    public void testStartGame1() {
+    void testStartGame1() {
         gui.setMainElements();
         gui.showStartingWindow();
         gui.startFrame();
@@ -79,7 +79,7 @@ public class GUITest {
     }
 
     @Test
-    public void testStartGame2() {
+    void testStartGame2() {
         gui.startFrame();
         assertEquals(gui.currentWindow, 0); // 0
         assertTrue(gui.getButtons()[0].isVisible());
@@ -90,7 +90,7 @@ public class GUITest {
     }
 
     @Test
-    public void testGameStart() {
+    void testGameStart() {
         // Simulate clicking on the "Play" button
         gui.getButtons()[0].doClick();
         assertEquals(gui.currentWindow, 2); // 1
@@ -102,7 +102,7 @@ public class GUITest {
     }
 
     @Test
-    public void testGameStartWithSameNamePlayers() {
+    void testGameStartWithSameNamePlayers() {
         gui.getInputPlayer1().setText("Same name");
         gui.getInputPlayer2().setText("Same name");
         // Simulate clicking on the "Play" button
@@ -119,7 +119,7 @@ public class GUITest {
     }
 
     @Test
-    public void testMouseClicked() {
+    void testMouseClicked() {
         // Simulate clicking on the board
         gui.getGridPanel().dispatchEvent(new MouseEvent(gui.getGridPanel(), MouseEvent.MOUSE_CLICKED
                 , System.currentTimeMillis(), 0, 100, 100, 1, false));
@@ -128,7 +128,7 @@ public class GUITest {
     }
 
     @Test
-    public void testSetMainElements() {
+    void testSetMainElements() {
         gui.setMainElements();
         JFrame frame = gui.getFrame();
         JPanel upper_panel = gui.getUpperPanel();
@@ -141,7 +141,7 @@ public class GUITest {
     }
 
     @Test
-    public void testShowBoard() {
+    void testShowBoard() {
         gui.showBoard();
         assertNotNull(gui.getGridPanel());
         assertTrue(gui.getGridPanel().isVisible());
@@ -153,7 +153,7 @@ public class GUITest {
     // will throw IOException when there is no internet connection,
     // and also it might not be possible to test the GUI methods as they are dependent on many other GUI elements.
     @Test
-    public void testShowStartingWindow() {
+    void testShowStartingWindow() {
         gui.setMainElements();
         gui.showStartingWindow();
         assertEquals(0, gui.currentWindow);
@@ -162,7 +162,7 @@ public class GUITest {
     }
 
     @Test
-    public void testShowSettings() {
+    void testShowSettings() {
         gui.setMainElements();
         gui.showStartingWindow();
         gui.startFrame();

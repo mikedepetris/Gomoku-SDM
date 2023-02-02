@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class CLIControllerTest {
+class CLIControllerTest {
     @Test
     void testCLICreation() {
         CLIController cli = CLIController.createInstance(System.out, System.in);

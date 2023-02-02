@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class UtilitiesTest {
+class UtilitiesTest {
 
     private static Stream<Arguments> generateListAndPartitionToCreate() {
         return Stream.of(
@@ -19,7 +19,7 @@ public class UtilitiesTest {
 
     @ParameterizedTest
     @MethodSource("generateListAndPartitionToCreate")
-    public void testPartitionList(List<Integer> list, int size) {
+    void testPartitionList(List<Integer> list, int size) {
         Assertions.assertEquals(size, Utilities.partition(list, size).size());
     }
 
