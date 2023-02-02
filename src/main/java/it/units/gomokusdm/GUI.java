@@ -359,7 +359,7 @@ public class GUI implements ActionListener, MouseListener {
 //        player2.setUsername(user2);
         this.board = new BoardImplementation(this.selectedBoardSize);
         try {
-            this.game = new GomokuGame(board, player1, player2, checkBoxisOverlineWinner.isSelected());
+            this.game = new GomokuGame(board, player1, player2, checkBoxisOverlineWinner.isSelected(), true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -562,7 +562,7 @@ public class GUI implements ActionListener, MouseListener {
                                         game.getPlayer2().getUsername(),
                                         game.getPlayer2().getMovesList().size())
                 );
-            } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
+            } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER)) {
                 title.setText(game.getCurrentMovingPlayer().getUsername() + " wins!");
                 isGameFinished = true;
                 JOptionPane.showMessageDialog(frame,

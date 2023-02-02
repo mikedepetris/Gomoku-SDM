@@ -8,13 +8,12 @@ import java.util.List;
 
 import static it.units.gomokusdm.BoardImplementationTest.*;
 import static it.units.gomokusdm.GomokuGame.MAX_NUMBER_OF_STONES;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-class GomokuGameTest {
+public class GomokuGameTest {
     private static final int DEFAULT_BOARD_SIZE = 19;
 
     @Test
-    void testGameInstantiation() {
+    public void testGameInstantiation() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -25,7 +24,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testInvalidGameInstantiationWithColorPlayersEqual() {
+    public void testInvalidGameInstantiationWithColorPlayersEqual() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.BLACK);
         Board board = new BoardImplementation();
@@ -33,7 +32,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testInvalidGameInstantiationWithPlayerNamesEqual() {
+    public void testInvalidGameInstantiationWithPlayerNamesEqual() {
         Player firstPlayer = new Player("SameName", Stone.BLACK);
         Player secondPlayer = new Player("SameName", Stone.WHITE);
         Board board = new BoardImplementation();
@@ -43,7 +42,7 @@ class GomokuGameTest {
 
 
     @Test
-    void testIsFeasibleMove() {
+    public void testIsFeasibleMove() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -54,7 +53,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testIsNotFeasibleMove() {
+    public void testIsNotFeasibleMove() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -70,7 +69,7 @@ class GomokuGameTest {
     // The second player (white) tries to make the move, in adjacent coordinates (8,9)
 
     @Test
-    void testMakeFirstMoveAdjacent() {
+    public void testMakeFirstMoveAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -90,7 +89,7 @@ class GomokuGameTest {
     // The second player (white) tries to make the move, but in not adjacent coordinates (1,1)
     // the cell is empty
     @Test
-    void testMakeFirstMoveNotAdjacent() {
+    public void testMakeFirstMoveNotAdjacent() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -106,7 +105,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() {
+    public void testGetStoneAtAfterTheFirstMovementOfBlackPlayer() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -118,7 +117,7 @@ class GomokuGameTest {
 
 
     @Test
-    void testMakeConsecutiveMoves() throws GomokuGame.InvalidMoveThrowable {
+    public void testMakeConsecutiveMoves() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -166,7 +165,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testMakeConsecutiveMovesOutsideTheBoard() {
+    public void testMakeConsecutiveMovesOutsideTheBoard() {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -220,7 +219,7 @@ class GomokuGameTest {
 
 
     @Test
-    void testIsPlayerWinningGame() throws GomokuGame.InvalidMoveThrowable {
+    public void testIsPlayerWinningGame() throws GomokuGame.InvalidMoveThrowable {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
@@ -228,21 +227,28 @@ class GomokuGameTest {
         boolean[] result = new boolean[8];
         int i = 0;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
-        result[i++] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
+        i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
 
         boolean[] expected_result = {false, false, false, false, false, false, false, true};
         for (int j = 0; j < result.length; j++) {
@@ -251,7 +257,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testIsPlayerWinningGameWith5ConsecutiveStones() {
+    public void testIsPlayerWinningGameWith5ConsecutiveStones() {
         List<Boolean> result = new ArrayList<>();
 
         Player firstPlayer = new Player("First", Stone.BLACK);
@@ -261,21 +267,21 @@ class GomokuGameTest {
         try {
             gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
         } catch (GomokuGame.InvalidMoveThrowable e) {
             throw new RuntimeException(e);
         }
@@ -345,7 +351,7 @@ class GomokuGameTest {
     }
 
     @Test
-    void testBoardGameDraw60Stones() {
+    public void testBoardGameDraw60Stones() {
         BoardImplementation board = readBoardFromFile("src/test/resources/board_game_draw_60_stones.txt");
         final int boardDimension = board.getBoardDimension();
         int numberOfEmptyCell = board.getNumberOfEmptyPositionInBoard();
@@ -377,38 +383,41 @@ class GomokuGameTest {
         Assertions.assertTrue(isGameTie);
     }
 
-    // overline: more than five stones in a row
     @Test
-    void testIsPlayerNotWinningGameWithOverline() throws GomokuGame.InvalidMoveThrowable {
-        Player firstPlayerBlack = new Player("First", Stone.BLACK);
-        Player secondPlayerWhite = new Player("Second", Stone.WHITE);
+    void testPlayerTimerExpired() throws InterruptedException {
+        final int timerDuration = 1;
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
         Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
-        GomokuGame gomokuGame = new GomokuGame(board, firstPlayerBlack, secondPlayerWhite, false);
-        List<Boolean> resultList = new ArrayList<>();
-        gomokuGame.makeMove(secondPlayerWhite, new Coordinates(10, 10));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(firstPlayerBlack, new Coordinates(9, 8));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(secondPlayerWhite, new Coordinates(11, 10));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(firstPlayerBlack, new Coordinates(9, 7));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(secondPlayerWhite, new Coordinates(11, 11));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(firstPlayerBlack, new Coordinates(9, 11));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(secondPlayerWhite, new Coordinates(11, 12));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(firstPlayerBlack, new Coordinates(9, 12));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(secondPlayerWhite, new Coordinates(11, 13));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
-        gomokuGame.makeMove(firstPlayerBlack, new Coordinates(9, 10));
-        resultList.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer, true, true);
+        gomokuGame.changeTimersDuration(timerDuration);
+        try {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+        } catch (BoardGame.InvalidMoveThrowable e) {
+            throw new RuntimeException(e);
+        }
+        Thread.sleep(timerDuration * 1000 + 100);
 
-        Boolean[] expected_result = {false, false, false, false, false, false, false, false, false, false};
-        //for (int i = 0; i < resultList.size(); i++)
-        //    Assertions.assertEquals(resultList.get(i), expected_result[i]);
-        assertArrayEquals(expected_result, resultList.toArray(new Boolean[0]));
+        Assertions.assertEquals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER, gomokuGame.getGameStatus());
+        Assertions.assertEquals(secondPlayer, gomokuGame.getWinner());
+    }
+
+    @Test
+    void testGameStatusChange() throws InterruptedException {
+        final int timerDuration = 1;
+        Player firstPlayer = new Player("First", Stone.BLACK);
+        Player secondPlayer = new Player("Second", Stone.WHITE);
+        Board board = new BoardImplementation(DEFAULT_BOARD_SIZE);
+        GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer, true, true);
+        gomokuGame.changeTimersDuration(timerDuration);
+        try {
+            gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
+        } catch (BoardGame.InvalidMoveThrowable e) {
+            throw new RuntimeException(e);
+        }
+
+        gomokuGame.addGameStatusChangedEventListener(gameStatus ->
+                Assertions.assertEquals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER, gameStatus));
+        Thread.sleep(timerDuration * 1000 + 100);
     }
 }
