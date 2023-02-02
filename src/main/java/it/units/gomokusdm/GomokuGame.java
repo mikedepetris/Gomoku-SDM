@@ -8,12 +8,16 @@ import java.util.logging.Level;
 public class GomokuGame implements BoardGame {
 
     public static final int MAX_NUMBER_OF_STONES = 60;
+    public static final int TIMER_DURATION_IN_SECONDS = 240;
     private final Board board;
     private BoardGameStatus gameStatus;
     private final Player player1;
     private final Player player2;
     private Player currentMovingPlayer;
     private Player winner;
+    private PlayerTimer player1Timer;
+    private PlayerTimer player2Timer;
+    private GameStatusChangedEventListener gameStatusChangedEventListener;
 
     public GomokuGame(Board board, Player player1, Player player2) {
         Utilities.getLoggerOfClass(getClass())
@@ -68,6 +72,11 @@ public class GomokuGame implements BoardGame {
     }
 
     @Override
+    public void addGameStatusChangedEventListener(GameStatusChangedEventListener listener) {
+        gameStatusChangedEventListener = listener;
+    }
+
+    @Override
     public void makeMove(Player player, Coordinates coordinates) throws InvalidMoveThrowable {
         Utilities.getLoggerOfClass(getClass()).log(Level.INFO,
                 "makeMove: player=%s %s".formatted(player.getUsername(), coordinates));
@@ -99,10 +108,18 @@ public class GomokuGame implements BoardGame {
 
     private void updateGameStatus() {
         if (thereIsAWinner()) {
-            gameStatus = BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER;
-            winner = currentMovingPlayer;
+            gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_WINNER;
+            winner = winner == null ? currentMovingPlayer : winner;
+            callStatusGameChangedListener();
         } else if (areTheStonesOfAPlayerFinished()) {
             gameStatus = BoardGameStatus.GAME_FINISHED_WITH_A_DRAW;
+            callStatusGameChangedListener();
+        }
+    }
+
+    private void callStatusGameChangedListener() {
+        if(gameStatusChangedEventListener != null) {
+            gameStatusChangedEventListener.onChange(gameStatus);
         }
     }
 
@@ -111,7 +128,7 @@ public class GomokuGame implements BoardGame {
     }
 
     private boolean thereIsAWinner() {
-        return checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
+        return winner != null || checkIfThereAreFiveConsecutiveStones(getCurrentMovingPlayer().getColour());
     }
 
     private boolean isTurnOfPlayer(Player player) {
@@ -180,7 +197,7 @@ public class GomokuGame implements BoardGame {
 
     // Controlla se esiste una stone adiacente intorno a quella che sto inserendo.
     // Se ne esiste almeno una, posso inserire la stone
-    public boolean isThereAnAdjacentStone(Coordinates coordinates) {
+    private boolean isThereAnAdjacentStone(Coordinates coordinates) {
         List<Coordinates> adjacentCoordinates = board.getAdjacentCoordinatesAt(coordinates);
         for (Coordinates el : adjacentCoordinates) {
             if (board.areValidCoordinates(coordinates) && !board.isEmptyCell(el)) {

@@ -550,7 +550,7 @@ public class GUI implements ActionListener, MouseListener {
                                         game.getPlayer2().getUsername(),
                                         game.getPlayer2().getMovesList().size())
                 );
-            } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER)) {
+            } else if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER)) {
                 title.setText(game.getCurrentMovingPlayer().getUsername() + " wins!");
                 isGameFinished = true;
                 JOptionPane.showMessageDialog(frame,

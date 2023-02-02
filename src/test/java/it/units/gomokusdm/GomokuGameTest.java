@@ -227,28 +227,28 @@ public class GomokuGameTest {
         boolean[] result = new boolean[8];
         int i = 0;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
         i++;
         gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
-        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER);
+        result[i] = gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER);
 
         boolean[] expected_result = {false, false, false, false, false, false, false, true};
         for (int j = 0; j < result.length; j++) {
@@ -267,21 +267,21 @@ public class GomokuGameTest {
         try {
             gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 10));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(8, 8));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 11));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(7, 7));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 12));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(6, 6));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(secondPlayer, new Coordinates(9, 13));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
             gomokuGame.makeMove(firstPlayer, new Coordinates(5, 5));
-            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WHIT_A_WINNER));
+            result.add(gomokuGame.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_WINNER));
         } catch (GomokuGame.InvalidMoveThrowable e) {
             throw new RuntimeException(e);
         }
@@ -382,4 +382,6 @@ public class GomokuGameTest {
         isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertTrue(isGameTie);
     }
+
+
 }

@@ -16,6 +16,8 @@ public interface BoardGame {
 
     BoardGameStatus getGameStatus();
 
+    void addGameStatusChangedEventListener(GameStatusChangedEventListener listener);
+
     Player getWinner();
 
     class InvalidMoveThrowable extends Throwable {
