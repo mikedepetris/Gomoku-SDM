@@ -20,8 +20,8 @@ public class GUI implements ActionListener, MouseListener {
 //    }
 
     public static final String GAME_TITLE = "Gomoku";
-    public static final String IMAGES_BOARD_IMG_19_PNG = "/images/boardImg19.png";
-    public static final String IMAGES_BOARD_IMG_15_PNG = "/images/boardImg15.png";
+    public static final String IMAGES_BOARD_IMG_19_PNG = "/images/boardImg19wood.png";
+    public static final String IMAGES_BOARD_IMG_15_PNG = "/images/boardImg15wood.png";
     public static final String IMAGES_BLACK_STONE_IMG_PNG = "/images/blackStoneImg.png";
     public static final String IMAGES_WHITE_STONE_IMG_PNG = "/images/whiteStoneImg.png";
     private final JPanel settingsPanel = new JPanel();
@@ -255,7 +255,7 @@ public class GUI implements ActionListener, MouseListener {
 
         title.setBackground(new Color(234, 214, 84)); // Colore testo
         title.setForeground(new Color(3, 3, 3)); // Colore testo
-        title.setFont(new Font("Ink Free", Font.BOLD, 30)); // Font testo
+        title.setFont(new Font("Ink Free", Font.BOLD, 32)); // Font testo
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setText(GAME_TITLE);
         title.setOpaque(true);
@@ -319,22 +319,22 @@ public class GUI implements ActionListener, MouseListener {
             settingsPanelAlreadyVisited = true;
 
             JLabel insertSize = new JLabel("Choose the dimension of the Board:");
-            insertSize.setBounds(250, 120, 300, 20);
+            insertSize.setBounds(250, 160, 300, 20);
             settingsPanel.add(insertSize);
 
             comboDimensions.setSelectedIndex(1);
             comboDimensions.addActionListener(this);
-            comboDimensions.setBounds(250, 150, 200, 20);
+            comboDimensions.setBounds(250, 200, 200, 20);
             settingsPanel.add(comboDimensions);
 
             checkBoxMoveCounter = new JCheckBox("Show move counter on stones");
             checkBoxMoveCounter.setBackground(new Color(234, 214, 84));
-            checkBoxMoveCounter.setBounds(250, 230, 200, 20);
+            checkBoxMoveCounter.setBounds(250, 240, 200, 20);
             settingsPanel.add(checkBoxMoveCounter);
 
             checkBoxisOverlineWinner = new JCheckBox("Overline (>5 stones) is valid to win the game", true);
             checkBoxisOverlineWinner.setBackground(new Color(234, 214, 84));
-            checkBoxisOverlineWinner.setBounds(250, 260, 200, 20);
+            checkBoxisOverlineWinner.setBounds(250, 260, 300, 20);
             settingsPanel.add(checkBoxisOverlineWinner);
 
             JButton backToMainMenuStart = new JButton("Back to Main Menu");
@@ -382,7 +382,7 @@ public class GUI implements ActionListener, MouseListener {
                 boardImg15.removeMouseListener(this);
                 boardImg15.addMouseListener(this);
                 // Inserisco la pedina nera al centro:
-                showStone(blackStoneImg, 26 * 9 - 54, 26 * 9 - 54, Stone.BLACK, 1);
+                showStone(blackStoneImg, 26 * 9 - 52, 26 * 9 - 52, Stone.BLACK, 1);
             }
         }
 
@@ -408,7 +408,7 @@ public class GUI implements ActionListener, MouseListener {
                 boardImg19.add(stone);
             }
             case 15 -> {
-                resize = 22 + 54;
+                resize = 22 + 52;
                 setStoneLabel(resizeX, resizeY, stoneColor, num, stone, resize);
                 boardImg15.add(stone);
             }
