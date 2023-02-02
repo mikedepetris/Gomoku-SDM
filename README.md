@@ -1,5 +1,7 @@
 **Gomoku game**
 
+Used IDE: **IntelliJ IDEA** 2022.3.2 (Ultimate Edition) Build #IU-223.8617.56, built on January 26, 2023
+JDK: corretto-18.0.2
 build with "**gradle build**"
 
 GUI tests are disabled on CircleCI https://app.circleci.com/pipelines/github/mikedepetris
@@ -27,5 +29,3 @@ copy commands to checkout in your local repository
     git checkout <17-test-pr>
 do changes
 commit push
-
-qui nuovo issue 19
