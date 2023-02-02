@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class PlayerTimerTest {
 
-    private static final int TIMER_DURATION = 3;
+    private static final int TIMER_DURATION = 1;
 
     @Test
     void testTimerInitialization() {
@@ -22,7 +22,7 @@ public class PlayerTimerTest {
             playerWithExpiredTimer.setUsername("expiredPlayer");
         });
         playerTimer.startTimer();
-        Thread.sleep(TIMER_DURATION * 1000);
+        Thread.sleep(TIMER_DURATION * 1000 + 100);
 
         Assertions.assertEquals("expiredPlayer", player.getUsername());
     }
