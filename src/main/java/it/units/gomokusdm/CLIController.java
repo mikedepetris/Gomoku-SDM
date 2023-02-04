@@ -52,11 +52,7 @@ public class CLIController {
         setPlayerName(player1);
         setPlayerName(player2);
         game = new GomokuGame(board, player1, player2);
-        game.addGameStatusChangedEventListener(new GameStatusChangedEventListener() {
-            @Override
-            public void onChange(BoardGameStatus status) {
-
-            }
+        game.addGameStatusChangedEventListener(status -> {
         });
     }
 
@@ -78,7 +74,6 @@ public class CLIController {
                 game.makeMove(nextMovingPlayer, coordinates);
             } catch (GomokuGame.InvalidMoveThrowable | WrongStringFormatException e) {
                 outputStream.printf("Invalid coordinates! %s %nTry again.", e.getMessage());
-                //TODO: aggiungere il motivo dell'errore (con e.getMessage())
             }
         }
         if (game.getGameStatus().equals(BoardGameStatus.GAME_FINISHED_WITH_A_DRAW)) {

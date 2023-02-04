@@ -363,9 +363,6 @@ public class GomokuGameTest {
         Player firstPlayer = new Player("First", Stone.BLACK);
         Player secondPlayer = new Player("Second", Stone.WHITE);
         GomokuGame gomokuGame = new GomokuGame(board, firstPlayer, secondPlayer);
-//        System.out.println("Calculations 1");
-//        System.out.println(game.getPlayer1().getMovesList().size());
-//        System.out.println(game.getPlayer2().getMovesList().size());
         boolean isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertFalse(isGameTie);
 
@@ -376,9 +373,6 @@ public class GomokuGameTest {
             gomokuGame.getPlayer1().addMove(fakeCoordinates);
         for (int i = 0; i < numberOfWhiteStones; i++)
             gomokuGame.getPlayer2().addMove(fakeCoordinates);
-//        System.out.println("Calculations 2");
-//        System.out.println(game.getPlayer1().getMovesList().size());
-//        System.out.println(game.getPlayer2().getMovesList().size());
         isGameTie = gomokuGame.areTheStonesOfAPlayerFinished();
         Assertions.assertTrue(isGameTie);
     }
