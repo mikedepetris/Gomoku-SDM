@@ -137,7 +137,7 @@ public class CLIController {
     }
 
     private void printBoard() {
-        outputStream.print(BoardFormatter.formatBoard(board));
+        outputStream.print(BoardFormatter.formatBoard15to1andAtoO(board));
     }
 
     public String getFormattedBoard15to1andAtoO() {
