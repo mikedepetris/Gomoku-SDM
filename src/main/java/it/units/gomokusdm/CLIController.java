@@ -112,7 +112,7 @@ public class CLIController {
             String[] tokens = string.split(",");
             //return new Coordinates(Integer.parseInt(tokens[0].trim()), Integer.parseInt(tokens[1].trim()));
             int dim = board.getBoardDimension();
-            return new Coordinates(dim - Integer.parseInt(tokens[0].trim()), tokens[1].trim().charAt(0) - 'a' + 1);
+            return new Coordinates(dim - Integer.parseInt(tokens[0].trim()), tokens[1].trim().charAt(0) - 'a');
         }
         throw new WrongStringFormatException("String doesn't match the expected format: row,col");
     }
