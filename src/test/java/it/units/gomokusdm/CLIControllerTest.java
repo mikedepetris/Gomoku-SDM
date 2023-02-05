@@ -48,7 +48,7 @@ class CLIControllerTest {
                 2
                 PlayerOne
                 PlayerTwo
-                8, h
+                8, i
                 STOP
                 """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
@@ -176,14 +176,14 @@ class CLIControllerTest {
                         1
                         player one
                         player two
-                        10, j
-                        10, h
                         10, k
-                        10, g
+                        10, i
                         10, l
-                        10, f
+                        10, h
                         10, m
-                        10, e
+                        10, g
+                        10, n
+                        10, f
                         """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
@@ -274,15 +274,15 @@ class CLIControllerTest {
                         1
                         player one
                         player two
-                        10, j
-                        10, h
                         10, k
-                        10, g
+                        10, i
                         10, l
-                        10, f
+                        10, h
                         10, m
+                        10, g
+                        10, n
                         9, *!&%x
-                        10, e
+                        10, f
                         """;
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
         CLIController.closeInstance();
